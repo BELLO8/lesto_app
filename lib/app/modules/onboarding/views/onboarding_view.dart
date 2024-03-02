@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lesto/app/components/Button/link_button.dart';
+import 'package:lesto/app/components/Button/primary_button.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Contents/auth_constant.dart';
 import 'package:lesto/app/data/constants/Contents/text_constant.dart';
+import 'package:lesto/app/routes/app_pages.dart';
 
 import '../../../data/constants/Image/image_constant.dart';
 import '../controllers/onboarding_controller.dart';
@@ -17,8 +20,8 @@ class OnboardingView extends GetView<OnboardingController> {
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
-          image: AssetImage(ImageString.onboardingImage),
-        )),
+                image: AssetImage(ImageString.onboardingImage),
+                fit: BoxFit.cover)),
         child: Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(
@@ -43,7 +46,9 @@ class OnboardingView extends GetView<OnboardingController> {
                     ),
                     PrimaryButton(
                       title: AuthText.REGISTER_BUTTON_TEXT,
-                      press: () {},
+                      press: () {
+                        Get.toNamed(Routes.AUTH_REGISTER);
+                      },
                       color: PrimaryColor.primary500,
                       textColor: NeutralColor.neutral100,
                       width: 373,
@@ -51,7 +56,9 @@ class OnboardingView extends GetView<OnboardingController> {
                     ),
                     LinkButton(
                       title: AuthText.LOGIN_BUTTON_TEXT,
-                      press: () {},
+                      press: () {
+                        Get.toNamed(Routes.AUTH_LOGIN);
+                      },
                     ),
                   ],
                 ),
@@ -60,71 +67,6 @@ class OnboardingView extends GetView<OnboardingController> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class LinkButton extends StatelessWidget {
-  const LinkButton({
-    super.key,
-    required this.title,
-    required this.press,
-  });
-  final String title;
-  final VoidCallback press;
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          fixedSize: const Size(240, 56),
-        ),
-        onPressed: press,
-        child: Text(title,
-            style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                color: PrimaryColor.primary700)));
-  }
-}
-
-class PrimaryButton extends StatelessWidget {
-  const PrimaryButton({
-    super.key,
-    required this.title,
-    required this.press,
-    required this.textColor,
-    required this.color,
-    required this.width,
-    required this.height,
-  });
-  final String title;
-  final VoidCallback press;
-  final Color textColor;
-  final Color color;
-  final double width;
-  final double height;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 26, bottom: 8),
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(10), color: color),
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            fixedSize: Size(width, height),
-          ),
-          onPressed: press,
-          child: Text(title,
-              style: TextStyle(
-                  fontFamily: 'Poppins', fontSize: 16, color: textColor))),
     );
   }
 }
