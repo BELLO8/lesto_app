@@ -1,0 +1,53 @@
+name: lesto
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment:
+  sdk: ">=3.2.4 <4.0.0"
+
+dependencies:
+  cupertino_icons: ^1.0.2
+  get: 4.6.6
+  get_storage: 2.1.1
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/images/
+    - assets/icons/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/poppins/Poppins-Regular.ttf
+        - asset: assets/fonts/poppins/Poppins-Medium.ttf
+        - asset: assets/fonts/poppins/Poppins-Bold.ttf
+
+    - family: Gilroy
+      fonts:
+        - asset: assets/fonts/gilroy/Gilroy-Light.ttf
+
+    - family: GilroyRegular
+      fonts:
+        - asset: assets/fonts/gilroy/Gilroy-Regular.ttf
+
+    - family: GilroyMedium
+      fonts:
+        - asset: assets/fonts/gilroy/Gilroy-Medium.ttf
+
+    - family: GilroySemi
+      fonts:
+        - asset: assets/fonts/gilroy/Gilroy-SemiBold.ttf
+
+    - family: GilroyBold
+      fonts:
+        - asset: assets/fonts/gilroy/Gilroy-Bold.ttf
