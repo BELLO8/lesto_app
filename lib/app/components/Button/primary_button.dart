@@ -19,7 +19,7 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 26, bottom: 4),
+      margin: const EdgeInsets.only(bottom: 4),
       decoration:
           BoxDecoration(borderRadius: BorderRadius.circular(10), color: color),
       child: ElevatedButton(

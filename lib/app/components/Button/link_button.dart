@@ -6,9 +6,13 @@ class LinkButton extends StatelessWidget {
     super.key,
     required this.title,
     required this.press,
+    required this.width,
+    required this.height,
   });
   final String title;
   final VoidCallback press;
+  final double width;
+  final double height;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -17,7 +21,7 @@ class LinkButton extends StatelessWidget {
           elevation: 0,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          fixedSize: const Size(300, 56),
+          fixedSize: Size(width, height),
         ),
         onPressed: press,
         child: Text(title,

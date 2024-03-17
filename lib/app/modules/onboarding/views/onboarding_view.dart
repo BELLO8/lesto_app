@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lesto/app/components/Button/link_button.dart';
 import 'package:lesto/app/components/Button/primary_button.dart';
+import 'package:lesto/app/components/Container/container_image.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Contents/auth_constant.dart';
@@ -17,11 +18,9 @@ class OnboardingView extends GetView<OnboardingController> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(ImageString.onboardingImage),
-                fit: BoxFit.cover)),
+      body: ImageContainer(
+        size: size,
+        backgroundImage: ImageString.onboardingImage,
         child: Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(
@@ -59,6 +58,8 @@ class OnboardingView extends GetView<OnboardingController> {
                       press: () {
                         Get.toNamed(Routes.AUTH_LOGIN);
                       },
+                      width: 300,
+                      height: 30,
                     ),
                   ],
                 ),

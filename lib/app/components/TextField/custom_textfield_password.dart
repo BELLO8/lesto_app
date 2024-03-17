@@ -27,7 +27,7 @@ class CustomTextfieldPassWord extends StatelessWidget {
 
     return Column(
       children: [
-        SizedBox(height: size.height * 0.03),
+        SizedBox(height: size.height * 0.01),
         Align(
             alignment: Alignment.topLeft,
             child: Text(
@@ -60,7 +60,7 @@ class CustomTextfieldPassWord extends StatelessWidget {
               border: InputBorder.none,
               fillColor: Colors.transparent,
               contentPadding:
-                  const EdgeInsets.symmetric(vertical: 18.0, horizontal: 13),
+                  const EdgeInsets.symmetric(vertical: 14.0, horizontal: 13),
               hintStyle: TextStyle(
                   color: NeutralColor.neutral500,
                   fontSize: 17.0,

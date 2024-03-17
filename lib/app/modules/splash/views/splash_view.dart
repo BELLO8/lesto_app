@@ -16,8 +16,8 @@ class SplashView extends GetView<SplashController> {
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-          image: AssetImage(ImageString.backgroundSplashImage),
-        )),
+                image: AssetImage(ImageString.backgroundSplashImage),
+                fit: BoxFit.cover)),
         child: Center(
           child: Image.asset(
             ImageString.logo,

@@ -8,7 +8,6 @@ class AuthLoginController extends GetxController {
   final password = TextEditingController();
 
   var isOscure = true.obs;
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -24,5 +23,7 @@ class AuthLoginController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  void obscure() {
+    isOscure.value = !isOscure.value;
+  }
 }

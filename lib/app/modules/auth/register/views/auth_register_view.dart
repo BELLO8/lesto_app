@@ -56,6 +56,9 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
                   ]),
             ),
           ),
+          SizedBox(
+            height: size.height * 0.02,
+          ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 13),
             child: Column(children: [
@@ -90,6 +93,9 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
                       controller.obscure();
                     },
                   )),
+              SizedBox(
+                height: size.height * 0.04,
+              ),
               PrimaryButton(
                   title: AuthText.SIGNUP_BUTTON_TEXT,
                   press: () {
@@ -104,6 +110,8 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
                 press: () {
                   Get.toNamed(Routes.AUTH_LOGIN);
                 },
+                width: 300,
+                height: 30,
               ),
             ]),
           )

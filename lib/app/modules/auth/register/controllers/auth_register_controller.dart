@@ -27,6 +27,6 @@ class AuthRegisterController extends GetxController {
   }
 
   void obscure() {
-    isOscure.value == !isOscure.value;
+    isOscure.value = !isOscure.value;
   }
 }
