@@ -12,6 +12,8 @@ abstract class Routes {
   static const REGISTER = _Paths.REGISTER;
   static const AUTH_LOGIN = _Paths.LOGIN;
   static const AUTH_REGISTER = _Paths.REGISTER;
+  static const FOOD_DETAIL = _Paths.FOOD_DETAIL;
+  static const GENERATE_MENU = _Paths.GENERATE_MENU;
 }
 
 abstract class _Paths {
@@ -23,4 +25,6 @@ abstract class _Paths {
   static const REGISTER = '/register';
   static const AUTH_LOGIN = '/login';
   static const AUTH_REGISTER = '/register';
+  static const FOOD_DETAIL = '/food-detail';
+  static const GENERATE_MENU = '/generate-menu';
 }

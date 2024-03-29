@@ -1,12 +1,18 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lesto/app/components/Button/link_button.dart';
+import 'package:lesto/app/components/Dialog/bottom_sheet_dialog.dart';
+import 'package:lesto/app/components/Dialog/modal_dialog.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Contents/homescreen_text_constant.dart';
 import 'package:lesto/app/data/constants/Image/image_constant.dart';
+import 'package:lesto/app/routes/app_pages.dart';
 
+import '../../../components/Dialog/Content/generate_menu_content.dart';
+import '../../../components/Dialog/Content/search_content.dart';
+import '../../../components/Dialog/Content/user_profil_content.dart';
 import '../../../components/EasyDateTime/easy_date_timeline.dart';
 import '../controllers/home_controller.dart';
 
@@ -15,6 +21,27 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    List<Map<String, dynamic>> menus = [
+      {
+        'img': ImageString.food1,
+        'timing': '15-20 Mins',
+        'foodName': 'Foutou sauce claire',
+        'level': 'Difficultés: Moyen'
+      },
+      {
+        'img': ImageString.food2,
+        'timing': '1-2 heures',
+        'foodName': 'Tchep poulet',
+        'level': 'Difficultés: Moyen'
+      },
+      {
+        'img': ImageString.food3,
+        'timing': '50-60 Mins',
+        'foodName': 'Gouagouassou',
+        'level': 'Difficultés: Moyen'
+      },
+    ];
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -61,13 +88,24 @@ class HomeView extends GetView<HomeController> {
                       SizedBox(
                         width: size.width * 0.06,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            image: DecorationImage(
-                                image: AssetImage(ImageString.avatar))),
-                        height: size.height * 0.07,
-                        width: size.height * 0.07,
+                      InkWell(
+                        radius: 50,
+                        onTap: () {
+                          bottomSheetDialog(
+                              context,
+                              UserProfileContent(
+                                size: size,
+                              ),
+                              size.height * 0.67);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              image: DecorationImage(
+                                  image: AssetImage(ImageString.avatar))),
+                          height: size.height * 0.06,
+                          width: size.height * 0.06,
+                        ),
                       )
                     ],
                   ),
@@ -86,27 +124,37 @@ class HomeView extends GetView<HomeController> {
                   SizedBox(
                     height: size.height * 0.01,
                   ),
-                  Container(
-                    height: 46,
-                    width: size.width * 0.9,
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(13),
-                        border: Border.all(
-                            width: 1.5, color: PrimaryColor.primary1000)),
-                    child: Row(
-                      children: [
-                        Image.asset(ImageString.search),
-                        SizedBox(
-                          width: size.width * 0.02,
-                        ),
-                        Text("Rechercher un plat",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFFD5C2B9),
-                                fontSize: 16,
-                                fontFamily: 'Gilroy'))
-                      ],
+                  InkWell(
+                    onTap: () {
+                      bottomSheetDialog(
+                          context,
+                          SearchContent(
+                            controller: controller.search,
+                          ),
+                          size.height * 0.94);
+                    },
+                    child: Container(
+                      height: 46,
+                      width: size.width * 0.9,
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(13),
+                          border: Border.all(
+                              width: 1.5, color: PrimaryColor.primary1000)),
+                      child: Row(
+                        children: [
+                          Image.asset(ImageString.search),
+                          SizedBox(
+                            width: size.width * 0.02,
+                          ),
+                          Text("Rechercher un plat",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFD5C2B9),
+                                  fontSize: 16,
+                                  fontFamily: 'Gilroy'))
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -172,7 +220,14 @@ class HomeView extends GetView<HomeController> {
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    showAlert(
+                                        context,
+                                        GenerateMenuContent(),
+                                        size.width * 0.85,
+                                        size.height * 0.57,
+                                        true);
+                                  },
                                   child: Row(
                                     children: [
                                       Image.asset(
@@ -205,7 +260,7 @@ class HomeView extends GetView<HomeController> {
                     ],
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 26),
+                    padding: EdgeInsets.only(top: 26),
                     child: Row(children: [
                       Text(HomeText.HOMESCREEN_RECOMMANDATION_TEXT,
                           style: TextStyle(
@@ -221,6 +276,86 @@ class HomeView extends GetView<HomeController> {
                         height: 30,
                       ),
                     ]),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.23,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: menus.map((menu) {
+                        return InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          onTap: () {
+                            Get.toNamed(Routes.FOOD_DETAIL);
+                          },
+                          child: Container(
+                            width: 180,
+                            height: 184,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 12),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: PrimaryColor.primary100),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 117,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      image: DecorationImage(
+                                          image: AssetImage(menu['img']),
+                                          fit: BoxFit.cover)),
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: Container(
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 6, vertical: 10),
+                                      alignment: Alignment.center,
+                                      width: 106,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                      child: Text(menu['timing'],
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0xFF381712),
+                                              fontSize: 15,
+                                              fontFamily: 'GilroyRegular')),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 12),
+                                  child: Column(children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(menu['foodName'],
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: PrimaryColor.primary1000,
+                                              fontSize: 14,
+                                              fontFamily: 'GilroySemi')),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text("Difficultés: Moyen",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: PrimaryColor.primary600,
+                                              fontSize: 12,
+                                              fontFamily: 'GilroyRegular')),
+                                    ),
+                                  ]),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
                   Align(
                     alignment: Alignment.topLeft,

@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 
+import '../modules/FoodDetail/bindings/food_detail_binding.dart';
+import '../modules/FoodDetail/views/food_detail_view.dart';
+import '../modules/GenerateMenu/bindings/generate_menu_binding.dart';
+import '../modules/GenerateMenu/views/generate_menu_view.dart';
 import '../modules/auth/login/bindings/auth_login_binding.dart';
 import '../modules/auth/login/views/auth_login_view.dart';
 import '../modules/auth/register/bindings/auth_register_binding.dart';
@@ -43,6 +47,16 @@ class AppPages {
       name: _Paths.AUTH_REGISTER,
       page: () => const AuthRegisterView(),
       binding: AuthRegisterBinding(),
+    ),
+    GetPage(
+      name: _Paths.FOOD_DETAIL,
+      page: () => const FoodDetailView(),
+      binding: FoodDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.GENERATE_MENU,
+      page: () => const GenerateMenuView(),
+      binding: GenerateMenuBinding(),
     ),
   ];
 }

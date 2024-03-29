@@ -11,5 +11,9 @@ class ImageString {
   static const String search = "assets/images/search.png";
   static const String food = "assets/images/food.png";
   static const String spinner = "assets/images/spinner.png";
+  static const String whiteSpinner = "assets/images/whiteSpinner.png";
   static const String noMenu = "assets/images/noMenu.png";
+  static const String food1 = "assets/images/food1.png";
+  static const String food2 = "assets/images/food2.png";
+  static const String food3 = "assets/images/food3.png";
 }

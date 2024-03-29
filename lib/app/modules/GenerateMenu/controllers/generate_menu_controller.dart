@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeController extends GetxController {
-  //TODO: Implement HomeController
+class GenerateMenuController extends GetxController {
+  //TODO: Implement GenerateMenuController
 
   final count = 0.obs;
-  final search = TextEditingController();
   @override
   void onInit() {
     super.onInit();

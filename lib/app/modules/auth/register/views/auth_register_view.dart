@@ -69,19 +69,19 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
               ),
               CustomTextField(
                 controller: controller.phone,
-                hintValue: LabelText.LABEL_NAME,
+                hintValue: LabelText.LABEL_PHONE,
                 typeInput: TextInputType.phone,
                 label: 'Téléphone',
               ),
               CustomTextField(
                 controller: controller.country,
-                hintValue: LabelText.LABEL_NAME,
+                hintValue: LabelText.LABEL_COUNTRY,
                 label: 'Nationalité',
               ),
               CustomTextField(
                 controller: controller.email,
                 typeInput: TextInputType.emailAddress,
-                hintValue: LabelText.LABEL_NAME,
+                hintValue: LabelText.LABEL_EMAIL,
                 label: 'Email',
               ),
               Obx(() => CustomTextfieldPassWord(
@@ -97,18 +97,21 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
                 height: size.height * 0.04,
               ),
               PrimaryButton(
+                  styleText: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      color: NeutralColor.neutral100),
                   title: AuthText.SIGNUP_BUTTON_TEXT,
                   press: () {
-                    Get.toNamed(Routes.HOME);
+                    Get.offNamed(Routes.HOME);
                   },
-                  textColor: NeutralColor.neutral100,
                   color: PrimaryColor.primary500,
                   width: 372,
                   height: 56),
               LinkButton(
                 title: AuthText.LOGIN_BUTTON_TEXT,
                 press: () {
-                  Get.toNamed(Routes.AUTH_LOGIN);
+                  Get.offNamed(Routes.AUTH_LOGIN);
                 },
                 width: 300,
                 height: 30,

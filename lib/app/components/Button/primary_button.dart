@@ -5,17 +5,17 @@ class PrimaryButton extends StatelessWidget {
     super.key,
     required this.title,
     required this.press,
-    required this.textColor,
     required this.color,
     required this.width,
     required this.height,
+    required this.styleText,
   });
   final String title;
   final VoidCallback press;
-  final Color textColor;
   final Color color;
   final double width;
   final double height;
+  final TextStyle styleText;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,9 +31,7 @@ class PrimaryButton extends StatelessWidget {
             fixedSize: Size(width, height),
           ),
           onPressed: press,
-          child: Text(title,
-              style: TextStyle(
-                  fontFamily: 'Poppins', fontSize: 16, color: textColor))),
+          child: Text(title, style: styleText)),
     );
   }
 }

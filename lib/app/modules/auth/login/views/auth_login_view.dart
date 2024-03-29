@@ -11,9 +11,11 @@ import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Contents/auth_constant.dart';
 import 'package:lesto/app/data/constants/Contents/label_constant.dart';
+import 'package:lesto/app/data/constants/Contents/modal_text_constant.dart';
 import 'package:lesto/app/data/constants/Image/image_constant.dart';
 import 'package:lesto/app/routes/app_pages.dart';
 
+import '../../../../components/Dialog/modal_dialog.dart';
 import '../controllers/auth_login_controller.dart';
 
 class AuthLoginView extends GetView<AuthLoginController> {
@@ -92,18 +94,49 @@ class AuthLoginView extends GetView<AuthLoginController> {
                                   )),
                             ),
                             PrimaryButton(
+                                styleText: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16,
+                                    color: NeutralColor.neutral100),
                                 title: AuthText.LOGIN_TEXT,
                                 press: () {
-                                  Get.toNamed(Routes.HOME);
+                                  showAlert(
+                                      context,
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 35),
+                                        child: Row(children: [
+                                          CircularProgressIndicator(
+                                            color: PrimaryColor.primary400,
+                                          ),
+                                          SizedBox(
+                                            width: 14,
+                                          ),
+                                          Text(
+                                            ModalText.MODAL_CONNEXION_TEXT,
+                                            style: TextStyle(
+                                                decoration: TextDecoration.none,
+                                                fontFamily: 'Gilroy',
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                          )
+                                        ]),
+                                      ),
+                                      size.width * 0.85,
+                                      size.height * 0.11,
+                                      false);
+                                  Future.delayed(const Duration(seconds: 5),
+                                      () {
+                                    Get.offNamed(Routes.HOME);
+                                  });
                                 },
-                                textColor: NeutralColor.neutral100,
                                 color: PrimaryColor.primary500,
                                 width: 372,
                                 height: 56),
                             LinkButton(
                               title: AuthText.ALREADY_CONNECT,
                               press: () {
-                                Get.toNamed(Routes.AUTH_REGISTER);
+                                Get.offNamed(Routes.AUTH_REGISTER);
                               },
                               width: 300,
                               height: 30,

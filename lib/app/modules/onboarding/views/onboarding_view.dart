@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lesto/app/components/Button/link_button.dart';
@@ -44,12 +46,15 @@ class OnboardingView extends GetView<OnboardingController> {
                       style: TextStyle(fontFamily: 'Gilroy', fontSize: 22),
                     ),
                     PrimaryButton(
+                      styleText: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          color: NeutralColor.neutral100),
                       title: AuthText.REGISTER_BUTTON_TEXT,
                       press: () {
                         Get.toNamed(Routes.AUTH_REGISTER);
                       },
                       color: PrimaryColor.primary500,
-                      textColor: NeutralColor.neutral100,
                       width: 373,
                       height: 56,
                     ),
