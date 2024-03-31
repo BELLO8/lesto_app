@@ -21,26 +21,6 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    List<Map<String, dynamic>> menus = [
-      {
-        'img': ImageString.food1,
-        'timing': '15-20 Mins',
-        'foodName': 'Foutou sauce claire',
-        'level': 'Difficultés: Moyen'
-      },
-      {
-        'img': ImageString.food2,
-        'timing': '1-2 heures',
-        'foodName': 'Tchep poulet',
-        'level': 'Difficultés: Moyen'
-      },
-      {
-        'img': ImageString.food3,
-        'timing': '50-60 Mins',
-        'foodName': 'Gouagouassou',
-        'level': 'Difficultés: Moyen'
-      },
-    ];
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -223,9 +203,11 @@ class HomeView extends GetView<HomeController> {
                                   onPressed: () {
                                     showAlert(
                                         context,
-                                        GenerateMenuContent(),
+                                        GenerateMenuContent(
+                                          controller: controller.prohibition,
+                                        ),
                                         size.width * 0.85,
-                                        size.height * 0.57,
+                                        size.height * 0.47,
                                         true);
                                   },
                                   child: Row(
@@ -281,7 +263,7 @@ class HomeView extends GetView<HomeController> {
                     height: size.height * 0.23,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
-                      children: menus.map((menu) {
+                      children: controller.menus.map((menu) {
                         return InkWell(
                           borderRadius: BorderRadius.circular(15),
                           onTap: () {
@@ -308,21 +290,35 @@ class HomeView extends GetView<HomeController> {
                                     alignment: Alignment.topRight,
                                     child: Container(
                                       margin: EdgeInsets.symmetric(
-                                          horizontal: 6, vertical: 10),
+                                          horizontal: 8, vertical: 10),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5),
                                       alignment: Alignment.center,
-                                      width: 106,
+                                      width: 114,
                                       height: 30,
                                       decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
                                               BorderRadius.circular(50)),
-                                      child: Text(menu['timing'],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              color: Color(0xFF381712),
-                                              fontSize: 15,
-                                              fontFamily: 'GilroyRegular')),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.timer,
+                                            color: PrimaryColor.primary500,
+                                            size: 18,
+                                          ),
+                                          SizedBox(
+                                            width: 4,
+                                          ),
+                                          Text(menu['timing'],
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color(0xFF381712),
+                                                  fontSize: 15,
+                                                  fontFamily: 'GilroyRegular')),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
