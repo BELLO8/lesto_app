@@ -56,8 +56,9 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
                 return Container(
                   margin: EdgeInsets.symmetric(horizontal: 2),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Color(0xFFD98B65)),
+                    borderRadius: BorderRadius.circular(50),
+                    color: Color(0xFFD98B65),
+                  ),
                   child: InkWell(
                     radius: 10,
                     onTap: () {
