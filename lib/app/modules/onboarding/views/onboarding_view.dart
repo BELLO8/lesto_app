@@ -26,7 +26,7 @@ class OnboardingView extends GetView<OnboardingController> {
         child: Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(
-            height: size.height * 0.40,
+            height: size.height * 0.45,
             child: Column(children: [
               Image.asset(
                 ImageString.logoPrimary,

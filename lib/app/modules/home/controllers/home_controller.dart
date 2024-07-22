@@ -1,37 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../data/constants/Image/image_constant.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:lesto/app/data/Models/menu_model.dart';
+import 'package:lesto/app/data/providers/menu_provider.dart';
 
 class HomeController extends GetxController {
   //TODO: Implement HomeController
 
-  final count = 0.obs;
   final search = TextEditingController();
   final prohibition = TextEditingController();
-  List<Map<String, dynamic>> menus = [
-    {
-      'img': ImageString.food1,
-      'timing': '15-20 Mins',
-      'foodName': 'Foutou sauce claire',
-      'level': 'Difficultés: Moyen'
-    },
-    {
-      'img': ImageString.food2,
-      'timing': '1-2 heures',
-      'foodName': 'Tchep poulet',
-      'level': 'Difficultés: Moyen'
-    },
-    {
-      'img': ImageString.food3,
-      'timing': '50-60 Mins',
-      'foodName': 'Gouagouassou',
-      'level': 'Difficultés: Moyen'
-    },
-  ];
+  var menuList = <Menu>[].obs;
+  var loading = false.obs;
+  
+
   @override
   void onInit() {
     super.onInit();
+    getMenu();
   }
 
   @override
@@ -44,5 +29,12 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  Future<void> getMenu() async {
+    try {
+      loading.value = true;
+      menuList.value = await MenuProvider().getMenu(1);
+    } finally {
+      loading.value = false;
+    }
+  }
 }

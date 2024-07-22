@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lesto/app/components/Button/link_button.dart';
 import 'package:lesto/app/components/Dialog/bottom_sheet_dialog.dart';
 import 'package:lesto/app/components/Dialog/modal_dialog.dart';
@@ -21,7 +22,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
+    final box = GetStorage();
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -42,7 +43,7 @@ class HomeView extends GetView<HomeController> {
                                   fontSize: 18,
                                   fontFamily: 'GilroySemi')),
                           TextSpan(
-                              text: ' Bello',
+                              text: box.read('nom'),
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 27,
@@ -145,7 +146,7 @@ class HomeView extends GetView<HomeController> {
                       Container(
                         alignment: Alignment.topLeft,
                         padding: EdgeInsets.symmetric(horizontal: 18),
-                        height: size.height * 0.18,
+                        height: size.height * 0.2,
                         width: size.width,
                         decoration: BoxDecoration(
                             color: PrimaryColor.primary100,
@@ -153,7 +154,7 @@ class HomeView extends GetView<HomeController> {
                         child: Column(
                           children: [
                             Container(
-                              margin: EdgeInsets.only(top: 28),
+                              margin: EdgeInsets.only(top: 20),
                               child: RichText(
                                 text: TextSpan(children: [
                                   TextSpan(
@@ -185,7 +186,7 @@ class HomeView extends GetView<HomeController> {
                             ),
                             Container(
                               height: size.height * 0.05,
-                              width: size.width * 0.51,
+                              width: size.width * 0.55,
                               margin: const EdgeInsets.only(top: 13, bottom: 4),
                               decoration: BoxDecoration(
                                 border: Border.all(
@@ -260,17 +261,17 @@ class HomeView extends GetView<HomeController> {
                     ]),
                   ),
                   SizedBox(
-                    height: size.height * 0.23,
+                    height: size.height * 0.25,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
-                      children: controller.menus.map((menu) {
+                      children: controller.menuList.getRange(0, 4).map((menu) {
                         return InkWell(
                           borderRadius: BorderRadius.circular(15),
                           onTap: () {
                             Get.toNamed(Routes.FOOD_DETAIL);
                           },
                           child: Container(
-                            width: 180,
+                            width: size.width * 0.5,
                             height: 184,
                             margin: EdgeInsets.symmetric(
                                 horizontal: 5, vertical: 12),
@@ -282,10 +283,11 @@ class HomeView extends GetView<HomeController> {
                                 Container(
                                   height: 117,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      image: DecorationImage(
-                                          image: AssetImage(menu['img']),
-                                          fit: BoxFit.cover)),
+                                    borderRadius: BorderRadius.circular(15),
+                                    image: DecorationImage(
+                                        image: NetworkImage(menu.image),
+                                        fit: BoxFit.cover),
+                                  ),
                                   child: Align(
                                     alignment: Alignment.topRight,
                                     child: Container(
@@ -294,7 +296,7 @@ class HomeView extends GetView<HomeController> {
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 5),
                                       alignment: Alignment.center,
-                                      width: 114,
+                                      width: size.width * 0.24,
                                       height: 30,
                                       decoration: BoxDecoration(
                                           color: Colors.white,
@@ -310,12 +312,12 @@ class HomeView extends GetView<HomeController> {
                                           SizedBox(
                                             width: 4,
                                           ),
-                                          Text(menu['timing'],
+                                          Text(menu.duree,
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   color: Color(0xFF381712),
-                                                  fontSize: 15,
+                                                  fontSize: 16,
                                                   fontFamily: 'GilroyRegular')),
                                         ],
                                       ),
@@ -328,7 +330,7 @@ class HomeView extends GetView<HomeController> {
                                   child: Column(children: [
                                     Align(
                                       alignment: Alignment.topLeft,
-                                      child: Text(menu['foodName'],
+                                      child: Text(menu.libelle,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               color: PrimaryColor.primary1000,
@@ -337,7 +339,7 @@ class HomeView extends GetView<HomeController> {
                                     ),
                                     Align(
                                       alignment: Alignment.topLeft,
-                                      child: Text("Difficultés: Moyen",
+                                      child: Text("Difficultés: ${menu.level}",
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               color: PrimaryColor.primary600,
@@ -434,6 +436,72 @@ class HomeView extends GetView<HomeController> {
                           fontFamily: 'GilroyRegular',
                         ),
                       ),
+                      // SizedBox(
+                      //   width: 355,
+                      //   height: 165,
+                      //   child: Stack(
+                      //     children: <Widget>[
+                      //       Container(
+                      //         width: 355,
+                      //         height: 165,
+                      //         decoration: BoxDecoration(
+                      //           borderRadius: BorderRadius.circular(20),
+                      //           image: DecorationImage(
+                      //               image: AssetImage(ImageString.food2),
+                      //               fit: BoxFit.cover),
+                      //         ),
+                      //       ),
+                      //       Container(
+                      //         padding: const EdgeInsets.all(5.0),
+                      //         alignment: Alignment.bottomCenter,
+                      //         decoration: BoxDecoration(
+                      //           borderRadius: BorderRadius.circular(20),
+                      //           gradient: LinearGradient(
+                      //             begin: Alignment.topCenter,
+                      //             end: Alignment.bottomCenter,
+                      //             colors: <Color>[
+                      //               Color(0x1F825221),
+                      //               Color(0xAF301902),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //         child: Align(
+                      //           alignment: Alignment.topRight,
+                      //           child: Container(
+                      //             margin: EdgeInsets.symmetric(
+                      //                 horizontal: 8, vertical: 10),
+                      //             padding: EdgeInsets.symmetric(horizontal: 5),
+                      //             alignment: Alignment.center,
+                      //             width: 114,
+                      //             height: 30,
+                      //             decoration: BoxDecoration(
+                      //                 color: Colors.white,
+                      //                 borderRadius: BorderRadius.circular(50)),
+                      //             child: Row(
+                      //               children: [
+                      //                 Icon(
+                      //                   Icons.timer,
+                      //                   color: PrimaryColor.primary500,
+                      //                   size: 18,
+                      //                 ),
+                      //                 SizedBox(
+                      //                   width: 4,
+                      //                 ),
+                      //                 Text("15-18 mins",
+                      //                     textAlign: TextAlign.center,
+                      //                     style: TextStyle(
+                      //                         fontWeight: FontWeight.w600,
+                      //                         color: Color(0xFF381712),
+                      //                         fontSize: 15,
+                      //                         fontFamily: 'GilroyRegular')),
+                      //               ],
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ]),
                   )
                 ],

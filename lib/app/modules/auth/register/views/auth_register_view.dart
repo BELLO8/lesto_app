@@ -6,6 +6,7 @@ import 'package:lesto/app/components/Button/link_button.dart';
 import 'package:lesto/app/components/Button/primary_button.dart';
 import 'package:lesto/app/components/TextField/custom_textfield.dart';
 import 'package:lesto/app/components/TextField/custom_textfield_password.dart';
+import 'package:lesto/app/data/Models/RegisterModel.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Contents/auth_constant.dart';
@@ -33,27 +34,30 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
           ),
           Align(
             alignment: Alignment.topLeft,
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 13),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      AuthText.REGISTER_TEXT,
-                      style: TextStyle(
-                          letterSpacing: -1.5,
-                          fontFamily: 'GilroyBold',
-                          fontSize: 35,
-                          color: PrimaryColor.primary900),
-                    ),
-                    Text(
-                      AuthText.REGISTER_TEXT_INFO,
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 16,
-                          color: PrimaryColor.primary900),
-                    )
-                  ]),
+            child: Form(
+              key: controller.formKey,
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 13),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AuthText.REGISTER_TEXT,
+                        style: TextStyle(
+                            letterSpacing: -1.5,
+                            fontFamily: 'GilroyBold',
+                            fontSize: 35,
+                            color: PrimaryColor.primary900),
+                      ),
+                      Text(
+                        AuthText.REGISTER_TEXT_INFO,
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                            color: PrimaryColor.primary900),
+                      )
+                    ]),
+              ),
             ),
           ),
           SizedBox(
@@ -63,9 +67,14 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
             margin: EdgeInsets.symmetric(horizontal: 13),
             child: Column(children: [
               CustomTextField(
-                controller: controller.name,
+                controller: controller.firstName,
                 hintValue: LabelText.LABEL_NAME,
-                label: 'Nom et premons',
+                label: 'Nom',
+              ),
+              CustomTextField(
+                controller: controller.lastName,
+                hintValue: LabelText.LABEL_LASTNAME,
+                label: 'Prenoms',
               ),
               CustomTextField(
                 controller: controller.phone,
@@ -103,7 +112,14 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
                       color: NeutralColor.neutral100),
                   title: AuthText.SIGNUP_BUTTON_TEXT,
                   press: () {
-                    Get.offNamed(Routes.HOME);
+                    if (controller.formKey.currentState!.validate()) {
+                      controller.inscription(RegisterModel(
+                          nom: controller.firstName.text,
+                          prenoms: controller.lastName.text,
+                          password: controller.password.text,
+                          telephone: controller.phone.text,
+                          email: controller.email.text));
+                    }
                   },
                   color: PrimaryColor.primary500,
                   width: 372,
@@ -111,7 +127,7 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
               LinkButton(
                 title: AuthText.LOGIN_BUTTON_TEXT,
                 press: () {
-                  Get.offNamed(Routes.AUTH_LOGIN);
+                  Get.offNamed(Routes.LOGIN);
                 },
                 width: 300,
                 height: 30,

@@ -2,15 +2,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:lesto/app/data/Models/RegisterModel.dart';
+import 'package:lesto/app/data/providers/auth_provider.dart';
+import 'package:lesto/app/routes/app_pages.dart';
 
 class AuthRegisterController extends GetxController {
-  final name = TextEditingController();
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
   final phone = TextEditingController();
   final country = TextEditingController();
   final email = TextEditingController();
   final password = TextEditingController();
-
+  final formKey = new GlobalKey<FormState>();
+  final box = GetStorage();
   var isOscure = true.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -28,5 +35,27 @@ class AuthRegisterController extends GetxController {
 
   void obscure() {
     isOscure.value = !isOscure.value;
+  }
+
+  void inscription(RegisterModel registerRequest) async {
+    var response = await AuthProvider().register(registerRequest);
+    if (response['status'] == 'success') {
+      box.write('nom', response["data"]['nom']);
+      box.write('prenoms', response["data"]['prenoms']);
+      box.write('email', response["data"]['email']);
+      box.write('telephone', response["data"]['telephone']);
+
+      Get.snackbar('Succès', response['message'],
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
+          icon: const Icon(
+            Icons.check,
+            color: Colors.white,
+          ));
+      Get.offNamed(Routes.HOME);
+    }
   }
 }
