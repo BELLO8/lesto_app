@@ -35,7 +35,7 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
           Align(
             alignment: Alignment.topLeft,
             child: Form(
-              key: controller.formKey,
+              key: controller.fKey,
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 13),
                 child: Column(
@@ -67,16 +67,37 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
             margin: EdgeInsets.symmetric(horizontal: 13),
             child: Column(children: [
               CustomTextField(
+                validate: (nom) {
+                  if (nom == null || nom.isEmpty) {
+                    return 'Le nom ne peut être vide';
+                  }
+                  return null;
+                },
                 controller: controller.firstName,
                 hintValue: LabelText.LABEL_NAME,
                 label: 'Nom',
               ),
               CustomTextField(
+                validate: (prenom) {
+                  if (prenom == null || prenom.isEmpty) {
+                    return 'Le nom ne peut être vide';
+                  }
+                  return null;
+                },
                 controller: controller.lastName,
                 hintValue: LabelText.LABEL_LASTNAME,
                 label: 'Prenoms',
               ),
               CustomTextField(
+                validate: (telephone) {
+                  if (telephone == null || telephone.isEmpty) {
+                    return 'Le mot de passe ne peut être vide';
+                  }
+                  if (telephone.length != 10) {
+                    return "Telephone doit être egale a 10 chiffres";
+                  }
+                  return null;
+                },
                 controller: controller.phone,
                 hintValue: LabelText.LABEL_PHONE,
                 typeInput: TextInputType.phone,
@@ -88,12 +109,26 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
                 label: 'Nationalité',
               ),
               CustomTextField(
+                validate: (email) {
+                  if (email == null || email.isEmpty) {
+                    return 'Le nom ne peut être vide';
+                  }
+                },
                 controller: controller.email,
                 typeInput: TextInputType.emailAddress,
                 hintValue: LabelText.LABEL_EMAIL,
                 label: 'Email',
               ),
               Obx(() => CustomTextfieldPassWord(
+                    validate: (password) {
+                      if (password == null || password.isEmpty) {
+                        return 'Le mot de passe ne peut être vide';
+                      }
+                      if (password.length < 8) {
+                        return 'Mot de passe trop court 8 caractères au minimum';
+                      }
+                      return null;
+                    },
                     controller: controller.password,
                     hintValue: 'Mot de passe',
                     isObscure: controller.isOscure.value,
@@ -112,12 +147,12 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
                       color: NeutralColor.neutral100),
                   title: AuthText.SIGNUP_BUTTON_TEXT,
                   press: () {
-                    if (controller.formKey.currentState!.validate()) {
+                    if (controller.fKey.currentState!.validate()) {
                       controller.inscription(RegisterModel(
                           nom: controller.firstName.text,
-                          prenoms: controller.lastName.text,
+                          prenom: controller.lastName.text,
                           password: controller.password.text,
-                          telephone: controller.phone.text,
+                          number: controller.phone.text,
                           email: controller.email.text));
                     }
                   },

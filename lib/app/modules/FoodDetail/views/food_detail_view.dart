@@ -47,7 +47,11 @@ class FoodDetailView extends GetView<FoodDetailController> {
           child: NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[HomeSilverBar()];
+              return <Widget>[
+                HomeSilverBar(
+                  imagePath: controller.argumentData.image,
+                )
+              ];
             },
             body: SingleChildScrollView(
               child: SizedBox(
@@ -60,7 +64,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "L'Attiéké Poisson",
+                            controller.argumentData.nom,
                             style: TextStyle(
                                 fontFamily: 'GilroySemi',
                                 fontSize: 32,
@@ -77,7 +81,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
                                 width: 4,
                               ),
                               Text(
-                                '15-20 Mins',
+                                controller.argumentData.duree,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 14,
@@ -87,7 +91,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
                                 width: 4,
                               ),
                               Text(
-                                '| Difficultés: Moyen',
+                                '| Difficultés: ${controller.argumentData.level}',
                                 style: TextStyle(
                                     color: NeutralColor.neutral400,
                                     fontSize: 14,
@@ -112,7 +116,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
                           ),
                           SizedBox(
                             child: Text(
-                              "L'Attiéké ou semoule de manioc est l'un des plats les plus connu de la Cuisine Ivoirienne. On le retrouve à tous les grands rendez-vous festifs et aussi au menu dans tous les grands restaurants, maquis et autres lieux de restauration en Côte d’Ivoire.",
+                              controller.argumentData.description,
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
@@ -199,11 +203,14 @@ class FoodDetailView extends GetView<FoodDetailController> {
                             ),
                           ),
                           Container(
-                            decoration: BoxDecoration(color: Colors.pink),
-                            child: Column(
-                              children: [Text('3')],
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 8),
+                            child: Text(
+                              'Video de preparation',
+                              style: TextStyle(
+                                  fontFamily: 'GilroySemi', fontSize: 18),
                             ),
-                          ),
+                          )
                         ],
                       ),
                     ),

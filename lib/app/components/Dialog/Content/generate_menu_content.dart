@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get/get.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/routes/app_pages.dart';
@@ -9,7 +8,6 @@ import 'package:lesto/app/routes/app_pages.dart';
 import '../../../data/constants/Colors/color_primary.dart';
 import '../../../data/constants/Contents/modal_text_constant.dart';
 import '../../Button/primary_button.dart';
-import '../modal_dialog.dart';
 
 class GenerateMenuContent extends StatelessWidget {
   const GenerateMenuContent({
@@ -46,7 +44,7 @@ class GenerateMenuContent extends StatelessWidget {
       },
       {
         'id': 3,
-        'icon': TablerIcons.salt,
+        'icon': "",
         'label': ModalText.SALE,
       },
     ];
@@ -170,33 +168,7 @@ class GenerateMenuContent extends StatelessWidget {
                   color: PrimaryColor.primary700),
               title: ModalText.MODAL_GENERATE_BUTTON_TEXT,
               press: () {
-                showAlert(
-                    context,
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 35),
-                      child: Row(children: [
-                        CircularProgressIndicator(
-                          color: PrimaryColor.primary400,
-                        ),
-                        SizedBox(
-                          width: 14,
-                        ),
-                        Text(
-                          ModalText.MODAL_GENERATE_TEXT,
-                          style: TextStyle(
-                              decoration: TextDecoration.none,
-                              fontFamily: 'Gilroy',
-                              fontSize: 14,
-                              color: Colors.black),
-                        )
-                      ]),
-                    ),
-                    size.width * 0.85,
-                    size.height * 0.11,
-                    false);
-                Future.delayed(const Duration(seconds: 5), () {
-                  Get.toNamed(Routes.GENERATE_MENU);
-                });
+                Get.toNamed(Routes.GENERATE_MENU);
               },
               color: PrimaryColor.primary100,
               width: 274,

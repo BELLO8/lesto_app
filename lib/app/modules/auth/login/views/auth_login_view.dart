@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:lesto/app/components/Button/link_button.dart';
 import 'package:lesto/app/components/Button/primary_button.dart';
 import 'package:lesto/app/components/Container/container_image.dart';
+import 'package:lesto/app/components/Dialog/modal_dialog.dart';
 import 'package:lesto/app/components/TextField/custom_textfield.dart';
 import 'package:lesto/app/components/TextField/custom_textfield_password.dart';
 import 'package:lesto/app/data/Models/LoginModel.dart';
@@ -12,6 +13,7 @@ import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Contents/auth_constant.dart';
 import 'package:lesto/app/data/constants/Contents/label_constant.dart';
+import 'package:lesto/app/data/constants/Contents/modal_text_constant.dart';
 import 'package:lesto/app/data/constants/Image/image_constant.dart';
 import 'package:lesto/app/routes/app_pages.dart';
 
@@ -69,12 +71,30 @@ class AuthLoginView extends GetView<AuthLoginController> {
                             margin: EdgeInsets.symmetric(horizontal: 13),
                             child: Column(children: [
                               CustomTextField(
-                                typeInput: TextInputType.number,
+                                validate: (telephone) {
+                                  if (telephone == null || telephone.isEmpty) {
+                                    return 'Le mot de passe ne peut être vide';
+                                  }
+                                  if (telephone.length != 10) {
+                                    return "Telephone doit être egale a 10 chiffres";
+                                  }
+                                  return null;
+                                },
                                 controller: controller.phone,
                                 hintValue: AuthText.LOGIN_LABEL_PHONE,
                                 label: AuthText.LOGIN_LABEL_PHONE,
                               ),
                               Obx(() => CustomTextfieldPassWord(
+                                    validate: (password) {
+                                      if (password == null ||
+                                          password.isEmpty) {
+                                        return 'Le mot de passe ne peut être vide';
+                                      }
+                                      if (password.length < 8) {
+                                        return 'Mot de passe trop court 8 caractères au minimum';
+                                      }
+                                      return null;
+                                    },
                                     controller: controller.password,
                                     hintValue: 'Mot de passe',
                                     isObscure: controller.isOscure.value,
@@ -108,36 +128,36 @@ class AuthLoginView extends GetView<AuthLoginController> {
                                           telephone: controller.phone.text,
                                           password: controller.password.text));
                                     }
-
-                                    // showAlert(
-                                    //     context,
-                                    //     Container(
-                                    //       padding: EdgeInsets.symmetric(
-                                    //           horizontal: 35),
-                                    //       child: Row(children: [
-                                    //         CircularProgressIndicator(
-                                    //           color: PrimaryColor.primary400,
-                                    //         ),
-                                    //         SizedBox(
-                                    //           width: 14,
-                                    //         ),
-                                    //         Text(
-                                    //           ModalText.MODAL_CONNEXION_TEXT,
-                                    //           style: TextStyle(
-                                    //               decoration: TextDecoration.none,
-                                    //               fontFamily: 'Gilroy',
-                                    //               fontSize: 14,
-                                    //               color: Colors.black),
-                                    //         )
-                                    //       ]),
-                                    //     ),
-                                    //     size.width * 0.85,
-                                    //     size.height * 0.11,
-                                    //     false);
-                                    // Future.delayed(const Duration(seconds: 5),
-                                    //     () {
-                                    //   Get.offNamed(Routes.HOME);
-                                    // });
+                                    controller.loading.value
+                                        ? showAlert(
+                                            context,
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 35),
+                                              child: Row(children: [
+                                                CircularProgressIndicator(
+                                                  color:
+                                                      PrimaryColor.primary400,
+                                                ),
+                                                SizedBox(
+                                                  width: 14,
+                                                ),
+                                                Text(
+                                                  ModalText
+                                                      .MODAL_CONNEXION_TEXT,
+                                                  style: TextStyle(
+                                                      decoration:
+                                                          TextDecoration.none,
+                                                      fontFamily: 'Gilroy',
+                                                      fontSize: 14,
+                                                      color: Colors.black),
+                                                )
+                                              ]),
+                                            ),
+                                            size.width * 0.85,
+                                            size.height * 0.11,
+                                            false)
+                                        : null;
                                   },
                                   color: PrimaryColor.primary500,
                                   width: 372,

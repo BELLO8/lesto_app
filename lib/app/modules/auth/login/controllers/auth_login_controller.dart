@@ -10,9 +10,9 @@ import 'package:lesto/app/routes/app_pages.dart';
 class AuthLoginController extends GetxController {
   final phone = TextEditingController();
   final password = TextEditingController();
-  final formKey = new GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   final box = GetStorage();
-
+  final loading = false.obs;
   var isOscure = true.obs;
   @override
   void onInit() {
@@ -34,8 +34,12 @@ class AuthLoginController extends GetxController {
   }
 
   void connexion(LoginModel loginRequest) async {
+    loading.value = true;
+    update();
     var loginResponse = await AuthProvider().login(loginRequest);
     if (loginResponse['status'] == "error") {
+      loading.value = false;
+      update();
       Get.snackbar('Erreur', loginResponse['message'],
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
@@ -47,11 +51,15 @@ class AuthLoginController extends GetxController {
             color: Colors.white,
           ));
     } else if (loginResponse['status'] == "success") {
-      if (box.read('token') == null) {
-        box.write('token', loginResponse['data']['token']);
-      }
-
-      Get.offNamed(Routes.HOME);
+      loading.value = false;
+      update();
+      print(box.read('onboarding'));
+      box.write('token', loginResponse['token']['token']);
+      box.write('nom', loginResponse["data"]['nom']);
+      box.write('prenoms', loginResponse["data"]['prenoms']);
+      box.write('email', loginResponse["data"]['email']);
+      box.write('telephone', loginResponse["data"]['telephone']);
+      Get.offAndToNamed(Routes.HOME);
     } else {}
   }
 }

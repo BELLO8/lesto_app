@@ -18,6 +18,7 @@ class AuthProvider extends GetConnect {
   register(RegisterModel registerRequest) async {
     final response = await post(
         EndPoint.API_URL + EndPoint.Register_URL, registerRequest.toJson());
+    print(response.body);
     return response.body;
   }
 }

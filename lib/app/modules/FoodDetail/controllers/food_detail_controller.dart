@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lesto/app/data/Models/plat_model.dart';
 
 class FoodDetailController extends GetxController {
   //TODO: Implement FoodDetailController
+  Plat argumentData = Get.arguments;
 
   final count = 0.obs;
   final pageController = PageController();

@@ -14,7 +14,7 @@ class AuthRegisterController extends GetxController {
   final country = TextEditingController();
   final email = TextEditingController();
   final password = TextEditingController();
-  final formKey = new GlobalKey<FormState>();
+  final fKey = GlobalKey<FormState>();
   final box = GetStorage();
   var isOscure = true.obs;
 

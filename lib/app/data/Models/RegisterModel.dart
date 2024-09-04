@@ -11,32 +11,32 @@ String registerModelToJson(RegisterModel data) => json.encode(data.toJson());
 
 class RegisterModel {
   String nom;
-  String prenoms;
+  String prenom;
   String password;
-  String telephone;
+  String number;
   String email;
 
   RegisterModel({
     required this.nom,
-    required this.prenoms,
+    required this.prenom,
     required this.password,
-    required this.telephone,
+    required this.number,
     required this.email,
   });
 
   factory RegisterModel.fromJson(Map<String, dynamic> json) => RegisterModel(
         nom: json["nom"],
-        prenoms: json["prenoms"],
+        prenom: json["prenom"],
         password: json["password"],
-        telephone: json["telephone"],
+        number: json["number"],
         email: json["email"],
       );
 
   Map<String, dynamic> toJson() => {
         "nom": nom,
-        "prenoms": prenoms,
+        "prenom": prenom,
         "password": password,
-        "telephone": telephone,
+        "number": number,
         "email": email,
       };
 }

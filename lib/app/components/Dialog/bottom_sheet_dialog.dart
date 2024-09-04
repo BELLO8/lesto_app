@@ -2,7 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-void bottomSheetDialog(BuildContext ctx, Widget child, double height) {
+void bottomSheetDialog(
+    BuildContext ctx, Widget child, double height, Function() action) {
   Size size = MediaQuery.of(ctx).size;
   showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -23,5 +24,5 @@ void bottomSheetDialog(BuildContext ctx, Widget child, double height) {
                 child: child,
               ),
             ],
-          ));
+          )).whenComplete(action);
 }

@@ -1,36 +1,26 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lesto/app/modules/home/controllers/home_controller.dart';
 
 import '../../../data/constants/Colors/color_primary.dart';
 import '../../../data/constants/Image/image_constant.dart';
 
 class SearchContent extends StatelessWidget {
-  const SearchContent({super.key, required this.controller});
+  const SearchContent({
+    super.key,
+    required this.controller,
+    required this.onChanged,
+    required this.child,
+  });
   final TextEditingController controller;
+  final void Function(String)? onChanged;
+  final Widget child;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    List<Map<String, dynamic>> menus = [
-      {
-        'img': ImageString.food2,
-        'timing': '2 h 30 min',
-        'time': 'midi',
-        'foodName': 'Sauce gouagouassou',
-        'level': 'Difficultés: Moyen',
-        'description':
-            'Oignons frais, daurades fraîches à couper en 2 morceaux égaux...'
-      },
-      {
-        'img': ImageString.food3,
-        'timing': '1 h 50 min',
-        'time': 'midi',
-        'foodName': 'Placali sauce gombo',
-        'level': 'Difficultés: Moyen',
-        'description':
-            'Placez les morceaux de gombos dans un mixeur et réduisez-les en petits'
-      },
-    ];
+    final homeController = Get.put(HomeController());
     return Container(
       margin: EdgeInsets.symmetric(vertical: 25, horizontal: 10),
       child: Column(children: [
@@ -50,6 +40,7 @@ class SearchContent extends StatelessWidget {
               SizedBox(
                 width: size.width * 0.77,
                 child: TextFormField(
+                  onChanged: onChanged,
                   cursorColor: PrimaryColor.primary600,
                   controller: controller,
                   style: TextStyle(
@@ -58,10 +49,10 @@ class SearchContent extends StatelessWidget {
                   decoration: InputDecoration(
                     filled: true,
                     border: InputBorder.none,
-                    fillColor: Colors.transparent,
+                    fillColor: PrimaryColor.transparent,
                     hintStyle: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFFD5C2B9),
+                        color: PrimaryColor.primary200,
                         fontSize: 16,
                         fontFamily: 'Gilroy'),
                     hintText: "Rechercher un plat",
@@ -75,123 +66,19 @@ class SearchContent extends StatelessWidget {
           height: 12,
         ),
         Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "2 élements trouvés",
-            style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-                fontFamily: 'GilroySemi'),
-          ),
-        ),
+            alignment: Alignment.topLeft,
+            child: Obx(
+              () => Text(
+                "${homeController.searchPlatList.length} élements trouvés",
+                style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    fontFamily: 'GilroySemi'),
+              ),
+            )),
         SizedBox(
           height: size.height * 0.78,
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: menus.map((menu) {
-              return Container(
-                width: 338,
-                height: 142,
-                margin: EdgeInsets.symmetric(horizontal: 5, vertical: 12),
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                decoration: BoxDecoration(
-                    border:
-                        Border.all(width: 1.2, color: PrimaryColor.primary200),
-                    borderRadius: BorderRadius.circular(15),
-                    color: PrimaryColor.primary100),
-                child: Row(
-                  children: [
-                    Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          image: DecorationImage(
-                              image: AssetImage(menu['img']),
-                              fit: BoxFit.cover)),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              menu['foodName'],
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: PrimaryColor.primary900,
-                                  fontSize: 18,
-                                  fontFamily: 'GilroySemi'),
-                            ),
-                            SizedBox(
-                              width: size.width * 0.5,
-                              child: Text(
-                                menu['description'],
-                                maxLines: 2,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13,
-                                    fontFamily: 'GilroyRegular'),
-                              ),
-                            ),
-                            SizedBox(
-                              child: Row(children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical: 5),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.timer,
-                                        color: PrimaryColor.primary500,
-                                        size: 18,
-                                      ),
-                                      SizedBox(
-                                        width: 3,
-                                      ),
-                                      Text(
-                                        menu['timing'],
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 13,
-                                            fontFamily: 'GilroyRegular'),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 8),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.wb_sunny_rounded,
-                                        color: PrimaryColor.primary500,
-                                        size: 20,
-                                      ),
-                                      SizedBox(
-                                        width: 3,
-                                      ),
-                                      Text(
-                                        menu['time'],
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 13,
-                                            fontFamily: 'GilroyRegular'),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ]),
-                            ),
-                          ]),
-                    )
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
+          child: child,
         )
       ]),
     );

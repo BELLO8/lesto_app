@@ -8,17 +8,15 @@ class MenuProvider extends GetConnect {
     httpClient.baseUrl = EndPoint.API_URL;
   }
 
+  // Fonction pour convertir une structure JSON en une liste de Category
+
   getMenu(int id) async {
     final response = await get('${EndPoint.API_URL}/menu/generer/$id');
     if (response.statusCode == 200) {
-      Iterable data = response.body['data'];
-      var menu = data.map((e) => Menu.fromJson(e)).toList();
-      return menu;
+      List<Dish> categories = response.body['data'];
+      return categories;
     } else {
-      return null;
+      return <Dish>[];
     }
   }
-
-  Future<Response<Menu>> postMenu(Menu menu) async => await post('menu', menu);
-  Future<Response> deleteMenu(int id) async => await delete('menu/$id');
 }

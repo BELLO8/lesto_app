@@ -1,14 +1,39 @@
 // To parse this JSON data, do
 //
-//     final menu = menuFromJson(jsonString);
+//     final dish = dishFromJson(jsonString);
 
 import 'dart:convert';
 
-Menu menuFromJson(String str) => Menu.fromJson(json.decode(str));
+Dish dishFromJson(String str) => Dish.fromJson(json.decode(str));
 
-String menuToJson(Menu data) => json.encode(data.toJson());
+String dishToJson(Dish data) => json.encode(data.toJson());
 
-class Menu {
+class Dish {
+  DateTime date;
+  String name;
+  List<Plat> plats;
+
+  Dish({
+    required this.date,
+    required this.name,
+    required this.plats,
+  });
+
+  factory Dish.fromJson(Map<String, dynamic> json) => Dish(
+        date: DateTime.parse(json["date"]),
+        name: json["name"],
+        plats: List<Plat>.from(json["plats"].map((x) => Plat.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "date":
+            "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
+        "name": name,
+        "plats": List<dynamic>.from(plats.map((x) => x.toJson())),
+      };
+}
+
+class Plat {
   int id;
   String libelle;
   String duree;
@@ -16,7 +41,7 @@ class Menu {
   String description;
   String level;
 
-  Menu({
+  Plat({
     required this.id,
     required this.libelle,
     required this.duree,
@@ -25,7 +50,7 @@ class Menu {
     required this.level,
   });
 
-  factory Menu.fromJson(Map<String, dynamic> json) => Menu(
+  factory Plat.fromJson(Map<String, dynamic> json) => Plat(
         id: json["id"],
         libelle: json["libelle"],
         duree: json["duree"],

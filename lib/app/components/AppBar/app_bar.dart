@@ -2,11 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
-import 'package:lesto/app/data/constants/Image/image_constant.dart';
 
 class HomeSilverBar extends StatelessWidget {
-  const HomeSilverBar({super.key});
-
+  const HomeSilverBar({super.key, required this.imagePath});
+  final String imagePath;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -57,7 +56,7 @@ class HomeSilverBar extends StatelessWidget {
           background: Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage(ImageString.food3), fit: BoxFit.cover)),
+                    image: NetworkImage(imagePath), fit: BoxFit.cover)),
           ),
           titlePadding: EdgeInsets.zero,
           title: AnimatedOpacity(

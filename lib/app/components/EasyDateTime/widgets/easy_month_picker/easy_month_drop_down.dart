@@ -43,7 +43,7 @@ class EasyMonthDropDown extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: value!.name == month.name
-                      ? Color(0xFFD06E3F)
+                      ? PrimaryColor.primary600
                       : PrimaryColor.primary100),
               child: InkWell(
                 radius: 10,
@@ -60,7 +60,7 @@ class EasyMonthDropDown extends StatelessWidget {
                             fontSize: 13,
                             color: value!.name == month.name
                                 ? Color(0xFFFFFFFF)
-                                : Color(0xFFD06E3F)))),
+                                : PrimaryColor.primary600))),
               ),
             );
           }).toList(),

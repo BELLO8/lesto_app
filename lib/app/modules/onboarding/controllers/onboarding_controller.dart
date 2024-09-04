@@ -1,12 +1,13 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class OnboardingController extends GetxController {
   //TODO: Implement OnboardingController
-
-  final count = 0.obs;
+  final storage = GetStorage();
   @override
   void onInit() {
     super.onInit();
+    storage.write('onboarding', 'onboard');
   }
 
   @override
@@ -18,6 +19,4 @@ class OnboardingController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

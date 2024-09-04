@@ -6,15 +6,16 @@ import 'package:get_storage/get_storage.dart';
 import 'package:lesto/app/components/Button/link_button.dart';
 import 'package:lesto/app/components/Dialog/bottom_sheet_dialog.dart';
 import 'package:lesto/app/components/Dialog/modal_dialog.dart';
+import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Contents/homescreen_text_constant.dart';
 import 'package:lesto/app/data/constants/Image/image_constant.dart';
 import 'package:lesto/app/routes/app_pages.dart';
 
-import '../../../components/Dialog/Content/generate_menu_content.dart';
 import '../../../components/Dialog/Content/search_content.dart';
 import '../../../components/Dialog/Content/user_profil_content.dart';
 import '../../../components/EasyDateTime/easy_date_timeline.dart';
+import '../../../data/constants/Contents/modal_text_constant.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -77,7 +78,8 @@ class HomeView extends GetView<HomeController> {
                               UserProfileContent(
                                 size: size,
                               ),
-                              size.height * 0.67);
+                              size.height * 0.67,
+                              () => {});
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -97,7 +99,7 @@ class HomeView extends GetView<HomeController> {
                     alignment: Alignment.topLeft,
                     child: Text(HomeText.HOMESCREEN_TEXT,
                         style: TextStyle(
-                            color: Color(0xFF381712),
+                            color: PrimaryColor.primary900,
                             fontSize: 17,
                             fontWeight: FontWeight.w700,
                             fontFamily: 'Gilroy')),
@@ -111,8 +113,172 @@ class HomeView extends GetView<HomeController> {
                           context,
                           SearchContent(
                             controller: controller.search,
+                            onChanged: (value) {
+                              controller.searchPlat(value);
+                            },
+                            child: Center(
+                              child: Obx(
+                                () => controller.isloading.value
+                                    ? Center(
+                                        child:
+                                            const CircularProgressIndicator())
+                                    : ListView(
+                                        scrollDirection: Axis.vertical,
+                                        children: controller.searchPlatList
+                                            .map((plat) {
+                                          return InkWell(
+                                            onTap: () {
+                                              Get.toNamed(Routes.FOOD_DETAIL,
+                                                  arguments: plat);
+                                            },
+                                            child: Container(
+                                              width: 338,
+                                              height: 142,
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 5, vertical: 12),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 12, vertical: 12),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      width: 1.2,
+                                                      color: PrimaryColor
+                                                          .primary200),
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  color:
+                                                      PrimaryColor.primary100),
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    height: 100,
+                                                    width: 100,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                        image: DecorationImage(
+                                                            image: NetworkImage(
+                                                                plat.image),
+                                                            fit: BoxFit.cover)),
+                                                  ),
+                                                  Container(
+                                                    margin:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 8,
+                                                            horizontal: 12),
+                                                    child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            plat.nom,
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color: PrimaryColor
+                                                                    .primary900,
+                                                                fontSize: 18,
+                                                                fontFamily:
+                                                                    'GilroySemi'),
+                                                          ),
+                                                          SizedBox(
+                                                            width: size.width *
+                                                                0.5,
+                                                            child: Text(
+                                                              plat.description,
+                                                              maxLines: 2,
+                                                              softWrap: true,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize: 13,
+                                                                  fontFamily:
+                                                                      'GilroyRegular'),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            child: Row(
+                                                                children: [
+                                                                  Container(
+                                                                    margin: EdgeInsets
+                                                                        .symmetric(
+                                                                            vertical:
+                                                                                5),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Icon(
+                                                                          Icons
+                                                                              .timer,
+                                                                          color:
+                                                                              PrimaryColor.primary500,
+                                                                          size:
+                                                                              18,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              3,
+                                                                        ),
+                                                                        Text(
+                                                                          plat.duree,
+                                                                          style: TextStyle(
+                                                                              fontWeight: FontWeight.w600,
+                                                                              fontSize: 13,
+                                                                              fontFamily: 'GilroyRegular'),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  Container(
+                                                                    margin: EdgeInsets.symmetric(
+                                                                        vertical:
+                                                                            5,
+                                                                        horizontal:
+                                                                            8),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Icon(
+                                                                          Icons
+                                                                              .wb_sunny_rounded,
+                                                                          color:
+                                                                              PrimaryColor.primary500,
+                                                                          size:
+                                                                              20,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              3,
+                                                                        ),
+                                                                        Text(
+                                                                          plat.level,
+                                                                          style: TextStyle(
+                                                                              fontWeight: FontWeight.w600,
+                                                                              fontSize: 13,
+                                                                              fontFamily: 'GilroyRegular'),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  )
+                                                                ]),
+                                                          ),
+                                                        ]),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                              ),
+                            ),
                           ),
-                          size.height * 0.94);
+                          size.height * 0.94,
+                          () => {controller.searchPlatList.value = []});
                     },
                     child: Container(
                       height: 46,
@@ -131,7 +297,7 @@ class HomeView extends GetView<HomeController> {
                           Text("Rechercher un plat",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: Color(0xFFD5C2B9),
+                                  color: NeutralColor.neutral300,
                                   fontSize: 16,
                                   fontFamily: 'Gilroy'))
                         ],
@@ -160,25 +326,25 @@ class HomeView extends GetView<HomeController> {
                                   TextSpan(
                                       text: 'Créez des menus',
                                       style: TextStyle(
-                                          color: Color(0xFF693025),
+                                          color: PrimaryColor.primary900,
                                           fontSize: 22,
                                           fontFamily: 'GilroyBold')),
                                   TextSpan(
                                       text: ' qui',
                                       style: TextStyle(
-                                          color: Color(0xFF693025),
+                                          color: PrimaryColor.primary900,
                                           fontSize: 16,
                                           fontFamily: 'Gilroy')),
                                   TextSpan(
                                       text: '\n reflètent votre',
                                       style: TextStyle(
-                                          color: Color(0xFF693025),
+                                          color: PrimaryColor.primary900,
                                           fontSize: 16,
                                           fontFamily: 'Gilroy')),
                                   TextSpan(
                                       text: ' style de vie .',
                                       style: TextStyle(
-                                          color: Color(0xFF693025),
+                                          color: PrimaryColor.primary900,
                                           fontSize: 19,
                                           fontFamily: 'GilroyBold')),
                                 ]),
@@ -204,12 +370,42 @@ class HomeView extends GetView<HomeController> {
                                   onPressed: () {
                                     showAlert(
                                         context,
-                                        GenerateMenuContent(
-                                          controller: controller.prohibition,
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 35),
+                                          child: Row(children: [
+                                            CircularProgressIndicator(
+                                              color: PrimaryColor.primary400,
+                                            ),
+                                            SizedBox(
+                                              width: 14,
+                                            ),
+                                            Text(
+                                              ModalText.MODAL_GENERATE_TEXT,
+                                              style: TextStyle(
+                                                  decoration:
+                                                      TextDecoration.none,
+                                                  fontFamily: 'Gilroy',
+                                                  fontSize: 14,
+                                                  color: Colors.black),
+                                            )
+                                          ]),
                                         ),
                                         size.width * 0.85,
-                                        size.height * 0.47,
-                                        true);
+                                        size.height * 0.11,
+                                        false);
+                                    Future.delayed(const Duration(seconds: 2),
+                                        () {
+                                      Get.offAndToNamed(Routes.GENERATE_MENU);
+                                    });
+                                    // showAlert(
+                                    //     context,
+                                    //     GenerateMenuContent(
+                                    //       controller: controller.prohibition,
+                                    //     ),
+                                    //     size.width * 0.85,
+                                    //     size.height * 0.47,
+                                    //     true);
                                   },
                                   child: Row(
                                     children: [
@@ -248,7 +444,7 @@ class HomeView extends GetView<HomeController> {
                       Text(HomeText.HOMESCREEN_RECOMMANDATION_TEXT,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF381712),
+                              color: PrimaryColor.primary900,
                               fontSize: 19,
                               fontFamily: 'GilroyBold')),
                       Spacer(),
@@ -262,97 +458,138 @@ class HomeView extends GetView<HomeController> {
                   ),
                   SizedBox(
                     height: size.height * 0.25,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: controller.menuList.getRange(0, 4).map((menu) {
-                        return InkWell(
-                          borderRadius: BorderRadius.circular(15),
-                          onTap: () {
-                            Get.toNamed(Routes.FOOD_DETAIL);
-                          },
-                          child: Container(
-                            width: size.width * 0.5,
-                            height: 184,
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 12),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: PrimaryColor.primary100),
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: 117,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    image: DecorationImage(
-                                        image: NetworkImage(menu.image),
-                                        fit: BoxFit.cover),
-                                  ),
-                                  child: Align(
-                                    alignment: Alignment.topRight,
-                                    child: Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 10),
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 5),
-                                      alignment: Alignment.center,
-                                      width: size.width * 0.24,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(50)),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.timer,
-                                            color: PrimaryColor.primary500,
-                                            size: 18,
-                                          ),
-                                          SizedBox(
-                                            width: 4,
-                                          ),
-                                          Text(menu.duree,
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Color(0xFF381712),
-                                                  fontSize: 16,
-                                                  fontFamily: 'GilroyRegular')),
-                                        ],
+                    child: Obx(
+                      () => controller.loading.value
+                          ? const Center(child: CircularProgressIndicator())
+                          : controller.platList.isNotEmpty
+                              ? ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: controller.platList.map((menu) {
+                                    return InkWell(
+                                      borderRadius: BorderRadius.circular(15),
+                                      onTap: () {
+                                        Get.toNamed(Routes.FOOD_DETAIL,
+                                            arguments: menu);
+                                      },
+                                      child: Container(
+                                        width: size.width * 0.5,
+                                        height: 184,
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 5, vertical: 12),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            color: PrimaryColor.primary100),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 117,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        menu.image),
+                                                    fit: BoxFit.cover),
+                                              ),
+                                              child: Align(
+                                                alignment: Alignment.topRight,
+                                                child: Container(
+                                                  margin: EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 10),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 5),
+                                                  alignment: Alignment.center,
+                                                  width: size.width * 0.24,
+                                                  height: 30,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50)),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.timer,
+                                                        color: PrimaryColor
+                                                            .primary500,
+                                                        size: 18,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 4,
+                                                      ),
+                                                      Text(menu.duree,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color: PrimaryColor
+                                                                  .primary900,
+                                                              fontSize: 16,
+                                                              fontFamily:
+                                                                  'GilroyRegular')),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.symmetric(
+                                                  vertical: 8, horizontal: 12),
+                                              child: Column(children: [
+                                                Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Text(menu.nom,
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: PrimaryColor
+                                                              .primary1000,
+                                                          fontSize: 14,
+                                                          fontFamily:
+                                                              'GilroySemi')),
+                                                ),
+                                                Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Text(
+                                                      "Difficultés: ${menu.level}",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: PrimaryColor
+                                                              .primary600,
+                                                          fontSize: 12,
+                                                          fontFamily:
+                                                              'GilroyRegular')),
+                                                ),
+                                              ]),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                )
+                              : Container(
+                                  margin: EdgeInsets.symmetric(vertical: 40),
+                                  child: Column(children: [
+                                    Image.asset(
+                                      ImageString.noMenu,
+                                      width: 100,
+                                    ),
+                                    Text(
+                                      "Aucune recommandation de plats",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'GilroyRegular',
                                       ),
                                     ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 12),
-                                  child: Column(children: [
-                                    Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(menu.libelle,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              color: PrimaryColor.primary1000,
-                                              fontSize: 14,
-                                              fontFamily: 'GilroySemi')),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text("Difficultés: ${menu.level}",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              color: PrimaryColor.primary600,
-                                              fontSize: 12,
-                                              fontFamily: 'GilroyRegular')),
-                                    ),
                                   ]),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      }).toList(),
+                                ),
                     ),
                   ),
                   Align(
@@ -360,7 +597,7 @@ class HomeView extends GetView<HomeController> {
                     child: Text(HomeText.HOMESCREEN_planification_TEXT,
                         style: TextStyle(
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFF381712),
+                            color: PrimaryColor.primary900,
                             fontSize: 19,
                             fontFamily: 'GilroySemi')),
                   ),
@@ -385,7 +622,7 @@ class HomeView extends GetView<HomeController> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 18),
                         decoration: BoxDecoration(
-                          color: isSelected ? const Color(0xFFD06E3F) : null,
+                          color: isSelected ? PrimaryColor.primary600 : null,
                           borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: Column(
@@ -399,7 +636,7 @@ class HomeView extends GetView<HomeController> {
                                 fontWeight: FontWeight.bold,
                                 color: isSelected
                                     ? Colors.white
-                                    : const Color(0xffD06E3F),
+                                    : PrimaryColor.primary600,
                               ),
                             ),
                             const SizedBox(
@@ -413,7 +650,7 @@ class HomeView extends GetView<HomeController> {
                                 fontWeight: FontWeight.bold,
                                 color: isSelected
                                     ? Colors.white
-                                    : const Color(0xffD06E3F),
+                                    : PrimaryColor.primary600,
                               ),
                             ),
                           ],

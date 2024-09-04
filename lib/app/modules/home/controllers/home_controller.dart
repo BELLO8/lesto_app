@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:lesto/app/data/Models/menu_model.dart';
-import 'package:lesto/app/data/providers/menu_provider.dart';
+import 'package:lesto/app/data/Models/plat_model.dart';
+import 'package:lesto/app/data/providers/plat_provider.dart';
 
 class HomeController extends GetxController {
   //TODO: Implement HomeController
 
   final search = TextEditingController();
   final prohibition = TextEditingController();
-  var menuList = <Menu>[].obs;
-  var loading = false.obs;
-  
+  var platList = <Plat>[].obs;
+  var searchPlatList = <Plat>[].obs;
+  var isloading = true.obs;
+  var loading = true.obs;
 
   @override
   void onInit() {
     super.onInit();
-    getMenu();
+    getPlat();
   }
 
   @override
@@ -29,12 +29,21 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  Future<void> getMenu() async {
+  Future<void> getPlat() async {
     try {
       loading.value = true;
-      menuList.value = await MenuProvider().getMenu(1);
+      platList.value = await PlatProvider().getPlats();
     } finally {
       loading.value = false;
+    }
+  }
+
+  void searchPlat(String name) async {
+    try {
+      isloading.value = true;
+      searchPlatList.value = await PlatProvider().searchPlats(name);
+    } finally {
+      isloading.value = false;
     }
   }
 }

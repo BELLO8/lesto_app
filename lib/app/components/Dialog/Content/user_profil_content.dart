@@ -2,11 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:lesto/app/routes/app_pages.dart';
 
 import '../../../data/constants/Colors/color_neutral.dart';
 import '../../../data/constants/Colors/color_primary.dart';
 import '../../../data/constants/Image/image_constant.dart';
-import '../../../routes/app_pages.dart';
 import '../user_menu.dart';
 
 class UserProfileContent extends StatelessWidget {
@@ -19,6 +20,7 @@ class UserProfileContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final storage = GetStorage();
     return Container(
       margin: EdgeInsets.symmetric(vertical: 15, horizontal: 35),
       child: Column(
@@ -55,14 +57,14 @@ class UserProfileContent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Bello Kader",
+                      storage.read("nom") + storage.read("prenoms"),
                       style: TextStyle(
                           fontFamily: 'GilroyBold',
                           fontSize: 20,
                           letterSpacing: -1),
                     ),
                     Text(
-                      "bellokader8@gmail.com ",
+                      storage.read("email"),
                       style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
                     )
                   ]),
@@ -96,7 +98,14 @@ class UserProfileContent extends StatelessWidget {
           InkWell(
             borderRadius: BorderRadius.circular(4),
             onTap: () {
-              Get.offNamed(Routes.AUTH_LOGIN);
+              storage.remove('token');
+              storage.remove('nom');
+              storage.remove('prenoms');
+              storage.remove('email');
+              storage.remove('telephone');
+              if (storage.read('token') == null) {
+                Get.offNamed(Routes.AUTH_LOGIN);
+              }
             },
             child: Container(
               alignment: Alignment.center,
