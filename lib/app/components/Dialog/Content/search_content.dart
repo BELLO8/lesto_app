@@ -38,7 +38,7 @@ class SearchContent extends StatelessWidget {
                 width: size.width * 0.02,
               ),
               SizedBox(
-                width: size.width * 0.77,
+                width: size.width * 0.7,
                 child: TextFormField(
                   onChanged: onChanged,
                   cursorColor: PrimaryColor.primary600,
@@ -65,17 +65,17 @@ class SearchContent extends StatelessWidget {
         SizedBox(
           height: 12,
         ),
-        Align(
-            alignment: Alignment.topLeft,
-            child: Obx(
-              () => Text(
-                "${homeController.searchPlatList.length} élements trouvés",
-                style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                    fontFamily: 'GilroySemi'),
-              ),
-            )),
+        // Align(
+        //     alignment: Alignment.topLeft,
+        //     child: Obx(
+        //       () => Text(
+        //         "${homeController.searchPlatList.length} élements trouvés",
+        //         style: TextStyle(
+        //             fontWeight: FontWeight.w600,
+        //             fontSize: 18,
+        //             fontFamily: 'GilroySemi'),
+        //       ),
+        //     )),
         SizedBox(
           height: size.height * 0.78,
           child: child,

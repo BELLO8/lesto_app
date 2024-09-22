@@ -10,13 +10,5 @@ class OnboardingController extends GetxController {
     storage.write('onboarding', 'onboard');
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 }

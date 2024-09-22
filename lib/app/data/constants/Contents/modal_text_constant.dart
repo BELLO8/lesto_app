@@ -18,6 +18,8 @@ class ModalText {
   static const String MODAL_GENERATE_QUESTION_TEXT = 'Générez-vous les plat pour :';
   static const String MODAL_GENERATE_QUESTION_TEXT_2 = 'Mangez-vous des plat :';
   static const String MODAL_GENERATE_QUESTION_TEXT_3 = 'Avez-vous des interditions alimentaires ?';
+  static const String MODAL_GENERATE_QUESTION_TEXT_4 = 'Definir une periode ?';
+
   static const String MIDI = 'Midi';
   static const String SOIR = 'Soir';
   static const String SUCRE = 'Sucré';

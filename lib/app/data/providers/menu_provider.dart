@@ -10,11 +10,13 @@ class MenuProvider extends GetConnect {
 
   // Fonction pour convertir une structure JSON en une liste de Category
 
-  getMenu(int id) async {
-    final response = await get('${EndPoint.API_URL}/menu/generer/$id');
+  getMenu(int id, String dateDebut, String dateFin) async {
+    final response =
+        await get('${EndPoint.API_URL}/menu/generer/$id/$dateDebut/$dateFin/2');
     if (response.statusCode == 200) {
-      List<Dish> categories = response.body['data'];
-      return categories;
+      Iterable data = response.body['data'];
+      var menu = data.map((e) => Dish.fromJson(e)).toList();
+      return menu;
     } else {
       return <Dish>[];
     }

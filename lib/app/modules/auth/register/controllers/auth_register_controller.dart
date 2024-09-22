@@ -16,6 +16,7 @@ class AuthRegisterController extends GetxController {
   final password = TextEditingController();
   final fKey = GlobalKey<FormState>();
   final box = GetStorage();
+  final countryLabel = "".obs;
   var isOscure = true.obs;
 
   @override
@@ -40,6 +41,7 @@ class AuthRegisterController extends GetxController {
   void inscription(RegisterModel registerRequest) async {
     var response = await AuthProvider().register(registerRequest);
     if (response['status'] == 'success') {
+      box.write('id', response["data"]['id']);
       box.write('nom', response["data"]['nom']);
       box.write('prenoms', response["data"]['prenoms']);
       box.write('email', response["data"]['email']);

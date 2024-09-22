@@ -7,18 +7,22 @@ import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     Key? key,
-    required this.controller,
+    this.controller,
     required this.hintValue,
     this.validate,
     this.typeInput,
     required this.label,
+    this.fontSize,
+    this.borderColor,
   }) : super(key: key);
 
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String hintValue;
   final String? Function(String?)? validate;
   final TextInputType? typeInput;
   final String label;
+  final double? fontSize;
+  final Color? borderColor;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -30,13 +34,14 @@ class CustomTextField extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
-                fontSize: 18,
+                fontSize: fontSize ?? 18,
                 fontFamily: "GilroyMedium",
               ),
             )),
         Container(
           decoration: BoxDecoration(
-            border: Border.all(width: 1.5, color: PrimaryColor.primary900),
+            border: Border.all(
+                width: 1.5, color: borderColor ?? PrimaryColor.primary900),
             borderRadius: BorderRadius.circular(10),
           ),
           margin: EdgeInsets.symmetric(horizontal: 2, vertical: 7),

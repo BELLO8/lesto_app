@@ -16,4 +16,14 @@ class ImageString {
   static const String food1 = "assets/images/food1.png";
   static const String food2 = "assets/images/food2.png";
   static const String food3 = "assets/images/food3.png";
+  static const String fat = "assets/icons/mdi_trans-fat.svg";
+  static const String sun = "assets/icons/sun.svg";
+  static const String moon = "assets/icons/moon.svg";
+  static const String salt = "assets/icons/tabler_salt.svg";
+  static const String sugar = "assets/icons/ep_sugar.svg";
+  static const String coin = "assets/icons/bxs_coin.svg";
+  static const String userOff = "assets/icons/mdi_user-off-outline.svg";
+  static const String share = "assets/icons/solar_share-linear.svg";
+  static const String info = "assets/icons/lets-icons_info-duotone.svg";
+  static const String calendar = "assets/icons/calendar.svg";
 }

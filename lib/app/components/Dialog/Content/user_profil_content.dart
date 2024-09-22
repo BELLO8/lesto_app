@@ -77,20 +77,20 @@ class UserProfileContent extends StatelessWidget {
             children: [
               UserProfilMenu(
                   title: "A propos de l’application",
-                  icon: Icon(Icons.info_rounded),
+                  icon: ImageString.info,
                   onPressed: () {}),
               UserProfilMenu(
                   title: "Partager l’application",
-                  icon: Icon(Icons.share_outlined),
+                  icon: ImageString.share,
                   onPressed: () {}),
               UserProfilMenu(
                 title: "Souscription à Lesto ",
-                icon: Icon(Icons.money),
+                icon: ImageString.coin,
                 onPressed: () {},
               ),
               UserProfilMenu(
                 title: "Supprimer mon compte",
-                icon: Icon(Icons.abc),
+                icon: ImageString.userOff,
               ),
             ],
           ),

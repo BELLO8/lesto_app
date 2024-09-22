@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lesto/app/components/Button/link_button.dart';
 import 'package:lesto/app/components/Button/primary_button.dart';
+import 'package:lesto/app/components/TextField/CountryPicker.dart';
 import 'package:lesto/app/components/TextField/custom_textfield.dart';
 import 'package:lesto/app/components/TextField/custom_textfield_password.dart';
 import 'package:lesto/app/data/Models/RegisterModel.dart';
@@ -103,16 +104,29 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
                 typeInput: TextInputType.phone,
                 label: 'Téléphone',
               ),
-              CustomTextField(
-                controller: controller.country,
-                hintValue: LabelText.LABEL_COUNTRY,
-                label: 'Nationalité',
+              Column(
+                children: [
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Nationalité",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: "GilroyMedium",
+                        ),
+                      )),
+                  Countrypicker()
+                ],
               ),
               CustomTextField(
                 validate: (email) {
                   if (email == null || email.isEmpty) {
                     return 'Le nom ne peut être vide';
                   }
+                  return null;
                 },
                 controller: controller.email,
                 typeInput: TextInputType.emailAddress,

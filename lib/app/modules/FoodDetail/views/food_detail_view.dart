@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lesto/app/components/AppBar/app_bar.dart';
+import 'package:lesto/app/components/Video/VideoPlayer.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 
 import '../../../components/Button/primary_button.dart';
@@ -17,12 +18,12 @@ class FoodDetailView extends GetView<FoodDetailController> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
         bottomNavigationBar: Container(
-          padding: EdgeInsets.symmetric(horizontal: 8),
+          padding: EdgeInsets.symmetric(horizontal: 18),
           height: 73,
           child: Row(
             children: [
               Text(
-                'Prix :       0 Fcfa',
+                '0 Fcfa',
                 style: TextStyle(
                   fontFamily: 'GilroyBold',
                   fontSize: 14,
@@ -100,7 +101,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
                             ],
                           ),
                           SizedBox(
-                            height: 30,
+                            height: 16,
                           ),
                           Text(
                             "Description",
@@ -112,7 +113,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
                             ),
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 4,
                           ),
                           SizedBox(
                             child: Text(
@@ -126,40 +127,44 @@ class FoodDetailView extends GetView<FoodDetailController> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: size.height * 0.03,
+                    Container(
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          border: Border.all(
+                              color: NeutralColor.neutral200, width: 2)),
+                      height: size.height * 0.2,
+                      child: VideoApp(),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ButtonOptionTab(
-                            size: size,
-                            label: 'Ingredients',
-                            onPressed: () {
-                              controller.pageController.animateToPage(0,
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeIn);
-                            },
-                            color: PrimaryColor.primary500),
-                        ButtonOptionTab(
-                            size: size,
-                            label: 'Mode de préparation',
-                            onPressed: () {
-                              controller.pageController.animateToPage(1,
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeIn);
-                            },
-                            color: PrimaryColor.primary500),
-                        ButtonOptionTab(
-                            size: size,
-                            label: 'Vidéo',
-                            onPressed: () {
-                              controller.pageController.animateToPage(2,
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeIn);
-                            },
-                            color: PrimaryColor.primary500),
-                      ],
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ButtonOptionTab(
+                                size: size,
+                                label: 'Ingredients',
+                                onPressed: () {
+                                  controller.pageController.animateToPage(0,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.easeIn);
+                                },
+                                color: PrimaryColor.primary500),
+                            ButtonOptionTab(
+                                size: size,
+                                label: 'Mode de préparation',
+                                onPressed: () {
+                                  controller.pageController.animateToPage(1,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.easeIn);
+                                },
+                                color: PrimaryColor.primary500),
+                          ],
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: 12,
@@ -202,15 +207,6 @@ class FoodDetailView extends GetView<FoodDetailController> {
                               ],
                             ),
                           ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 8),
-                            child: Text(
-                              'Video de preparation',
-                              style: TextStyle(
-                                  fontFamily: 'GilroySemi', fontSize: 18),
-                            ),
-                          )
                         ],
                       ),
                     ),
@@ -247,7 +243,7 @@ class IngredientWidget extends StatelessWidget {
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          width: size.width * 0.8,
+          width: size.width * 0.75,
           child: Row(
             children: [
               Text(

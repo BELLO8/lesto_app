@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:lesto/app/components/Button/primary_button.dart';
 import 'package:lesto/app/data/Models/plat_model.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Image/image_constant.dart';
@@ -16,25 +18,17 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      floatingActionButton: SpeedDial(
-        backgroundColor: PrimaryColor.primary500,
-        children: [
-          SpeedDialChild(
-              backgroundColor: PrimaryColor.primary600,
-              child: Icon(
-                Icons.delivery_dining,
-                color: Colors.white,
-              ),
-              label: 'Livraison de course'),
-          SpeedDialChild(
-              backgroundColor: PrimaryColor.primary600,
-              child: Icon(
-                Icons.bike_scooter_sharp,
-                color: Colors.white,
-              ),
-              label: 'Livraison de plat')
-        ],
-        child: Image.asset(ImageString.whiteSpinner),
+      floatingActionButton: PrimaryButton(
+        title: "Génerer la liste des courses",
+        press: () {},
+        color: PrimaryColor.primary600,
+        width: size.width * 0.6,
+        height: size.height * 0.042,
+        styleText: TextStyle(
+            fontFamily: 'GilroyMedium',
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 14),
       ),
       appBar: AppBar(
         iconTheme: IconThemeData(color: PrimaryColor.primary600),
@@ -54,7 +48,7 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
             child: ListView(
               padding: EdgeInsets.symmetric(vertical: 16),
               scrollDirection: Axis.horizontal,
-              children: controller.days.map((days) {
+              children: controller.generateMenu.asMap().entries.map((days) {
                 return Container(
                   margin: EdgeInsets.symmetric(horizontal: 2),
                   decoration: BoxDecoration(
@@ -64,8 +58,7 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
                   child: InkWell(
                     radius: 10,
                     onTap: () {
-                      controller.scrollController.animateTo(
-                          days['index'] * 350.0,
+                      controller.scrollController.animateTo(days.key * 350.0,
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeIn);
                     },
@@ -73,7 +66,7 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
                       alignment: Alignment.center,
                       padding: EdgeInsets.symmetric(horizontal: 25),
                       child: Text(
-                        days['day'],
+                        days.value.name,
                         style: TextStyle(
                             fontFamily: 'GilroyMedium',
                             fontWeight: FontWeight.w500,
@@ -104,7 +97,7 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
                               child: Row(
                                 children: [
                                   Text(
-                                    menu.name,
+                                    "${menu.name}${" "}${DateFormat('dd MMMM yyyy', 'fr_FR').format(menu.date)}",
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: Colors.white,
@@ -123,17 +116,26 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
                             ),
                             SizedBox(
                               child: Column(
-                                children: menu.plats.map<Widget>((dish) {
+                                children: menu.plats
+                                    .asMap()
+                                    .entries
+                                    .map<Widget>((entry) {
+                                  int index = entry.key;
+                                  var dish = entry.value;
                                   return GenerateFoodWidget(
-                                      size: size,
-                                      borderWidth: 0,
-                                      borderColor: Colors.transparent,
-                                      backgroundColor: Colors.white,
-                                      image: dish.image,
-                                      title: dish.libelle,
-                                      description: dish.description,
-                                      time: dish.duree,
-                                      period: dish.level);
+                                    size: size,
+                                    borderWidth: 0,
+                                    borderColor: Colors.transparent,
+                                    backgroundColor: Colors.white,
+                                    image: dish.image,
+                                    title: dish.libelle,
+                                    description: dish.description,
+                                    time: dish.duree,
+                                    period: index == 0 ? 'Midi' : 'Soir',
+                                    icon: index == 0
+                                        ? ImageString.sun
+                                        : ImageString.moon,
+                                  );
                                 }).toList(),
                               ),
                             ),
@@ -161,6 +163,7 @@ class GenerateFoodWidget extends StatelessWidget {
     required this.description,
     required this.time,
     required this.period,
+    required this.icon,
   });
 
   final Size size;
@@ -172,6 +175,7 @@ class GenerateFoodWidget extends StatelessWidget {
   final String description;
   final String time;
   final String period;
+  final String icon;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -247,7 +251,7 @@ class GenerateFoodWidget extends StatelessWidget {
                               Icon(
                                 Icons.timer,
                                 color: PrimaryColor.primary500,
-                                size: 18,
+                                size: 20,
                               ),
                               SizedBox(
                                 width: 3,
@@ -267,10 +271,11 @@ class GenerateFoodWidget extends StatelessWidget {
                               EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                           child: Row(
                             children: [
-                              Icon(
-                                Icons.wb_sunny_rounded,
-                                color: PrimaryColor.primary500,
-                                size: 20,
+                              SvgPicture.asset(
+                                icon,
+                                color: PrimaryColor.primary700,
+                                height: 20,
+                                width: 20,
                               ),
                               SizedBox(
                                 width: 3,

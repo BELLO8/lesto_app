@@ -55,6 +55,7 @@ class AuthLoginController extends GetxController {
       update();
       print(box.read('onboarding'));
       box.write('token', loginResponse['token']['token']);
+      box.write('id', loginResponse["data"]['id']);
       box.write('nom', loginResponse["data"]['nom']);
       box.write('prenoms', loginResponse["data"]['prenoms']);
       box.write('email', loginResponse["data"]['email']);

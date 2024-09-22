@@ -9,20 +9,26 @@ void bottomSheetDialog(
       backgroundColor: Colors.transparent,
       context: ctx,
       isScrollControlled: true,
-      builder: (ctx) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                height: height,
-                decoration: BoxDecoration(
-                    color: Color(0xFFFFFFFF),
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20))),
-                alignment: Alignment.center,
-                child: child,
+      builder: (ctx) => Padding(
+            padding:
+                EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(
+                    height: height,
+                    decoration: BoxDecoration(
+                        color: Color(0xFFFFFFFF),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20))),
+                    alignment: Alignment.center,
+                    child: child,
+                  ),
+                ],
               ),
-            ],
+            ),
           )).whenComplete(action);
 }

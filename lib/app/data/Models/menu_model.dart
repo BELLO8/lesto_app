@@ -11,7 +11,7 @@ String dishToJson(Dish data) => json.encode(data.toJson());
 class Dish {
   DateTime date;
   String name;
-  List<Plat> plats;
+  List<PlatMenu> plats;
 
   Dish({
     required this.date,
@@ -22,7 +22,8 @@ class Dish {
   factory Dish.fromJson(Map<String, dynamic> json) => Dish(
         date: DateTime.parse(json["date"]),
         name: json["name"],
-        plats: List<Plat>.from(json["plats"].map((x) => Plat.fromJson(x))),
+        plats:
+            List<PlatMenu>.from(json["plats"].map((x) => PlatMenu.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -33,7 +34,7 @@ class Dish {
       };
 }
 
-class Plat {
+class PlatMenu {
   int id;
   String libelle;
   String duree;
@@ -41,7 +42,7 @@ class Plat {
   String description;
   String level;
 
-  Plat({
+  PlatMenu({
     required this.id,
     required this.libelle,
     required this.duree,
@@ -50,7 +51,7 @@ class Plat {
     required this.level,
   });
 
-  factory Plat.fromJson(Map<String, dynamic> json) => Plat(
+  factory PlatMenu.fromJson(Map<String, dynamic> json) => PlatMenu(
         id: json["id"],
         libelle: json["libelle"],
         duree: json["duree"],

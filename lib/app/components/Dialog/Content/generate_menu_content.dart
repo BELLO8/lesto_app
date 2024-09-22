@@ -1,9 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:lesto/app/components/TextField/custom_textfield.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
-import 'package:lesto/app/routes/app_pages.dart';
+import 'package:lesto/app/data/constants/Image/image_constant.dart';
+import 'package:lesto/app/modules/home/controllers/home_controller.dart';
 
 import '../../../data/constants/Colors/color_primary.dart';
 import '../../../data/constants/Contents/modal_text_constant.dart';
@@ -15,42 +19,46 @@ class GenerateMenuContent extends StatelessWidget {
     required this.controller,
   });
   final TextEditingController controller;
+
   @override
   Widget build(BuildContext context) {
+    TextEditingController dateController = TextEditingController();
     Size size = MediaQuery.of(context).size;
-    List<Map<String, dynamic>> time = [
+    final homeController = Get.find<HomeController>();
+
+    List<Map<dynamic, dynamic>> time = [
       {
         'id': 1,
-        'icon': Icons.sunny,
+        'icon': ImageString.sun,
         'label': ModalText.MIDI,
       },
       {
         'id': 2,
-        'icon': Icons.dark_mode_sharp,
+        'icon': ImageString.moon,
         'label': ModalText.SOIR,
       },
     ];
 
-    List<Map<String, dynamic>> type = [
+    List<Map<dynamic, dynamic>> type = [
       {
         'id': 1,
-        'icon': Icons.oil_barrel_rounded,
+        'icon': ImageString.fat,
         'label': ModalText.GRAS,
       },
       {
         'id': 2,
-        'icon': Icons.dark_mode_sharp,
+        'icon': ImageString.sugar,
         'label': ModalText.SUCRE,
       },
       {
         'id': 3,
-        'icon': "",
+        'icon': ImageString.salt,
         'label': ModalText.SALE,
       },
     ];
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 35),
+      margin: EdgeInsets.symmetric(horizontal: 25, vertical: 35),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -60,9 +68,9 @@ class GenerateMenuContent extends StatelessWidget {
               ModalText.MODAL_GENERATE_QUESTION_TEXT,
               textAlign: TextAlign.left,
               style: TextStyle(
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'GilroySemi',
                   color: Colors.black,
-                  fontSize: 14,
+                  fontSize: 16,
                   decoration: TextDecoration.none),
             ),
           ),
@@ -92,9 +100,9 @@ class GenerateMenuContent extends StatelessWidget {
               ModalText.MODAL_GENERATE_QUESTION_TEXT_2,
               textAlign: TextAlign.left,
               style: TextStyle(
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'GilroySemi',
                   color: Colors.black,
-                  fontSize: 14,
+                  fontSize: 16,
                   decoration: TextDecoration.none),
             ),
           ),
@@ -116,63 +124,133 @@ class GenerateMenuContent extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: size.height * 0.03,
+            height: 18,
           ),
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              ModalText.MODAL_GENERATE_QUESTION_TEXT_3,
+              ModalText.MODAL_GENERATE_QUESTION_TEXT_4,
               textAlign: TextAlign.left,
               style: TextStyle(
-                  fontFamily: 'GilroyMedium',
+                  fontFamily: 'GilroySemi',
                   color: Colors.black,
-                  fontSize: 14,
+                  fontSize: 16,
                   decoration: TextDecoration.none),
             ),
           ),
-          SizedBox(
-            height: size.height * 0.017,
-          ),
-          Material(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(width: 1.5, color: NeutralColor.neutral300),
-              ),
-              width: size.width * 0.77,
-              child: TextFormField(
-                cursorColor: PrimaryColor.primary600,
-                controller: controller,
-                style: TextStyle(
-                  fontFamily: "Poppins",
-                ),
-                decoration: InputDecoration(
-                  filled: true,
-                  border: InputBorder.none,
-                  fillColor: Colors.transparent,
-                  hintStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                      fontFamily: 'Gilroy'),
-                  hintText: "Piments, tomate,...etc",
-                ),
+          Obx(
+            () => Center(
+              child: Row(
+                children: [
+                  DatePicker(
+                    label: homeController.dateDebut.value,
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now().subtract(Duration(days: 0)),
+                          lastDate: DateTime(2101));
+
+                      if (pickedDate != null) {
+                        String formattedDate =
+                            DateFormat('yyyy-MM-dd').format(pickedDate);
+                        homeController.selectedDate(formattedDate);
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  DatePicker(
+                    label: homeController.dateFin.value,
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(), //get today's date
+                          firstDate: DateTime.now().subtract(Duration(days: 0)),
+                          lastDate: DateTime(2101));
+
+                      if (pickedDate != null) {
+                        String formattedDate =
+                            DateFormat('yyyy-MM-dd').format(pickedDate);
+                        homeController.selectedDateFin(formattedDate);
+                      }
+                    },
+                  ),
+                ],
               ),
             ),
           ),
-          Spacer(),
-          PrimaryButton(
-              styleText: TextStyle(
-                  fontFamily: 'GilroyMedium',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                  color: PrimaryColor.primary700),
-              title: ModalText.MODAL_GENERATE_BUTTON_TEXT,
-              press: () {
-                Get.toNamed(Routes.GENERATE_MENU);
-              },
-              color: PrimaryColor.primary100,
-              width: 274,
-              height: 44),
+          CustomTextField(
+            label: ModalText.MODAL_GENERATE_QUESTION_TEXT_3,
+            hintValue: 'Piment, tomate, etc..',
+            fontSize: 16,
+            borderColor: NeutralColor.neutral300,
+          ),
+          SizedBox(
+            height: size.height * 0.01,
+          ),
+          Center(
+            child: PrimaryButton(
+                styleText: TextStyle(
+                    fontFamily: 'GilroyMedium',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: PrimaryColor.primary700),
+                title: ModalText.MODAL_GENERATE_BUTTON_TEXT,
+                press: () {
+                  homeController.getMenu(1, homeController.dateDebut.value,
+                      homeController.dateFin.value);
+                 
+                },
+                color: PrimaryColor.primary100,
+                width: size.width,
+                height: 44),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DatePicker extends StatelessWidget {
+  const DatePicker({
+    super.key,
+    required this.label,
+    required this.onTap,
+  });
+
+  final String label;
+  final void Function()? onTap;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      height: 50,
+      decoration: BoxDecoration(
+        border: Border.all(width: 1.5, color: NeutralColor.neutral300),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            ImageString.calendar,
+            color: PrimaryColor.primary700,
+          ),
+          InkWell(
+            onTap: onTap,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 6),
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontFamily: "GilroyMedium",
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -190,7 +268,7 @@ class CustomRadioButton extends StatelessWidget {
 
   final Size size;
   final String label;
-  final IconData icon;
+  final String icon;
   final void Function() onPressed;
   @override
   Widget build(BuildContext context) {
@@ -207,9 +285,9 @@ class CustomRadioButton extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(
+            SvgPicture.asset(
               icon,
-              color: PrimaryColor.primary800,
+              color: PrimaryColor.primary700,
             ),
             SizedBox(
               width: size.width * 0.01,

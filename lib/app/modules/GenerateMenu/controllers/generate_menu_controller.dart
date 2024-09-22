@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lesto/app/data/Models/menu_model.dart';
-import 'package:lesto/app/data/providers/menu_provider.dart';
 
 import '../../../data/constants/Image/image_constant.dart';
 
 class GenerateMenuController extends GetxController {
-  //TODO: Implement GenerateMenuController
-
+  final argumentData = GetStorage();
   final count = 0.obs;
   final scrollController = ScrollController();
   var generateMenu = <Dish>[].obs;
@@ -112,24 +111,11 @@ class GenerateMenuController extends GetxController {
     getMenu();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   void increment() => count.value++;
 
-  Future<void> getMenu() async {
-    try {
-      isLoading.value = true;
-      generateMenu.value = await MenuProvider().getMenu(1);
-    } finally {
-      isLoading.value = false;
-    }
+  void getMenu() {
+    print(argumentData.read("menu"));
+    isLoading.value = false;
+    generateMenu.value = argumentData.read("menu");
   }
 }

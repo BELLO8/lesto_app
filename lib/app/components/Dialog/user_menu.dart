@@ -1,7 +1,7 @@
-
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../data/constants/Colors/color_neutral.dart';
 
@@ -13,7 +13,7 @@ class UserProfilMenu extends StatelessWidget {
     required this.title,
   });
   final void Function()? onPressed;
-  final Icon icon;
+  final String icon;
   final String title;
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,11 @@ class UserProfilMenu extends StatelessWidget {
         ),
         child: Row(
           children: [
-            icon,
+            SvgPicture.asset(
+              width: 24,
+              height: 24,
+              icon,
+            ),
             Spacer(),
             Text(
               title,

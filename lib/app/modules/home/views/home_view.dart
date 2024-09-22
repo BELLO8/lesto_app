@@ -3,9 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:lesto/app/components/Button/link_button.dart';
+import 'package:lesto/app/components/Dialog/Content/generate_menu_content.dart';
 import 'package:lesto/app/components/Dialog/bottom_sheet_dialog.dart';
-import 'package:lesto/app/components/Dialog/modal_dialog.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Contents/homescreen_text_constant.dart';
@@ -15,7 +14,6 @@ import 'package:lesto/app/routes/app_pages.dart';
 import '../../../components/Dialog/Content/search_content.dart';
 import '../../../components/Dialog/Content/user_profil_content.dart';
 import '../../../components/EasyDateTime/easy_date_timeline.dart';
-import '../../../data/constants/Contents/modal_text_constant.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -44,7 +42,7 @@ class HomeView extends GetView<HomeController> {
                                   fontSize: 18,
                                   fontFamily: 'GilroySemi')),
                           TextSpan(
-                              text: box.read('nom'),
+                              text: box.read('prenoms'),
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 27,
@@ -122,162 +120,177 @@ class HomeView extends GetView<HomeController> {
                                     ? Center(
                                         child:
                                             const CircularProgressIndicator())
-                                    : ListView(
-                                        scrollDirection: Axis.vertical,
-                                        children: controller.searchPlatList
-                                            .map((plat) {
-                                          return InkWell(
-                                            onTap: () {
-                                              Get.toNamed(Routes.FOOD_DETAIL,
-                                                  arguments: plat);
-                                            },
-                                            child: Container(
-                                              width: 338,
-                                              height: 142,
-                                              margin: EdgeInsets.symmetric(
-                                                  horizontal: 5, vertical: 12),
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 12, vertical: 12),
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      width: 1.2,
-                                                      color: PrimaryColor
-                                                          .primary200),
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                  color:
-                                                      PrimaryColor.primary100),
-                                              child: Row(
-                                                children: [
-                                                  Container(
-                                                    height: 100,
-                                                    width: 100,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15),
-                                                        image: DecorationImage(
-                                                            image: NetworkImage(
-                                                                plat.image),
-                                                            fit: BoxFit.cover)),
-                                                  ),
-                                                  Container(
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 8,
-                                                            horizontal: 12),
-                                                    child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            plat.nom,
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color: PrimaryColor
-                                                                    .primary900,
-                                                                fontSize: 18,
-                                                                fontFamily:
-                                                                    'GilroySemi'),
-                                                          ),
-                                                          SizedBox(
-                                                            width: size.width *
-                                                                0.5,
-                                                            child: Text(
-                                                              plat.description,
-                                                              maxLines: 2,
-                                                              softWrap: true,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  fontSize: 13,
-                                                                  fontFamily:
-                                                                      'GilroyRegular'),
+                                    : SizedBox(
+                                        child: ListView(
+                                          scrollDirection: Axis.vertical,
+                                          children: controller.searchPlatList
+                                              .map((plat) {
+                                            return InkWell(
+                                              onTap: () {
+                                                Get.toNamed(Routes.FOOD_DETAIL,
+                                                    arguments: plat);
+                                              },
+                                              child: Container(
+                                                width: 338,
+                                                height: 118,
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 5, vertical: 4),
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 12),
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        width: 1.2,
+                                                        color: PrimaryColor
+                                                            .primary200),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    color: PrimaryColor
+                                                        .transparent),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      height: 100,
+                                                      width: 100,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(15),
+                                                          image: DecorationImage(
+                                                              image: NetworkImage(
+                                                                  plat.image),
+                                                              fit: BoxFit
+                                                                  .cover)),
+                                                    ),
+                                                    Container(
+                                                      margin:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 8,
+                                                              horizontal: 8),
+                                                      child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            SizedBox(
+                                                              width:
+                                                                  size.width *
+                                                                      0.5,
+                                                              child: Text(
+                                                                plat.nom,
+                                                                softWrap: true,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    color: PrimaryColor
+                                                                        .primary900,
+                                                                    fontSize:
+                                                                        18,
+                                                                    fontFamily:
+                                                                        'GilroySemi'),
+                                                              ),
                                                             ),
-                                                          ),
-                                                          SizedBox(
-                                                            child: Row(
-                                                                children: [
-                                                                  Container(
-                                                                    margin: EdgeInsets
-                                                                        .symmetric(
-                                                                            vertical:
-                                                                                5),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Icon(
-                                                                          Icons
-                                                                              .timer,
-                                                                          color:
-                                                                              PrimaryColor.primary500,
-                                                                          size:
-                                                                              18,
-                                                                        ),
-                                                                        SizedBox(
-                                                                          width:
-                                                                              3,
-                                                                        ),
-                                                                        Text(
-                                                                          plat.duree,
-                                                                          style: TextStyle(
-                                                                              fontWeight: FontWeight.w600,
-                                                                              fontSize: 13,
-                                                                              fontFamily: 'GilroyRegular'),
-                                                                        )
-                                                                      ],
+                                                            SizedBox(
+                                                              width:
+                                                                  size.width *
+                                                                      0.5,
+                                                              child: Text(
+                                                                plat.description,
+                                                                maxLines: 2,
+                                                                softWrap: true,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontSize:
+                                                                        13,
+                                                                    fontFamily:
+                                                                        'GilroyRegular'),
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              child: Row(
+                                                                  children: [
+                                                                    Container(
+                                                                      margin: EdgeInsets.symmetric(
+                                                                          vertical:
+                                                                              5),
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          Icon(
+                                                                            Icons.timer,
+                                                                            color:
+                                                                                PrimaryColor.primary500,
+                                                                            size:
+                                                                                18,
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                3,
+                                                                          ),
+                                                                          Text(
+                                                                            plat.duree,
+                                                                            style: TextStyle(
+                                                                                fontWeight: FontWeight.w600,
+                                                                                fontSize: 13,
+                                                                                fontFamily: 'GilroyRegular'),
+                                                                          )
+                                                                        ],
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                  Container(
-                                                                    margin: EdgeInsets.symmetric(
-                                                                        vertical:
-                                                                            5,
-                                                                        horizontal:
-                                                                            8),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Icon(
-                                                                          Icons
-                                                                              .wb_sunny_rounded,
-                                                                          color:
-                                                                              PrimaryColor.primary500,
-                                                                          size:
-                                                                              20,
-                                                                        ),
-                                                                        SizedBox(
-                                                                          width:
-                                                                              3,
-                                                                        ),
-                                                                        Text(
-                                                                          plat.level,
-                                                                          style: TextStyle(
-                                                                              fontWeight: FontWeight.w600,
-                                                                              fontSize: 13,
-                                                                              fontFamily: 'GilroyRegular'),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  )
-                                                                ]),
-                                                          ),
-                                                        ]),
-                                                  )
-                                                ],
+                                                                    Container(
+                                                                      margin: EdgeInsets.symmetric(
+                                                                          vertical:
+                                                                              5,
+                                                                          horizontal:
+                                                                              8),
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          Icon(
+                                                                            Icons.wb_sunny_rounded,
+                                                                            color:
+                                                                                PrimaryColor.primary500,
+                                                                            size:
+                                                                                20,
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                3,
+                                                                          ),
+                                                                          Text(
+                                                                            plat.level,
+                                                                            style: TextStyle(
+                                                                                fontWeight: FontWeight.w600,
+                                                                                fontSize: 13,
+                                                                                fontFamily: 'GilroyRegular'),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    )
+                                                                  ]),
+                                                            ),
+                                                          ]),
+                                                    )
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                        }).toList(),
+                                            );
+                                          }).toList(),
+                                        ),
                                       ),
                               ),
                             ),
                           ),
-                          size.height * 0.94,
+                          size.height * 0.92,
                           () => {controller.searchPlatList.value = []});
                     },
                     child: Container(
@@ -368,56 +381,34 @@ class HomeView extends GetView<HomeController> {
                                             BorderRadius.circular(10)),
                                   ),
                                   onPressed: () {
-                                    showAlert(
-                                        context,
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 35),
-                                          child: Row(children: [
-                                            CircularProgressIndicator(
-                                              color: PrimaryColor.primary400,
+                                    box.read('menu') == null
+                                        ? bottomSheetDialog(
+                                            context,
+                                            GenerateMenuContent(
+                                              controller:
+                                                  controller.prohibition,
                                             ),
-                                            SizedBox(
-                                              width: 14,
-                                            ),
-                                            Text(
-                                              ModalText.MODAL_GENERATE_TEXT,
-                                              style: TextStyle(
-                                                  decoration:
-                                                      TextDecoration.none,
-                                                  fontFamily: 'Gilroy',
-                                                  fontSize: 14,
-                                                  color: Colors.black),
-                                            )
-                                          ]),
-                                        ),
-                                        size.width * 0.85,
-                                        size.height * 0.11,
-                                        false);
-                                    Future.delayed(const Duration(seconds: 2),
-                                        () {
-                                      Get.offAndToNamed(Routes.GENERATE_MENU);
-                                    });
-                                    // showAlert(
-                                    //     context,
-                                    //     GenerateMenuContent(
-                                    //       controller: controller.prohibition,
-                                    //     ),
-                                    //     size.width * 0.85,
-                                    //     size.height * 0.47,
-                                    //     true);
+                                            size.height * 0.67,
+                                            () => {})
+                                        : Get.toNamed(Routes.GENERATE_MENU);
                                   },
                                   child: Row(
                                     children: [
-                                      Image.asset(
-                                        ImageString.spinner,
-                                        width: 21,
-                                        height: 20,
-                                      ),
+                                      box.read('menu') == null
+                                          ? Image.asset(
+                                              ImageString.spinner,
+                                              width: 21,
+                                              height: 20,
+                                            )
+                                          : Text(""),
                                       SizedBox(
                                         width: size.width * 0.01,
                                       ),
-                                      Text(HomeText.HOMESCREEN_BUTTON_TEXT,
+                                      Text(
+                                          // ignore: unnecessary_null_comparison
+                                          box.read('menu') == null
+                                              ? HomeText.HOMESCREEN_BUTTON_TEXT
+                                              : 'Afficher le menu géneré',
                                           style: TextStyle(
                                               fontFamily: 'GilroySemi',
                                               fontSize: 14,
@@ -429,11 +420,13 @@ class HomeView extends GetView<HomeController> {
                         ),
                       ),
                       Positioned(
-                        top: 0,
+                        top: 35,
                         bottom: 0,
                         right: 0,
                         child: Image.asset(
                           ImageString.food,
+                          width: 110,
+                          height: 110,
                         ),
                       ),
                     ],
@@ -448,12 +441,12 @@ class HomeView extends GetView<HomeController> {
                               fontSize: 19,
                               fontFamily: 'GilroyBold')),
                       Spacer(),
-                      LinkButton(
-                        title: 'Voir plus',
-                        press: () {},
-                        width: 105,
-                        height: 30,
-                      ),
+                      // LinkButton(
+                      //   title: 'Voir plus',
+                      //   press: () {},
+                      //   width: 105,
+                      //   height: 30,
+                      // ),
                     ]),
                   ),
                   SizedBox(

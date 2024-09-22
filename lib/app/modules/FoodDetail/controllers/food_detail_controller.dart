@@ -5,7 +5,7 @@ import 'package:lesto/app/data/Models/plat_model.dart';
 class FoodDetailController extends GetxController {
   //TODO: Implement FoodDetailController
   Plat argumentData = Get.arguments;
-
+  
   final count = 0.obs;
   final pageController = PageController();
   List ingredients = [
@@ -18,20 +18,8 @@ class FoodDetailController extends GetxController {
     {'id': 8, 'name': "Vinaigre", 'quantity': '1/2L'},
   ];
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   void increment() => count.value++;
 }
