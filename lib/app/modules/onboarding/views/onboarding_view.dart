@@ -32,17 +32,13 @@ class OnboardingView extends GetView<OnboardingController> {
                 ImageString.logoPrimary,
                 width: 163,
               ),
-              const Text(
-                OtherText.ONBOARDING_TEXT_1,
-                style: TextStyle(fontFamily: 'GilroySemi', fontSize: 18),
-              ),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
                     const Text(
                       OtherText.ONBOARDING_TEXT_2,
-                      textAlign: TextAlign.left,
+                      textAlign: TextAlign.center,
                       style: TextStyle(fontFamily: 'Gilroy', fontSize: 22),
                     ),
                     PrimaryButton(

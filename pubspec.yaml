@@ -37,25 +37,23 @@ flutter:
   fonts:
     - family: Poppins
       fonts:
-        - asset: assets/fonts/poppins/Poppins-Regular.ttf
-        - asset: assets/fonts/poppins/Poppins-Medium.ttf
-        - asset: assets/fonts/poppins/Poppins-Bold.ttf
+        - asset: assets/fonts/Kurale/Kurale-Regular.ttf
     - family: PoppinsRegular
       fonts:
-        - asset: assets/fonts/poppins/Poppins-Regular.ttf
+        - asset: assets/fonts/Kurale/Kurale-Regular.ttf
     - family: Gilroy
       fonts:
-        - asset: assets/fonts/gilroy/Gilroy-Light.ttf
+        - asset: assets/fonts/Moonjelly/Moonjelly-Light.otf
     - family: GilroyRegular
       fonts:
-        - asset: assets/fonts/gilroy/Gilroy-Regular.ttf
+        - asset: assets/fonts/Moonjelly/Moonjelly-Light.otf
     - family: GilroyMedium
       fonts:
-        - asset: assets/fonts/gilroy/Gilroy-Medium.ttf
+        - asset: assets/fonts/Moonjelly/Moonjelly-Bold.otf
     - family: GilroySemi
       fonts:
-        - asset: assets/fonts/gilroy/Gilroy-SemiBold.ttf
+        - asset: assets/fonts/Moonjelly/Moonjelly-Bold.otf
     - family: GilroyBold
       fonts:
-        - asset: assets/fonts/gilroy/Gilroy-Bold.ttf
+        - asset: assets/fonts/Moonjelly/Moonjelly-Bold.otf
   uses-material-design: true

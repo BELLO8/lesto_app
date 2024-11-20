@@ -201,7 +201,6 @@ class GenerateMenuContent extends StatelessWidget {
                 press: () {
                   homeController.getMenu(1, homeController.dateDebut.value,
                       homeController.dateFin.value);
-                 
                 },
                 color: PrimaryColor.primary100,
                 width: size.width,
@@ -275,19 +274,17 @@ class CustomRadioButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        width: size.width * 0.24,
-        height: size.height * 0.05,
         margin: EdgeInsets.symmetric(horizontal: 2),
         padding: EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(width: 1.5, color: NeutralColor.neutral300),
+          border: Border.all(width: 1, color: NeutralColor.neutral200),
         ),
         child: Row(
           children: [
-            SvgPicture.asset(
+            SvgPicture.network(
               icon,
-              color: PrimaryColor.primary700,
+              color: PrimaryColor.primary500,
             ),
             SizedBox(
               width: size.width * 0.01,
@@ -295,9 +292,9 @@ class CustomRadioButton extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                  fontFamily: 'GilroyMedium',
-                  color: Colors.black,
-                  fontSize: 14,
+                  fontFamily: 'Gilroy',
+                  color: PrimaryColor.primary500,
+                  fontSize: 12,
                   decoration: TextDecoration.none),
             ),
           ],

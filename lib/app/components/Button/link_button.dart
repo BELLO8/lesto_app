@@ -28,6 +28,6 @@ class LinkButton extends StatelessWidget {
             style: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 12,
-                color: PrimaryColor.primary700)));
+                color: PrimaryColor.primary500)));
   }
 }

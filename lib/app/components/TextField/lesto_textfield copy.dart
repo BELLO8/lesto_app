@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
+class LestoTextField extends StatelessWidget {
+  const LestoTextField({
     Key? key,
     this.controller,
     required this.hintValue,
@@ -25,19 +25,8 @@ class CustomTextField extends StatelessWidget {
   final Color? borderColor;
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Column(
       children: [
-        SizedBox(height: size.height * 0.01),
-        Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: fontSize ?? 18,
-                fontFamily: "GilroyMedium",
-              ),
-            )),
         Container(
           decoration: BoxDecoration(
             border: Border.all(

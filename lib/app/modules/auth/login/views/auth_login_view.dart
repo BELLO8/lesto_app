@@ -8,7 +8,6 @@ import 'package:lesto/app/components/Container/container_image.dart';
 import 'package:lesto/app/components/Dialog/modal_dialog.dart';
 import 'package:lesto/app/components/TextField/custom_textfield.dart';
 import 'package:lesto/app/components/TextField/custom_textfield_password.dart';
-import 'package:lesto/app/data/Models/LoginModel.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Contents/auth_constant.dart';
@@ -117,17 +116,18 @@ class AuthLoginView extends GetView<AuthLoginController> {
                               ),
                               PrimaryButton(
                                   styleText: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
+                                      fontFamily: 'GilroySemi',
+                                      fontSize: 14,
                                       color: NeutralColor.neutral100),
                                   title: AuthText.LOGIN_TEXT,
                                   press: () {
-                                    if (controller.formKey.currentState!
-                                        .validate()) {
-                                      controller.connexion(LoginModel(
-                                          telephone: controller.phone.text,
-                                          password: controller.password.text));
-                                    }
+                                    Get.offAndToNamed(Routes.HOME);
+                                    // if (controller.formKey.currentState!
+                                    //     .validate()) {
+                                    //   controller.connexion(LoginModel(
+                                    //       telephone: controller.phone.text,
+                                    //       password: controller.password.text));
+                                    // }
                                     controller.loading.value
                                         ? showAlert(
                                             context,

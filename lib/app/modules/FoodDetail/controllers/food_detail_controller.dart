@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lesto/app/data/Models/plat_model.dart';
 
 class FoodDetailController extends GetxController {
   //TODO: Implement FoodDetailController
-  Plat argumentData = Get.arguments;
-  
+  // Plat argumentData = Get.arguments;
+  var argumentData = Get.arguments;
   final count = 0.obs;
   final pageController = PageController();
   List ingredients = [
@@ -17,9 +16,6 @@ class FoodDetailController extends GetxController {
     {'id': 7, 'name': "Sel", 'quantity': '5g'},
     {'id': 8, 'name': "Vinaigre", 'quantity': '1/2L'},
   ];
-
-
-
 
   void increment() => count.value++;
 }

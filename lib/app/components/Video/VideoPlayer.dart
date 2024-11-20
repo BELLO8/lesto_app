@@ -31,15 +31,23 @@ class _VideoAppState extends State<VideoApp> {
       home: Scaffold(
         body: Center(
           child: _controller.value.isInitialized
-              ? AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: VideoPlayer(_controller),
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(17),
+                  child: AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: VideoPlayer(_controller)),
                 )
-              : Container(),
+              : Container(
+                  decoration: const BoxDecoration(
+                    color: PrimaryColor.primary100,
+                    borderRadius: BorderRadius.all(Radius.circular(17)),
+                  ),
+                  height: 250,
+                ),
         ),
         floatingActionButton: FloatingActionButton(
           elevation: 0,
-          backgroundColor: PrimaryColor.primary600,
+          backgroundColor: const Color(0xABFFFFFF),
           onPressed: () {
             setState(() {
               _controller.value.isPlaying

@@ -4,6 +4,8 @@ import '../modules/FoodDetail/bindings/food_detail_binding.dart';
 import '../modules/FoodDetail/views/food_detail_view.dart';
 import '../modules/GenerateMenu/bindings/generate_menu_binding.dart';
 import '../modules/GenerateMenu/views/generate_menu_view.dart';
+import '../modules/GenerateMenuFilter/bindings/generate_menu_filter_binding.dart';
+import '../modules/GenerateMenuFilter/views/generate_menu_filter_view.dart';
 import '../modules/auth/login/bindings/auth_login_binding.dart';
 import '../modules/auth/login/views/auth_login_view.dart';
 import '../modules/auth/register/bindings/auth_register_binding.dart';
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.GENERATE_MENU,
       page: () => const GenerateMenuView(),
       binding: GenerateMenuBinding(),
+    ),
+    GetPage(
+      name: _Paths.GENERATE_MENU_FILTER,
+      page: () => const GenerateMenuFilterView(),
+      binding: GenerateMenuFilterBinding(),
     ),
   ];
 }
