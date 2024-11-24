@@ -7,8 +7,6 @@ class OnboardingController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    storage.write('onboarding', 'onboard');
+    // storage.write('onboarding', 'onboard');
   }
-
-
 }

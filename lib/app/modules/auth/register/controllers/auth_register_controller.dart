@@ -6,17 +6,18 @@ import 'package:get_storage/get_storage.dart';
 import 'package:lesto/app/data/Models/RegisterModel.dart';
 import 'package:lesto/app/data/providers/auth_provider.dart';
 import 'package:lesto/app/routes/app_pages.dart';
+import 'package:otp_pin_field/otp_pin_field.dart';
 
 class AuthRegisterController extends GetxController {
-  final firstName = TextEditingController();
-  final lastName = TextEditingController();
+  final userName = TextEditingController();
   final phone = TextEditingController();
-  final country = TextEditingController();
-  final email = TextEditingController();
-  final password = TextEditingController();
-  final fKey = GlobalKey<FormState>();
   final box = GetStorage();
-  final countryLabel = "".obs;
+  final pageControl = PageController();
+  final isLastPage = false.obs;
+  final isFirstPage = true.obs;
+  final currentPage = 0.obs;
+  final otpPinFieldController = GlobalKey<OtpPinFieldState>();
+
   var isOscure = true.obs;
 
   @override

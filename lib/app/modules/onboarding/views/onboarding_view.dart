@@ -41,9 +41,12 @@ class OnboardingView extends GetView<OnboardingController> {
                       textAlign: TextAlign.center,
                       style: TextStyle(fontFamily: 'Gilroy', fontSize: 22),
                     ),
+                    SizedBox(
+                      height: 12,
+                    ),
                     PrimaryButton(
                       styleText: TextStyle(
-                          fontFamily: 'Poppins',
+                          fontFamily: 'GilroySemi',
                           fontSize: 16,
                           color: NeutralColor.neutral100),
                       title: AuthText.REGISTER_BUTTON_TEXT,

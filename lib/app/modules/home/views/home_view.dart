@@ -57,13 +57,22 @@ class HomeView extends GetView<HomeController> {
                       ),
                       Spacer(),
                       Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 6, vertical: 6),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                                 width: 1, color: PrimaryColor.primary300)),
-                        height: size.height * 0.05,
-                        width: size.height * 0.05,
-                        child: Image.asset(ImageString.crown),
+                        child: Row(
+                          children: [
+                            Image.asset(ImageString.crown),
+                            Text("Standard",
+                                style: TextStyle(
+                                    color: PrimaryColor.primary700,
+                                    fontSize: 14,
+                                    fontFamily: 'GilroySemi'))
+                          ],
+                        ),
                       ),
                       SizedBox(
                         width: size.width * 0.06,

@@ -7,7 +7,9 @@ class AuthText{
   static const String REGISTER_TEXT_INFO = 'Renseigner les champs ci-dessous';
 
   static const String LOGIN_TEXT = 'Connexion';
-  static const String LOGIN_TEXT_INFO = 'Veuillez entrer vos informations de connexion';
+  static const String VERFICATION_OTP_TEXT = 'Vérification de code';
+  static const String ENTER_OTP_CODE_TEXT = 'Entrer le code de 4 chiffres envoyé au';
+  static const String LOGIN_TEXT_INFO = 'Veuillez saisir votre numéro de téléphone ci-dessous.';
   static const String LOGIN_LABEL_PHONE = 'Téléphone ou e-mail';
   static const String LOGIN_FORGET_PASSWORD ='Mot de passe oublié';
   static const String SIGNUP_BUTTON_TEXT = 'Créer mon compte';

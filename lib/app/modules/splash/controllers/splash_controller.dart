@@ -10,18 +10,15 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print(storage.read('onboarding'));
     Future.delayed(const Duration(seconds: 5), () {
       if (storage.read('token') == null && storage.read('onboarding') != null) {
         Get.offAndToNamed(Routes.AUTH_LOGIN);
       } else if (storage.read('onboarding') == null) {
-        storage.write('onboarding', 'onboard');
+        // storage.write('onboarding', 'onboard');
         Get.offAndToNamed(Routes.ONBOARDING);
       } else {
         Get.offAndToNamed(Routes.HOME);
       }
     });
   }
-
-
 }
