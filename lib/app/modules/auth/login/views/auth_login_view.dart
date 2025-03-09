@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lesto/app/components/Button/primary_button.dart';
 import 'package:lesto/app/components/TextField/number_textfield.dart';
+import 'package:lesto/app/data/Models/LoginModel.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Contents/auth_constant.dart';
 import 'package:lesto/app/data/constants/Image/image_constant.dart';
-import 'package:lesto/app/routes/app_pages.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 
 import '../controllers/auth_login_controller.dart';
@@ -23,7 +23,7 @@ class AuthLoginView extends GetView<AuthLoginController> {
       body: Column(
         children: [
           SizedBox(
-            height: size.height * 0.8,
+            height: size.height * 0.5,
             child: PageView(
               physics: const NeverScrollableScrollPhysics(),
               controller: controller.pageControl,
@@ -91,6 +91,20 @@ class AuthLoginView extends GetView<AuthLoginController> {
                     Stack(
                       children: [
                         Image.asset(ImageString.loginImage),
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: 25),
+                          child: IconButton(
+                              onPressed: () => {
+                                    controller.currentPage.value == 0
+                                        ? Get.back()
+                                        : controller.pageControl.previousPage(
+                                            duration: const Duration(
+                                                milliseconds: 500),
+                                            curve: Curves.easeIn)
+                                  },
+                              icon: const Icon(Icons.arrow_back,
+                                  color: PrimaryColor.primary600)),
+                        ),
                         Positioned(
                           top: 140,
                           child: Align(
@@ -125,13 +139,44 @@ class AuthLoginView extends GetView<AuthLoginController> {
                                                     color: NeutralColor
                                                         .neutral600),
                                               ),
-                                              Text(
-                                                controller.phone.text,
-                                                style: TextStyle(
-                                                    fontFamily: 'GilroyBold',
-                                                    fontSize: 14,
-                                                    color: PrimaryColor
-                                                        .primary500),
+                                              SizedBox(
+                                                width: 250,
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 12),
+                                                  child: OtpPinField(
+                                                    fieldWidth: 52,
+                                                    fieldHeight: 54,
+                                                    key: controller
+                                                        .otpPinFieldController,
+                                                    autoFillEnable: true,
+                                                    otpPinFieldDecoration:
+                                                        OtpPinFieldDecoration
+                                                            .custom,
+                                                    otpPinFieldStyle: OtpPinFieldStyle(
+                                                        fieldBorderWidth: 1,
+                                                        defaultFieldBorderColor:
+                                                            PrimaryColor
+                                                                .primary200,
+                                                        fieldBorderRadius: 10,
+                                                        textStyle: TextStyle(
+                                                            fontFamily:
+                                                                'Poppins',
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 22,
+                                                            color: PrimaryColor
+                                                                .primary500)),
+                                                    onChange: (text) {
+                                                      print(
+                                                          'Enter on change pin is $text');
+                                                    },
+                                                    maxLength: 4,
+                                                    onSubmit: (String pin) {
+                                                      controller.password(pin);
+                                                    },
+                                                  ),
+                                                ),
                                               ),
                                             ]),
                                       ),
@@ -144,57 +189,6 @@ class AuthLoginView extends GetView<AuthLoginController> {
                         ),
                       ],
                     ),
-                    OtpPinField(
-                      fieldWidth: 52,
-                      fieldHeight: 54,
-                      key: controller.otpPinFieldController,
-                      autoFillEnable: true,
-                      otpPinFieldDecoration: OtpPinFieldDecoration.custom,
-                      otpPinFieldStyle: OtpPinFieldStyle(
-                          fieldBorderWidth: 1,
-                          defaultFieldBorderColor: PrimaryColor.primary200,
-                          fieldBorderRadius: 10,
-                          textStyle: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 22,
-                              color: PrimaryColor.primary500)),
-                      onChange: (text) {
-                        print('Enter on change pin is $text');
-                      },
-                      maxLength: 4,
-                      onSubmit: (String pin) {
-                        print("OTP Entered: $pin");
-                      },
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Je n'ai pas reçu,",
-                          style: TextStyle(
-                            fontFamily: 'Gilroy',
-                            fontSize: 13,
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {},
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 6),
-                            child: Text(
-                              "Renvoyer le code",
-                              style: TextStyle(
-                                  fontFamily: 'Gilroy',
-                                  fontSize: 13,
-                                  color: PrimaryColor.primary500),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
                   ],
                 ),
               ],
@@ -213,36 +207,12 @@ class AuthLoginView extends GetView<AuthLoginController> {
                     title: controller.isLastPage.value ? 'Valider' : 'Suivant',
                     press: () {
                       controller.isLastPage.value
-                          ? Get.offAndToNamed(Routes.HOME)
-                          // ? showAlert(
-                          //     context,
-                          //     Container(
-                          //       padding: EdgeInsets.symmetric(horizontal: 35),
-                          //       child: Row(children: [
-                          //         CircularProgressIndicator(
-                          //           color: PrimaryColor.primary400,
-                          //         ),
-                          //         SizedBox(
-                          //           width: 14,
-                          //         ),
-                          //         Text(
-                          //           ModalText.MODAL_CONNEXION_TEXT,
-                          //           style: TextStyle(
-                          //               decoration: TextDecoration.none,
-                          //               fontFamily: 'Gilroy',
-                          //               fontSize: 14,
-                          //               color: Colors.black),
-                          //         )
-                          //       ]),
-                          //     ),
-                          //     size.width * 0.85,
-                          //     size.height * 0.11,
-                          //     false)
-                          : controller.phone.text != ""
-                              ? controller.pageControl.nextPage(
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.easeIn)
-                              : null;
+                          ? controller.connexion(
+                              LoginModel(
+                                  telephone: controller.phone.text,
+                                  password: controller.code.value),
+                              context)
+                          : controller.nextPage();
                     },
                     color: PrimaryColor.primary500,
                     width: 372,

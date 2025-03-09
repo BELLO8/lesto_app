@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:lesto/app/modules/auth/login/controllers/auth_login_controller.dart';
 import 'package:lesto/app/routes/app_pages.dart';
 
 import '../../../data/constants/Colors/color_neutral.dart';
-import '../../../data/constants/Colors/color_primary.dart';
 import '../../../data/constants/Image/image_constant.dart';
 import '../user_menu.dart';
 
@@ -20,6 +20,7 @@ class UserProfileContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = AuthLoginController();
     final storage = GetStorage();
     return Container(
       margin: EdgeInsets.symmetric(vertical: 15, horizontal: 35),
@@ -57,14 +58,14 @@ class UserProfileContent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      storage.read("nom") + storage.read("prenoms"),
+                      '${storage.read("nom") ?? ""}  ${storage.read("prenoms") ?? ""}',
                       style: TextStyle(
                           fontFamily: 'GilroyBold',
                           fontSize: 20,
                           letterSpacing: -1),
                     ),
                     Text(
-                      storage.read("email"),
+                      storage.read("email") ?? "",
                       style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
                     )
                   ]),
@@ -114,16 +115,16 @@ class UserProfileContent extends StatelessWidget {
               height: 48,
               width: 285,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: PrimaryColor.primary600, width: 1.5),
+                color: const Color.fromARGB(31, 240, 70, 70),
+                borderRadius: BorderRadius.circular(13),
               ),
               child: Text(
                 "Déconnexion",
                 style: TextStyle(
-                    fontFamily: 'Poppins',
+                    fontFamily: 'GilroySemi',
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: PrimaryColor.primary600),
+                    color: Colors.red),
               ),
             ),
           )

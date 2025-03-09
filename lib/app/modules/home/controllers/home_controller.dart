@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lesto/app/data/Models/menu_model.dart';
 import 'package:lesto/app/data/Models/plat_model.dart';
+import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/providers/menu_provider.dart';
 import 'package:lesto/app/data/providers/plat_provider.dart';
 import 'package:lesto/app/routes/app_pages.dart';
@@ -155,7 +156,7 @@ class HomeController extends GetxController {
 
     if (dateDebut == "Date de debut" && dateFin == "Date de fin") {
       Get.snackbar('Date invalide', 'Selectionnez une date valide',
-          backgroundColor: Colors.red);
+          backgroundColor: PrimaryColor.primary500, colorText: Colors.white);
     } else {
       generateMenu.value = await MenuProvider().getMenu(id, dateDebut, dateFin);
       storeMenu.write('menu', generateMenu);

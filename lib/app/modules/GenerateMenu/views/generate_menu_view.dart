@@ -18,6 +18,7 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       floatingActionButton: PrimaryButton(
         title: "Génerer la liste des courses",
         press: () {},
@@ -31,6 +32,7 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
             fontSize: 14),
       ),
       appBar: AppBar(
+        backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: PrimaryColor.primary600),
         title: const Text(
           'Menu de la semaine',
@@ -48,17 +50,17 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
             child: ListView(
               padding: EdgeInsets.symmetric(vertical: 16),
               scrollDirection: Axis.horizontal,
-              children: controller.generateMenu.asMap().entries.map((days) {
+              children: controller.generateMenu.asMap().entries.map((day) {
                 return Container(
                   margin: EdgeInsets.symmetric(horizontal: 2),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
-                    color: Color(0xFFD98B65),
+                    color: PrimaryColor.primary600,
                   ),
                   child: InkWell(
                     radius: 10,
                     onTap: () {
-                      controller.scrollController.animateTo(days.key * 350.0,
+                      controller.scrollController.animateTo(day.key * 350.0,
                           duration: const Duration(milliseconds: 500),
                           curve: Curves.easeIn);
                     },
@@ -66,7 +68,7 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
                       alignment: Alignment.center,
                       padding: EdgeInsets.symmetric(horizontal: 25),
                       child: Text(
-                        days.value.name,
+                        day.value.name,
                         style: TextStyle(
                             fontFamily: 'GilroyMedium',
                             fontWeight: FontWeight.w500,
@@ -91,7 +93,7 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
                         child: Column(
                           children: [
                             Container(
-                              color: PrimaryColor.primary700,
+                              color: PrimaryColor.primary500,
                               padding: EdgeInsets.symmetric(horizontal: 8),
                               height: 38,
                               child: Row(
@@ -116,25 +118,19 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
                             ),
                             SizedBox(
                               child: Column(
-                                children: menu.plats
-                                    .asMap()
-                                    .entries
-                                    .map<Widget>((entry) {
-                                  int index = entry.key;
-                                  var dish = entry.value;
+                                children: menu.plats.map<Widget>((plat) {
                                   return GenerateFoodWidget(
+                                    id: plat.id,
                                     size: size,
                                     borderWidth: 0,
                                     borderColor: Colors.transparent,
                                     backgroundColor: Colors.white,
-                                    image: dish.image,
-                                    title: dish.libelle,
-                                    description: dish.description,
-                                    time: dish.duree,
-                                    period: index == 0 ? 'Midi' : 'Soir',
-                                    icon: index == 0
-                                        ? ImageString.sun
-                                        : ImageString.moon,
+                                    image: plat.image,
+                                    title: plat.libelle,
+                                    description: plat.description,
+                                    time: plat.duree,
+                                    period: "",
+                                    icon: ImageString.moon,
                                   );
                                 }).toList(),
                               ),
@@ -164,8 +160,9 @@ class GenerateFoodWidget extends StatelessWidget {
     required this.time,
     required this.period,
     required this.icon,
+    required this.id,
   });
-
+  final int id;
   final Size size;
   final double borderWidth;
   final Color borderColor;
@@ -182,18 +179,18 @@ class GenerateFoodWidget extends StatelessWidget {
       onTap: () {
         Get.toNamed(Routes.FOOD_DETAIL,
             arguments: Plat(
-                id: 2,
+                id: id,
                 nom: title,
                 duree: time,
                 level: period,
                 image: image,
-                idType: 5,
+                idType: 0,
                 description: description));
       },
       child: Container(
         width: 338,
         height: 142,
-        margin: EdgeInsets.symmetric(horizontal: 30),
+        margin: EdgeInsets.symmetric(horizontal: 15),
         padding: EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
             border: Border.all(width: borderWidth, color: borderColor),
@@ -224,7 +221,7 @@ class GenerateFoodWidget extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            color: PrimaryColor.primary900,
+                            color: PrimaryColor.primary600,
                             fontSize: 18,
                             fontFamily: 'GilroySemi'),
                       ),

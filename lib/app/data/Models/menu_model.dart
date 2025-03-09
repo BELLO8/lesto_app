@@ -52,12 +52,13 @@ class PlatMenu {
   });
 
   factory PlatMenu.fromJson(Map<String, dynamic> json) => PlatMenu(
-        id: json["id"],
-        libelle: json["libelle"],
-        duree: json["duree"],
-        image: json["image"],
-        description: json["description"],
-        level: json["level"],
+        id: json["id"] ?? "",
+        libelle: json["libelle"] ?? "",
+        duree: json["duree"] ?? "",
+        image: json["image"] ??
+            "https://lesaventuresdekonan.home.blog/wp-content/uploads/2019/05/save_20190512_0740571049105813.jpeg",
+        description: json["description"] ?? "",
+        level: json["level"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {

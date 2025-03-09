@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lesto/app/components/Video/VideoPlayer.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
@@ -49,7 +50,8 @@ class FoodDetailView extends GetView<FoodDetailController> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: SizedBox(
+        child: Container(
+          color: Colors.white,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -67,12 +69,12 @@ class FoodDetailView extends GetView<FoodDetailController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      controller.argumentData['nom'],
+                      controller.argumentData.nom,
                       style: TextStyle(
                           fontFamily: 'GilroySemi',
-                          fontSize: 26,
+                          fontSize: 21,
                           color: PrimaryColor.primary500,
-                          letterSpacing: -2),
+                          letterSpacing: -1),
                     ),
                     Row(
                       children: [
@@ -84,7 +86,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
                           width: 4,
                         ),
                         Text(
-                          controller.argumentData['duree'],
+                          controller.argumentData.duree,
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 14,
@@ -94,7 +96,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
                           width: 4,
                         ),
                         Text(
-                          '| Difficultés: ${controller.argumentData['level']}',
+                          '| Difficultés: ${controller.argumentData.level}',
                           style: TextStyle(
                               color: NeutralColor.neutral400,
                               fontSize: 14,
@@ -119,7 +121,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
                     ),
                     SizedBox(
                       child: Text(
-                        controller.argumentData["description"],
+                        controller.argumentData.description,
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
@@ -172,18 +174,26 @@ class FoodDetailView extends GetView<FoodDetailController> {
                     Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      child: SingleChildScrollView(
-                        child: Column(
-                            children: controller.ingredients.map((item) {
-                          return Container(
-                            margin: EdgeInsets.symmetric(vertical: 4),
-                            child: IngredientWidget(
-                              size: size,
-                              name: item['name'],
-                              quantity: item['quantity'],
-                            ),
-                          );
-                        }).toList()),
+                      child: Obx(
+                        () => controller.loading.value
+                            ? const Center(child: CircularProgressIndicator())
+                            : controller.ingredients.isNotEmpty
+                                ? SingleChildScrollView(
+                                    child: Column(
+                                        children:
+                                            controller.ingredients.map((item) {
+                                      return Container(
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 4),
+                                        child: IngredientWidget(
+                                            size: size,
+                                            name: item.nom,
+                                            quantity: item.quantite,
+                                            unite: item.unite),
+                                      );
+                                    }).toList()),
+                                  )
+                                : Text("Aucun ingredient pour ce plat"),
                       ),
                     ),
                     SizedBox(
@@ -219,25 +229,29 @@ class IngredientWidget extends StatelessWidget {
     required this.size,
     required this.name,
     required this.quantity,
+    required this.unite,
   });
 
   final Size size;
   final String name;
-  final String quantity;
+  final String unite;
+  final int quantity;
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Container(
-          width: 55,
-          height: 55,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: PrimaryColor.primary100),
+          child: SvgPicture.network(
+            "https://cdn.hugeicons.com/icons/ice-cubes-stroke-rounded.svg",
+            color: PrimaryColor.primary500,
+          ),
         ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          width: size.width * 0.75,
+          width: size.width * 0.85,
           child: Row(
             children: [
               Text(
@@ -246,8 +260,8 @@ class IngredientWidget extends StatelessWidget {
               ),
               Spacer(),
               Text(
-                quantity,
-                style: TextStyle(fontFamily: 'GilroyBold', fontSize: 15),
+                '$quantity' '$unite',
+                style: TextStyle(fontFamily: 'Poppins', fontSize: 15),
               )
             ],
           ),

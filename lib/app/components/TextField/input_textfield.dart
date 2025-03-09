@@ -37,7 +37,6 @@ class InputTextField extends StatelessWidget {
           child: TextFormField(
             controller: controller,
             validator: validate,
-            keyboardType: TextInputType.phone,
             style: TextStyle(
               fontFamily: "Poppins",
             ),

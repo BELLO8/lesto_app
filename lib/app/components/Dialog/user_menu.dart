@@ -26,8 +26,8 @@ class UserProfilMenu extends StatelessWidget {
         height: 48,
         width: 285,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: NeutralColor.neutral300, width: 1.5),
+          borderRadius: BorderRadius.circular(13),
+          border: Border.all(color: NeutralColor.neutral200, width: 0.8),
         ),
         child: Row(
           children: [

@@ -7,7 +7,6 @@ import '../../../data/constants/Image/image_constant.dart';
 
 class GenerateMenuController extends GetxController {
   final argumentData = GetStorage();
-  final count = 0.obs;
   final scrollController = ScrollController();
   var generateMenu = <Dish>[].obs;
   var isLoading = true.obs;
@@ -111,10 +110,7 @@ class GenerateMenuController extends GetxController {
     getMenu();
   }
 
-  void increment() => count.value++;
-
   void getMenu() {
-    print(argumentData.read("menu"));
     isLoading.value = false;
     generateMenu.value = argumentData.read("menu");
   }

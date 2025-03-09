@@ -1,8 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:lesto/app/modules/home/controllers/home_controller.dart';
+import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 
 import '../../../data/constants/Colors/color_primary.dart';
 import '../../../data/constants/Image/image_constant.dart';
@@ -20,7 +19,6 @@ class SearchContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final homeController = Get.put(HomeController());
     return Container(
       margin: EdgeInsets.symmetric(vertical: 25, horizontal: 10),
       child: Column(children: [
@@ -29,8 +27,8 @@ class SearchContent extends StatelessWidget {
           width: size.width * 0.9,
           padding: EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              border: Border.all(width: 1.2, color: PrimaryColor.primary400)),
+              borderRadius: BorderRadius.circular(13),
+              border: Border.all(width: 1.2, color: PrimaryColor.primary200)),
           child: Row(
             children: [
               Image.asset(ImageString.search),
@@ -52,10 +50,10 @@ class SearchContent extends StatelessWidget {
                     fillColor: PrimaryColor.transparent,
                     hintStyle: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: PrimaryColor.primary200,
+                        color: NeutralColor.neutral400,
                         fontSize: 16,
                         fontFamily: 'Gilroy'),
-                    hintText: "Rechercher un plat",
+                    hintText: "Recherche d'élement",
                   ),
                 ),
               ),
@@ -65,17 +63,6 @@ class SearchContent extends StatelessWidget {
         SizedBox(
           height: 12,
         ),
-        // Align(
-        //     alignment: Alignment.topLeft,
-        //     child: Obx(
-        //       () => Text(
-        //         "${homeController.searchPlatList.length} élements trouvés",
-        //         style: TextStyle(
-        //             fontWeight: FontWeight.w600,
-        //             fontSize: 18,
-        //             fontFamily: 'GilroySemi'),
-        //       ),
-        //     )),
         SizedBox(
           height: size.height * 0.78,
           child: child,

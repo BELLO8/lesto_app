@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:lesto/app/data/Models/ingredient_model.dart';
 import 'package:lesto/app/data/Models/plat_model.dart';
 
 import '../constants/ApiUrl/endpoint_constant.dart';
@@ -17,6 +18,29 @@ class PlatProvider extends GetConnect {
       return plats;
     } else {
       return <Plat>[];
+    }
+  }
+
+  getPlatsIngredients(id) async {
+    final response =
+        await get('${EndPoint.API_URL}/ingredient/listIngredientPlat/$id');
+    if (response.statusCode == 200) {
+      Iterable data = response.body['data'];
+      var ingredient = data.map((e) => Ingredient.fromJson(e)).toList();
+      return ingredient;
+    } else {
+      return <Ingredient>[];
+    }
+  }
+
+  getAllIngredients() async {
+    final response = await get('${EndPoint.API_URL}/ingredient/all');
+    if (response.statusCode == 200) {
+      Iterable data = response.body['data'];
+      var ingredient = data.map((e) => Ingredient.fromJson(e)).toList();
+      return ingredient;
+    } else {
+      return <Ingredient>[];
     }
   }
 

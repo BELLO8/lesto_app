@@ -39,13 +39,13 @@ class HomeView extends GetView<HomeController> {
                               text: '👋 Salut,',
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 18,
+                                  fontSize: 15,
                                   fontFamily: 'Gilroy')),
                           TextSpan(
-                              text: box.read('prenoms'),
+                              text: box.read('nom'),
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 27,
+                                  fontSize: 20,
                                   fontFamily: 'GilroyBold')),
                           TextSpan(
                               text: ' !',
@@ -435,16 +435,17 @@ class HomeView extends GetView<HomeController> {
                     child: Obx(
                       () => controller.loading.value
                           ? const Center(child: CircularProgressIndicator())
-                          : controller.recommandation.isNotEmpty
+                          : controller.platList.isNotEmpty
                               ? ListView(
                                   scrollDirection: Axis.horizontal,
-                                  children:
-                                      controller.recommandation.map((menu) {
+                                  children: controller.platList
+                                      .getRange(0, 6)
+                                      .map((plat) {
                                     return InkWell(
                                       borderRadius: BorderRadius.circular(15),
                                       onTap: () {
                                         Get.toNamed(Routes.FOOD_DETAIL,
-                                            arguments: menu);
+                                            arguments: plat);
                                       },
                                       child: Container(
                                         width: size.width * 0.5,
@@ -464,7 +465,7 @@ class HomeView extends GetView<HomeController> {
                                                     BorderRadius.circular(15),
                                                 image: DecorationImage(
                                                     image: NetworkImage(
-                                                        menu['image']),
+                                                        plat.image),
                                                     fit: BoxFit.cover),
                                               ),
                                               child: Align(
@@ -494,7 +495,7 @@ class HomeView extends GetView<HomeController> {
                                                       SizedBox(
                                                         width: 4,
                                                       ),
-                                                      Text(menu["duree"],
+                                                      Text(plat.duree,
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -517,8 +518,10 @@ class HomeView extends GetView<HomeController> {
                                               child: Column(children: [
                                                 Align(
                                                   alignment: Alignment.topLeft,
-                                                  child: Text(menu["nom"],
+                                                  child: Text(plat.nom,
                                                       style: TextStyle(
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
                                                           fontWeight:
                                                               FontWeight.w600,
                                                           color: PrimaryColor
@@ -530,7 +533,7 @@ class HomeView extends GetView<HomeController> {
                                                 Align(
                                                   alignment: Alignment.topLeft,
                                                   child: Text(
-                                                      "Difficultés: ${menu["level"]}",
+                                                      "Difficultés: ${plat.level}",
                                                       style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.w600,

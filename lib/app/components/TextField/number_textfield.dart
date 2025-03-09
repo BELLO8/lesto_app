@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 
@@ -35,35 +34,6 @@ class NumberTextField extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 7),
         child: Row(
           children: [
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
-                child: Row(
-                  children: [
-                    SvgPicture.network(
-                      height: 15,
-                      width: 15,
-                      "https://flagcdn.com/ci.svg",
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      "225",
-                      style: TextStyle(
-                          fontFamily: 'GilroySemi',
-                          fontSize: 14,
-                          decoration: TextDecoration.none),
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Icon(Icons.keyboard_arrow_down)
-                  ],
-                ),
-              ),
-            ),
             SizedBox(
               width: 230,
               child: TextFormField(

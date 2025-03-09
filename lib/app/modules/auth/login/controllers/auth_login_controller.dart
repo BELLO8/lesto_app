@@ -7,6 +7,7 @@ import 'package:lesto/app/data/Models/LoginModel.dart';
 import 'package:lesto/app/data/providers/auth_provider.dart';
 import 'package:lesto/app/routes/app_pages.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
+import 'package:toastification/toastification.dart';
 
 class AuthLoginController extends GetxController {
   final pageControl = PageController();
@@ -18,6 +19,7 @@ class AuthLoginController extends GetxController {
   final box = GetStorage();
   final loading = false.obs;
   final otpPinFieldController = GlobalKey<OtpPinFieldState>();
+  var code = "".obs;
 
   var isOscure = true.obs;
   @override
@@ -39,25 +41,53 @@ class AuthLoginController extends GetxController {
     isOscure.value = !isOscure.value;
   }
 
-  void connexion(LoginModel loginRequest) async {
+  void password(text) {
+    code.value = text;
+  }
+
+  void nextPage() {
+    phone.text != ""
+        ? pageControl.nextPage(
+            duration: const Duration(milliseconds: 500), curve: Curves.easeIn)
+        : null;
+  }
+
+  void initialize() {
+    isLastPage.value = false;
+    isFirstPage.value = true;
+    currentPage.value = 0;
+    update();
+  }
+
+  void connexion(LoginModel loginRequest, context) async {
     loading.value = true;
     update();
     var loginResponse = await AuthProvider().login(loginRequest);
     if (loginResponse['status'] == "error") {
       loading.value = false;
       update();
-      Get.snackbar(
-        'Erreur',
-        loginResponse['message'],
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.all(10),
-        icon: const Icon(
-          Icons.error,
-          color: Colors.white,
+      //     Get.snackbar(
+      // 'Erreur',
+      // loginResponse['message'],
+      // snackPosition: SnackPosition.BOTTOM,
+      // backgroundColor: Colors.red,
+      // colorText: Colors.white,
+      // padding: const EdgeInsets.all(10),
+      // margin: const EdgeInsets.all(10),
+      // icon: const Icon(
+      //   Icons.error,
+      //   color: Colors.white,
+      // ),
+
+      toastification.show(
+        context: context,
+        type: ToastificationType.error,
+        style: ToastificationStyle.flat,
+        title: Text(
+          loginResponse['message'],
+          style: const TextStyle(fontFamily: 'GilroySemi', color: Colors.red),
         ),
+        autoCloseDuration: const Duration(seconds: 3),
       );
     } else if (loginResponse['status'] == "success") {
       loading.value = false;
@@ -69,6 +99,8 @@ class AuthLoginController extends GetxController {
       box.write('email', loginResponse["data"]['email']);
       box.write('telephone', loginResponse["data"]['telephone']);
       Get.offAndToNamed(Routes.HOME);
-    } else {}
+      initialize();
+      update();
+    }
   }
 }

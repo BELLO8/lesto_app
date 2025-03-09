@@ -227,6 +227,7 @@ class DatePicker extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 8),
       padding: EdgeInsets.symmetric(horizontal: 8),
       height: 50,
+      width: 160,
       decoration: BoxDecoration(
         border: Border.all(width: 1.5, color: NeutralColor.neutral300),
         borderRadius: BorderRadius.circular(10),
@@ -235,7 +236,7 @@ class DatePicker extends StatelessWidget {
         children: [
           SvgPicture.asset(
             ImageString.calendar,
-            color: PrimaryColor.primary700,
+            color: PrimaryColor.primary500,
           ),
           InkWell(
             onTap: onTap,
@@ -245,7 +246,7 @@ class DatePicker extends StatelessWidget {
                 label,
                 style: TextStyle(
                   fontSize: 15,
-                  fontFamily: "GilroyMedium",
+                  fontFamily: "Gilroy",
                 ),
               ),
             ),
@@ -295,6 +296,50 @@ class CustomRadioButton extends StatelessWidget {
                   fontFamily: 'Gilroy',
                   color: PrimaryColor.primary500,
                   fontSize: 12,
+                  decoration: TextDecoration.none),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomRadioButtonIngredient extends StatelessWidget {
+  const CustomRadioButtonIngredient({
+    super.key,
+    required this.size,
+    required this.label,
+    required this.onPressed,
+    required this.state,
+  });
+
+  final Size size;
+  final String label;
+  final bool state;
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 2),
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          color: state ? PrimaryColor.primary500 : Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(width: 1, color: NeutralColor.neutral200),
+        ),
+        child: Row(
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Gilroy',
+                  color: state ? Colors.white : PrimaryColor.primary500,
+                  fontSize: 13,
                   decoration: TextDecoration.none),
             ),
           ],

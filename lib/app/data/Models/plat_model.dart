@@ -25,12 +25,13 @@ class Plat {
 
   factory Plat.fromJson(Map<String, dynamic> json) => Plat(
         id: json["id"],
-        nom: json["nom"],
-        duree: json["duree"],
-        level: json["level"],
-        image: json["image"],
-        idType: json["id_type"],
-        description: json["description"],
+        nom: json["nom"] ?? "",
+        duree: json["duree"] ?? "1 heure",
+        level: json["level"] ?? "Moyen",
+        image: json["image"] ??
+            "https://lesaventuresdekonan.home.blog/wp-content/uploads/2019/05/save_20190512_0740571049105813.jpeg",
+        idType: json["id_type"] ?? 0,
+        description: json["description"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {

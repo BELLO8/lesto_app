@@ -1,12 +1,17 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:lesto/app/components/Button/primary_button.dart';
 import 'package:lesto/app/components/Dialog/Content/generate_menu_content.dart';
-import 'package:lesto/app/components/Dialog/bottom_sheet_dialog.dart';
 import 'package:lesto/app/components/TextField/lesto_textfield%20copy.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
+import 'package:lesto/app/data/constants/Contents/modal_text_constant.dart';
 import 'package:lesto/app/data/constants/Image/image_constant.dart';
+import 'package:lesto/app/modules/home/controllers/home_controller.dart';
+import 'package:toastification/toastification.dart';
 
 import '../controllers/generate_menu_filter_controller.dart';
 
@@ -14,9 +19,12 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
   const GenerateMenuFilterView({super.key});
   @override
   Widget build(BuildContext context) {
+    final homeController = Get.find<HomeController>();
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
             onPressed: () => {
                   controller.currentPage.value == 0
@@ -40,9 +48,86 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
                   onPageChanged: (index) {
                     controller.currentPage.value = index;
                     controller.isFirstPage.value = index == 0;
-                    controller.isLastPage.value = index == 2;
+                    controller.isLastPage.value = index == 3;
                   },
                   children: [
+                    Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            children: [
+                              Text(
+                                ModalText.MODAL_GENERATE_QUESTION_TEXT_4,
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontFamily: 'GilroySemi',
+                                    color: Colors.black,
+                                    fontSize: 21,
+                                    decoration: TextDecoration.none),
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 18),
+                                child: Obx(
+                                  () => Center(
+                                    child: Row(
+                                      children: [
+                                        DatePicker(
+                                          label: homeController.dateDebut.value,
+                                          onTap: () async {
+                                            DateTime? pickedDate =
+                                                await showDatePicker(
+                                                    context: context,
+                                                    initialDate: DateTime.now(),
+                                                    firstDate: DateTime.now()
+                                                        .subtract(
+                                                            Duration(days: 0)),
+                                                    lastDate: DateTime(2101));
+
+                                            if (pickedDate != null) {
+                                              String formattedDate =
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .format(pickedDate);
+                                              homeController
+                                                  .selectedDate(formattedDate);
+                                            }
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        DatePicker(
+                                          label: homeController.dateFin.value,
+                                          onTap: () async {
+                                            DateTime? pickedDate =
+                                                await showDatePicker(
+                                                    context: context,
+                                                    initialDate: DateTime
+                                                        .now(), //get today's date
+                                                    firstDate: DateTime.now()
+                                                        .subtract(
+                                                            Duration(days: 0)),
+                                                    lastDate: DateTime(2101));
+
+                                            if (pickedDate != null) {
+                                              String formattedDate =
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .format(pickedDate);
+                                              homeController.selectedDateFin(
+                                                  formattedDate);
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 18),
                       child: Center(
@@ -111,6 +196,9 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
                                     hintValue: "Nombre de personne", label: "")
                               ],
                             ),
+                            SizedBox(
+                              height: 25,
+                            ),
                           ],
                         ),
                       ),
@@ -137,36 +225,79 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
                             const SizedBox(
                               height: 24,
                             ),
-                            InkWell(
-                              onTap: () {
-                                bottomSheetDialog(context, Container(),
-                                    size.height * 0.92, () => {});
-                              },
-                              child: Container(
-                                height: 46,
-                                width: size.width * 0.6,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(13),
-                                    border: Border.all(
-                                        width: 1,
-                                        color: PrimaryColor.primary200)),
-                                child: Row(
-                                  children: [
-                                    Image.asset(ImageString.search),
-                                    SizedBox(
-                                      width: size.width * 0.02,
-                                    ),
-                                    const Text("Rechercher un ingrédients",
-                                        style: TextStyle(
+                            Container(
+                              height: 46,
+                              width: size.width * 0.6,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(13),
+                                  border: Border.all(
+                                      width: 1,
+                                      color: PrimaryColor.primary200)),
+                              child: Row(
+                                children: [
+                                  Image.asset(ImageString.search),
+                                  SizedBox(
+                                    width: size.width * 0.47,
+                                    child: TextFormField(
+                                      cursorColor: PrimaryColor.primary600,
+                                      style: TextStyle(
+                                        fontFamily: "Poppins",
+                                      ),
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        border: InputBorder.none,
+                                        fillColor: PrimaryColor.transparent,
+                                        hintStyle: TextStyle(
+                                            fontWeight: FontWeight.bold,
                                             color: PrimaryColor.primary500,
-                                            fontSize: 14,
-                                            fontFamily: 'Gilroy'))
-                                  ],
-                                ),
+                                            fontSize: 16,
+                                            fontFamily: 'Gilroy'),
+                                        hintText: "Rechercher un ingredient",
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Obx(() => SizedBox(
+                                  height: size.height * 0.55,
+                                  child: GridView.extent(
+                                    mainAxisSpacing: 14,
+                                    childAspectRatio: (4),
+                                    maxCrossAxisExtent: 190.0,
+                                    children: controller.ingredientListe
+                                        .map((ingredient) {
+                                      return CustomRadioButtonIngredient(
+                                        state: controller.arraySelectItem
+                                            .contains(ingredient.nom),
+                                        size: size,
+                                        label: ingredient.nom,
+                                        onPressed: () {
+                                          controller.selectItem.value =
+                                              ingredient.nom;
+                                          controller.arraySelectItem.contains(
+                                                  controller.selectItem.value)
+                                              ? controller.arraySelectItem
+                                                  .remove(controller
+                                                      .selectItem.value)
+                                              : controller.arraySelectItem.add(
+                                                  controller.selectItem.value);
+
+                                          print(controller.arraySelectItem);
+
+                                          //     ? controller.state.value =
+                                          //         !controller.state.value
+                                          //     : null;
+                                        },
+                                      );
+                                    }).toList(),
+                                  ),
+                                )),
                           ],
                         ),
                       ),
@@ -225,11 +356,29 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
                         color: NeutralColor.neutral100),
                     title: controller.isLastPage.value ? 'Valider' : 'Suivant',
                     press: () {
-                      controller.isLastPage.value
-                          ? const AlertDialog()
-                          : controller.pageController.nextPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeIn);
+                      if (homeController.dateDebut.value == "Date de debut" &&
+                          homeController.dateFin.value == "Date de fin") {
+                        toastification.show(
+                          context: context,
+                          type: ToastificationType.error,
+                          style: ToastificationStyle.simple,
+                          title: Text(
+                            "Selectionnez une date valide",
+                            style: const TextStyle(
+                                fontFamily: 'GilroySemi', color: Colors.red),
+                          ),
+                          autoCloseDuration: const Duration(seconds: 3),
+                        );
+                      } else {
+                        controller.isLastPage.value
+                            ? homeController.getMenu(
+                                1,
+                                homeController.dateDebut.value,
+                                homeController.dateFin.value)
+                            : controller.pageController.nextPage(
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeIn);
+                      }
                     },
                     color: PrimaryColor.primary500,
                     width: 424,
