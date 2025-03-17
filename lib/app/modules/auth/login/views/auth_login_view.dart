@@ -26,11 +26,11 @@ class AuthLoginView extends GetView<AuthLoginController> {
             height: size.height * 0.5,
             child: PageView(
               physics: const NeverScrollableScrollPhysics(),
-              controller: controller.pageControl,
+              controller: controller.pageControllerLogin,
               onPageChanged: (index) {
-                controller.currentPage.value = index;
-                controller.isFirstPage.value = index == 0;
-                controller.isLastPage.value = index == 1;
+                controller.currentPageLogin.value = index;
+                controller.isFirstPageLogin.value = index == 0;
+                controller.isLastPageLogin.value = index == 1;
               },
               children: [
                 Stack(
@@ -95,12 +95,13 @@ class AuthLoginView extends GetView<AuthLoginController> {
                           padding: EdgeInsets.symmetric(vertical: 25),
                           child: IconButton(
                               onPressed: () => {
-                                    controller.currentPage.value == 0
+                                    controller.currentPageLogin.value == 0
                                         ? Get.back()
-                                        : controller.pageControl.previousPage(
-                                            duration: const Duration(
-                                                milliseconds: 500),
-                                            curve: Curves.easeIn)
+                                        : controller.pageControllerLogin
+                                            .previousPage(
+                                                duration: const Duration(
+                                                    milliseconds: 500),
+                                                curve: Curves.easeIn)
                                   },
                               icon: const Icon(Icons.arrow_back,
                                   color: PrimaryColor.primary600)),
@@ -204,9 +205,11 @@ class AuthLoginView extends GetView<AuthLoginController> {
                         fontFamily: 'GilroySemi',
                         fontSize: 14,
                         color: NeutralColor.neutral100),
-                    title: controller.isLastPage.value ? 'Valider' : 'Suivant',
+                    title: controller.isLastPageLogin.value
+                        ? 'Valider'
+                        : 'Suivant',
                     press: () {
-                      controller.isLastPage.value
+                      controller.isLastPageLogin.value
                           ? controller.connexion(
                               LoginModel(
                                   telephone: controller.phone.text,

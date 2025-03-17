@@ -20,6 +20,7 @@ class GenerateMenuFilterController extends GetxController {
   final state = false.obs;
   var arraySelectItem = <String>[].obs;
   final selectItem = "".obs;
+  var arrayKitchen = <String>[].obs;
 
   List<Map<dynamic, dynamic>> type = [
     {
@@ -80,5 +81,17 @@ class GenerateMenuFilterController extends GetxController {
     storeMenu.write('menu', generateMenu);
     storeMenu.write('menuDate', DateTime.now());
     Get.toNamed(Routes.GENERATE_MENU);
+  }
+
+  void checked() {
+    arraySelectItem.contains(selectItem.value)
+        ? arraySelectItem.remove(selectItem.value)
+        : arraySelectItem.add(selectItem.value);
+  }
+
+  void checkedKitchenItem() {
+    arrayKitchen.contains(selectItem.value)
+        ? arrayKitchen.remove(selectItem.value)
+        : arrayKitchen.add(selectItem.value);
   }
 }

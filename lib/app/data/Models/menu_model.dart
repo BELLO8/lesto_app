@@ -55,9 +55,9 @@ class PlatMenu {
         id: json["id"] ?? "",
         libelle: json["libelle"] ?? "",
         duree: json["duree"] ?? "",
-        image: json["image"] ??
-            "https://lesaventuresdekonan.home.blog/wp-content/uploads/2019/05/save_20190512_0740571049105813.jpeg",
-        description: json["description"] ?? "",
+        image: json["image"] ?? "",
+        description: json["description"] ??
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
         level: json["level"] ?? "",
       );
 

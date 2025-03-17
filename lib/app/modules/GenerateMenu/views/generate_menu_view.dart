@@ -34,6 +34,9 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: PrimaryColor.primary600),
+        leading: IconButton(
+            onPressed: () => {Get.offAllNamed(Routes.HOME)},
+            icon: const Icon(Icons.arrow_back, color: PrimaryColor.primary600)),
         title: const Text(
           'Menu de la semaine',
           style: TextStyle(
@@ -203,8 +206,12 @@ class GenerateFoodWidget extends StatelessWidget {
               width: 100,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                image: DecorationImage(
-                    image: NetworkImage(image), fit: BoxFit.cover),
+                image: image != ""
+                    ? DecorationImage(
+                        image: NetworkImage(image), fit: BoxFit.cover)
+                    : DecorationImage(
+                        image: AssetImage(ImageString.defaultImage),
+                        fit: BoxFit.cover),
               ),
             ),
             Container(

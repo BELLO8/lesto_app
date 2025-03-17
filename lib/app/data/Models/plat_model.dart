@@ -28,10 +28,10 @@ class Plat {
         nom: json["nom"] ?? "",
         duree: json["duree"] ?? "1 heure",
         level: json["level"] ?? "Moyen",
-        image: json["image"] ??
-            "https://lesaventuresdekonan.home.blog/wp-content/uploads/2019/05/save_20190512_0740571049105813.jpeg",
+        image: json["image"] ?? "",
         idType: json["id_type"] ?? 0,
-        description: json["description"] ?? "",
+        description: json["description"] ??
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       );
 
   Map<String, dynamic> toJson() => {

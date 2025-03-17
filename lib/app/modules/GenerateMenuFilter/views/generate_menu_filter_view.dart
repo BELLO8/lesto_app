@@ -280,19 +280,7 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
                                         onPressed: () {
                                           controller.selectItem.value =
                                               ingredient.nom;
-                                          controller.arraySelectItem.contains(
-                                                  controller.selectItem.value)
-                                              ? controller.arraySelectItem
-                                                  .remove(controller
-                                                      .selectItem.value)
-                                              : controller.arraySelectItem.add(
-                                                  controller.selectItem.value);
-
-                                          print(controller.arraySelectItem);
-
-                                          //     ? controller.state.value =
-                                          //         !controller.state.value
-                                          //     : null;
+                                          controller.checked();
                                         },
                                       );
                                     }).toList(),
@@ -324,20 +312,28 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
                             const SizedBox(
                               height: 24,
                             ),
-                            SizedBox(
-                              height: 500,
-                              child: GridView.extent(
-                                mainAxisSpacing: 8,
-                                childAspectRatio: (3),
-                                maxCrossAxisExtent: 150.0,
-                                children: controller.type.map((period) {
-                                  return CustomRadioButton(
-                                    size: size,
-                                    icon: period['icon'],
-                                    label: period['label'],
-                                    onPressed: () {},
-                                  );
-                                }).toList(),
+                            Obx(
+                              () => SizedBox(
+                                height: 500,
+                                child: GridView.extent(
+                                  mainAxisSpacing: 8,
+                                  childAspectRatio: (3),
+                                  maxCrossAxisExtent: 150.0,
+                                  children: controller.type.map((period) {
+                                    return CustomRadioButton(
+                                      state: controller.arrayKitchen
+                                          .contains(period['label']),
+                                      size: size,
+                                      icon: period['icon'],
+                                      label: period['label'],
+                                      onPressed: () {
+                                        controller.selectItem.value =
+                                            period['label'];
+                                        controller.checkedKitchenItem();
+                                      },
+                                    );
+                                  }).toList(),
+                                ),
                               ),
                             ),
                           ],

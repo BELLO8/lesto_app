@@ -83,6 +83,7 @@ class GenerateMenuContent extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               children: time.map((period) {
                 return CustomRadioButton(
+                  state: false,
                   size: size,
                   icon: period['icon'],
                   label: period['label'],
@@ -115,6 +116,7 @@ class GenerateMenuContent extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               children: type.map((period) {
                 return CustomRadioButton(
+                  state: false,
                   size: size,
                   icon: period['icon'],
                   label: period['label'],
@@ -264,20 +266,23 @@ class CustomRadioButton extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onPressed,
+    required this.state,
   });
 
   final Size size;
   final String label;
   final String icon;
+  final bool state;
   final void Function() onPressed;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onPressed,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 2),
         padding: EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
+          color: state ? PrimaryColor.primary500 : Colors.white,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(width: 1, color: NeutralColor.neutral200),
         ),
@@ -285,7 +290,7 @@ class CustomRadioButton extends StatelessWidget {
           children: [
             SvgPicture.network(
               icon,
-              color: PrimaryColor.primary500,
+              color: state ? PrimaryColor.primary500 : Colors.white,
             ),
             SizedBox(
               width: size.width * 0.01,
@@ -294,7 +299,7 @@ class CustomRadioButton extends StatelessWidget {
               label,
               style: TextStyle(
                   fontFamily: 'Gilroy',
-                  color: PrimaryColor.primary500,
+                  color: state ? Colors.white : PrimaryColor.primary500,
                   fontSize: 12,
                   decoration: TextDecoration.none),
             ),

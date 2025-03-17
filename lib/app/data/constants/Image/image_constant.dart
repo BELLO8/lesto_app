@@ -26,4 +26,5 @@ class ImageString {
   static const String share = "assets/icons/solar_share-linear.svg";
   static const String info = "assets/icons/lets-icons_info-duotone.svg";
   static const String calendar = "assets/icons/calendar.svg";
+  static const String defaultImage = "assets/images/default_image.jpeg";
 }

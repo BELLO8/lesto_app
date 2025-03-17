@@ -10,10 +10,10 @@ import 'package:otp_pin_field/otp_pin_field.dart';
 import 'package:toastification/toastification.dart';
 
 class AuthLoginController extends GetxController {
-  final pageControl = PageController();
-  final isLastPage = false.obs;
-  final isFirstPage = true.obs;
-  final currentPage = 0.obs;
+  final pageControllerLogin = PageController();
+  final isLastPageLogin = false.obs;
+  final isFirstPageLogin = true.obs;
+  final currentPageLogin = 0.obs;
   final phone = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final box = GetStorage();
@@ -47,15 +47,15 @@ class AuthLoginController extends GetxController {
 
   void nextPage() {
     phone.text != ""
-        ? pageControl.nextPage(
+        ? pageControllerLogin.nextPage(
             duration: const Duration(milliseconds: 500), curve: Curves.easeIn)
         : null;
   }
 
   void initialize() {
-    isLastPage.value = false;
-    isFirstPage.value = true;
-    currentPage.value = 0;
+    isLastPageLogin.value = false;
+    isFirstPageLogin.value = true;
+    currentPageLogin.value = 0;
     update();
   }
 
