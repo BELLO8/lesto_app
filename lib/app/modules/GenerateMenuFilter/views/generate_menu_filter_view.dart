@@ -48,7 +48,7 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
                   onPageChanged: (index) {
                     controller.currentPage.value = index;
                     controller.isFirstPage.value = index == 0;
-                    controller.isLastPage.value = index == 3;
+                    controller.isLastPage.value = index == 2;
                   },
                   children: [
                     Column(
@@ -63,7 +63,7 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
                                 style: TextStyle(
                                     fontFamily: 'GilroySemi',
                                     color: Colors.black,
-                                    fontSize: 21,
+                                    fontSize: 20,
                                     decoration: TextDecoration.none),
                               ),
                               Container(
@@ -219,7 +219,7 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
                                 textAlign: TextAlign.center,
                                 'Avez-vous des ingrédients que vous ne désirez pas (interdits)?',
                                 style: TextStyle(
-                                    fontSize: 18, fontFamily: "Gilroy"),
+                                    fontSize: 13, fontFamily: "GilroyRegular"),
                               ),
                             ),
                             const SizedBox(
@@ -241,6 +241,9 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
                                   SizedBox(
                                     width: size.width * 0.47,
                                     child: TextFormField(
+                                      onChanged: (value) {
+                                        // controller.searchIngredient(value);
+                                      },
                                       cursorColor: PrimaryColor.primary600,
                                       style: TextStyle(
                                         fontFamily: "Poppins",
@@ -252,8 +255,8 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
                                         hintStyle: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: PrimaryColor.primary500,
-                                            fontSize: 16,
-                                            fontFamily: 'Gilroy'),
+                                            fontSize: 12,
+                                            fontFamily: 'GilroyRegular'),
                                         hintText: "Rechercher un ingredient",
                                       ),
                                     ),
@@ -290,56 +293,56 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
                         ),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            const Text(
-                              'Cuisine',
-                              style: TextStyle(
-                                  fontSize: 26, fontFamily: "GilroySemi"),
-                            ),
-                            const SizedBox(
-                              width: 280,
-                              child: Text(
-                                textAlign: TextAlign.center,
-                                'Quels sont les équipements disponibles dans votre cuisine ?',
-                                style: TextStyle(
-                                    fontSize: 18, fontFamily: "Gilroy"),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 24,
-                            ),
-                            Obx(
-                              () => SizedBox(
-                                height: 500,
-                                child: GridView.extent(
-                                  mainAxisSpacing: 8,
-                                  childAspectRatio: (3),
-                                  maxCrossAxisExtent: 150.0,
-                                  children: controller.type.map((period) {
-                                    return CustomRadioButton(
-                                      state: controller.arrayKitchen
-                                          .contains(period['label']),
-                                      size: size,
-                                      icon: period['icon'],
-                                      label: period['label'],
-                                      onPressed: () {
-                                        controller.selectItem.value =
-                                            period['label'];
-                                        controller.checkedKitchenItem();
-                                      },
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 2),
+                    //   child: Center(
+                    //     child: Column(
+                    //       children: [
+                    //         const Text(
+                    //           'Cuisine',
+                    //           style: TextStyle(
+                    //               fontSize: 26, fontFamily: "GilroySemi"),
+                    //         ),
+                    //         const SizedBox(
+                    //           width: 280,
+                    //           child: Text(
+                    //             textAlign: TextAlign.center,
+                    //             'Quels sont les équipements disponibles dans votre cuisine ?',
+                    //             style: TextStyle(
+                    //                 fontSize: 18, fontFamily: "Gilroy"),
+                    //           ),
+                    //         ),
+                    //         const SizedBox(
+                    //           height: 24,
+                    //         ),
+                    //         Obx(
+                    //           () => SizedBox(
+                    //             height: 500,
+                    //             child: GridView.extent(
+                    //               mainAxisSpacing: 8,
+                    //               childAspectRatio: (3),
+                    //               maxCrossAxisExtent: 150.0,
+                    //               children: controller.type.map((period) {
+                    //                 return CustomRadioButton(
+                    //                   state: controller.arrayKitchen
+                    //                       .contains(period['label']),
+                    //                   size: size,
+                    //                   icon: period['icon'],
+                    //                   label: period['label'],
+                    //                   onPressed: () {
+                    //                     controller.selectItem.value =
+                    //                         period['label'];
+                    //                     controller.checkedKitchenItem();
+                    //                   },
+                    //                 );
+                    //               }).toList(),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

@@ -247,8 +247,8 @@ class DatePicker extends StatelessWidget {
               child: Text(
                 label,
                 style: TextStyle(
-                  fontSize: 15,
-                  fontFamily: "Gilroy",
+                  fontSize: 14,
+                  fontFamily: "GilroyRegular",
                 ),
               ),
             ),
@@ -338,14 +338,18 @@ class CustomRadioButtonIngredient extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Text(
-              label,
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Gilroy',
-                  color: state ? Colors.white : PrimaryColor.primary500,
-                  fontSize: 13,
-                  decoration: TextDecoration.none),
+            SizedBox(
+              width: size.width * 0.4,
+              child: Text(
+                label,
+                style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Gilroy',
+                    color: state ? Colors.white : PrimaryColor.primary500,
+                    fontSize: 12,
+                    overflow: TextOverflow.ellipsis,
+                    decoration: TextDecoration.none),
+              ),
             ),
           ],
         ),

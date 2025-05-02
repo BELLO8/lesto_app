@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
-import 'package:video_player/video_player.dart';
 
 class VideoApp extends StatefulWidget {
   const VideoApp({super.key});
@@ -10,17 +9,9 @@ class VideoApp extends StatefulWidget {
 }
 
 class _VideoAppState extends State<VideoApp> {
-  late VideoPlayerController _controller;
-
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(
-        Uri.parse('https://apivideo-demo.s3.amazonaws.com/hello.mp4'))
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
   }
 
   @override
@@ -30,34 +21,21 @@ class _VideoAppState extends State<VideoApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Center(
-          child: _controller.value.isInitialized
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(17),
-                  child: AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller)),
-                )
-              : Container(
-                  decoration: const BoxDecoration(
-                    color: PrimaryColor.primary100,
-                    borderRadius: BorderRadius.all(Radius.circular(17)),
-                  ),
-                  height: 250,
-                ),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: PrimaryColor.primary100,
+              borderRadius: BorderRadius.all(Radius.circular(17)),
+            ),
+            height: 250,
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           elevation: 0,
           backgroundColor: const Color(0xABFFFFFF),
-          onPressed: () {
-            setState(() {
-              _controller.value.isPlaying
-                  ? _controller.pause()
-                  : _controller.play();
-            });
-          },
-          child: Icon(
+          onPressed: () {},
+          child: const Icon(
             color: Colors.white,
-            _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+            Icons.play_arrow,
           ),
         ),
       ),
@@ -66,7 +44,6 @@ class _VideoAppState extends State<VideoApp> {
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 }

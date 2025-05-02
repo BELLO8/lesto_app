@@ -94,4 +94,15 @@ class GenerateMenuFilterController extends GetxController {
         ? arrayKitchen.remove(selectItem.value)
         : arrayKitchen.add(selectItem.value);
   }
+
+  searchIngredient(element) {
+    Iterable search = ingredientListe
+        .where((ingredient) => ingredient.nom.contains(element))
+        .toList();
+    print(search);
+    return ingredientListe.value =
+        search.map((e) => Ingredient.fromJson(e)).toList();
+    // return ingredientListe
+    //     .where((ingredient) => ingredient.nom.toString().contains(element));
+  }
 }

@@ -121,19 +121,36 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
                             ),
                             SizedBox(
                               child: Column(
-                                children: menu.plats.map<Widget>((plat) {
-                                  return GenerateFoodWidget(
-                                    id: plat.id,
-                                    size: size,
-                                    borderWidth: 0,
-                                    borderColor: Colors.transparent,
-                                    backgroundColor: Colors.white,
-                                    image: plat.image,
-                                    title: plat.libelle,
-                                    description: plat.description,
-                                    time: plat.duree,
-                                    period: "",
-                                    icon: ImageString.moon,
+                                children: menu.plats
+                                    .asMap()
+                                    .entries
+                                    .map<Widget>((plat) {
+                                  return Column(
+                                    children: [
+                                      GenerateFoodWidget(
+                                        id: plat.value.id,
+                                        size: size,
+                                        borderWidth: 0,
+                                        borderColor: Colors.transparent,
+                                        backgroundColor: Colors.white,
+                                        image: plat.value.image,
+                                        title: plat.value.libelle,
+                                        description: plat.value.description,
+                                        time: plat.value.duree,
+                                        period: plat.key == 0 ? 'Midi' : 'Soir',
+                                        icon: plat.key == 0
+                                            ? ImageString.sun
+                                            : ImageString.moon,
+                                      ),
+                                      plat.key == 0
+                                          ? Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal:
+                                                      size.width * 0.07),
+                                              child: Image.asset(
+                                                  ImageString.separator))
+                                          : Text("")
+                                    ],
                                   );
                                 }).toList(),
                               ),
@@ -229,7 +246,7 @@ class GenerateFoodWidget extends StatelessWidget {
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             color: PrimaryColor.primary600,
-                            fontSize: 18,
+                            fontSize: 15,
                             fontFamily: 'GilroySemi'),
                       ),
                     ),

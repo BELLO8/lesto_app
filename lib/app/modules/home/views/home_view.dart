@@ -591,7 +591,6 @@ class HomeView extends GetView<HomeController> {
                     locale: "fr",
                     initialDate: DateTime.now(),
                     onDateChange: (selectedDate) {
-                      print(selectedDate);
                       controller.getPlatsByDate(selectedDate);
                     },
                     dayProps: const EasyDayProps(
@@ -648,27 +647,148 @@ class HomeView extends GetView<HomeController> {
                   SizedBox(
                     height: 12,
                   ),
-                  // Container(
-                  //   margin: EdgeInsets.symmetric(vertical: 55),
-                  //   child: Column(children: [
-                  //     Image.asset(
-                  //       ImageString.noMenu,
-                  //     ),
-                  //     Text(
-                  //       "Aucun menu généré pour le moment",
-                  //       style: TextStyle(
-                  //         fontSize: 14,
-                  //         fontWeight: FontWeight.w500,
-                  //         fontFamily: 'GilroyRegular',
-                  //       ),
-                  //     ),
-                  //   ]),
-                  // ),
-
-                  ListView(
-                    children: controller.generateMenuStore.map((element) {
-                      return Text("data");
-                    }).toList(),
+                  Obx(
+                    () => controller.generateMenuStore.isEmpty
+                        ? Container(
+                            margin: EdgeInsets.symmetric(vertical: 55),
+                            child: Column(children: [
+                              Image.asset(
+                                ImageString.noMenu,
+                              ),
+                              Text(
+                                "Aucun menu généré pour le moment",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'GilroyRegular',
+                                ),
+                              ),
+                            ]),
+                          )
+                        : SizedBox(
+                            child: Column(
+                              spacing: 4,
+                              children: controller.generateMenuStore[0].plats
+                                  .map<Widget>((plat) {
+                                return SizedBox(
+                                  width: 355,
+                                  height: 165,
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Container(
+                                        width: 355,
+                                        height: 165,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          image: DecorationImage(
+                                              image: AssetImage(
+                                                  ImageString.defaultImage),
+                                              fit: BoxFit.fill),
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(5.0),
+                                        alignment: Alignment.bottomCenter,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: <Color>[
+                                              Color(0x1F222222),
+                                              Color(0x74141414),
+                                            ],
+                                          ),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.topRight,
+                                              child: Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 8,
+                                                    vertical: 10),
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 5),
+                                                alignment: Alignment.center,
+                                                width: 114,
+                                                height: 30,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50)),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.timer,
+                                                      color: PrimaryColor
+                                                          .primary500,
+                                                      size: 18,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 4,
+                                                    ),
+                                                    Text(
+                                                        plat.duree == null
+                                                            ? plat.duree
+                                                            : "15-18 mins",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color: Color(
+                                                                0xFF381712),
+                                                            fontSize: 15,
+                                                            fontFamily:
+                                                                'GilroyRegular')),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.symmetric(
+                                                  vertical: 8, horizontal: 12),
+                                              child: Column(children: [
+                                                Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Text(plat.libelle,
+                                                      style: TextStyle(
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.white,
+                                                          fontSize: 20,
+                                                          fontFamily:
+                                                              'GilroySemi')),
+                                                ),
+                                                Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Text(
+                                                      "Difficultés: ${plat.level}",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.white,
+                                                          fontSize: 14,
+                                                          fontFamily:
+                                                              'GilroyRegular')),
+                                                ),
+                                              ]),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
                   )
                 ],
               ),

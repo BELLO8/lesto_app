@@ -17,7 +17,6 @@ dependencies:
   csc_picker: ^0.2.7
   flutter_svg: ^2.0.10+1
   date_picker_plus: ^4.1.0
-  video_player: ^2.9.1
   otp_pin_field: ^1.3.1
   toastification: ^2.3.0
 
@@ -39,23 +38,31 @@ flutter:
   fonts:
     - family: Poppins
       fonts:
-        - asset: assets/fonts/Kurale/Kurale-Regular.ttf
+        - asset: assets/fonts/poppins/Poppins-Regular.ttf
+        - asset: assets/fonts/poppins/Poppins-Medium.ttf
+        - asset: assets/fonts/poppins/Poppins-Bold.ttf
+
     - family: PoppinsRegular
       fonts:
-        - asset: assets/fonts/Kurale/Kurale-Regular.ttf
+        - asset: assets/fonts/poppins/Poppins-Regular.ttf
+
     - family: Gilroy
       fonts:
-        - asset: assets/fonts/Moonjelly/Moonjelly-Light.otf
+        - asset: assets/fonts/gilroy/Gilroy-Light.ttf
+
     - family: GilroyRegular
       fonts:
-        - asset: assets/fonts/Moonjelly/Moonjelly-Light.otf
+        - asset: assets/fonts/gilroy/Gilroy-Regular.ttf
+
     - family: GilroyMedium
       fonts:
-        - asset: assets/fonts/Moonjelly/Moonjelly-Bold.otf
+        - asset: assets/fonts/gilroy/Gilroy-Medium.ttf
+
     - family: GilroySemi
       fonts:
-        - asset: assets/fonts/Moonjelly/Moonjelly-Bold.otf
+        - asset: assets/fonts/gilroy/Gilroy-SemiBold.ttf
+
     - family: GilroyBold
       fonts:
-        - asset: assets/fonts/Moonjelly/Moonjelly-Bold.otf
+        - asset: assets/fonts/gilroy/Gilroy-Bold.ttf
   uses-material-design: true

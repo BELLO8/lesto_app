@@ -27,4 +27,5 @@ class ImageString {
   static const String info = "assets/icons/lets-icons_info-duotone.svg";
   static const String calendar = "assets/icons/calendar.svg";
   static const String defaultImage = "assets/images/default_image.jpeg";
+  static const String separator = "assets/images/separator.png";
 }

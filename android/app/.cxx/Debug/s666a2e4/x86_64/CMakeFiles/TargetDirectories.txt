@@ -1,0 +1,2 @@
+D:/Dev/lesto/android/app/.cxx/Debug/s666a2e4/x86_64/CMakeFiles/edit_cache.dir
+D:/Dev/lesto/android/app/.cxx/Debug/s666a2e4/x86_64/CMakeFiles/rebuild_cache.dir

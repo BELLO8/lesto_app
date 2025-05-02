@@ -189,13 +189,12 @@ class HomeController extends GetxController {
       generateMenuStore.value = storeMenu.read('menu');
       for (var jour in storeMenu.read('menu')) {
         if (jour.date == date) {
-          generateMenuStore.value = jour;
+          return generateMenuStore.value = [jour];
         }
       }
     } else {
-      print('object');
-      return [];
+      return generateMenuStore.value = [];
     }
-    return [];
+    return generateMenuStore.value = [];
   }
 }
