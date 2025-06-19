@@ -142,7 +142,7 @@ class GenerateMenuFilterView extends GetView<GenerateMenuFilterController> {
                               width: 250,
                               child: Text(
                                 textAlign: TextAlign.center,
-                                'Pour combien de personnes réalisez vous les menus?',
+                                'Pour combien de personnes réalisez-vous les menus?',
                                 style: TextStyle(
                                     fontSize: 18, fontFamily: "Gilroy"),
                               ),

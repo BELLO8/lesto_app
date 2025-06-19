@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:lesto/app/modules/auth/login/controllers/auth_login_controller.dart';
 import 'package:lesto/app/routes/app_pages.dart';
 
 import '../../../data/constants/Colors/color_neutral.dart';
@@ -20,7 +19,6 @@ class UserProfileContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = AuthLoginController();
     final storage = GetStorage();
     return Container(
       margin: EdgeInsets.symmetric(vertical: 15, horizontal: 35),
@@ -58,14 +56,14 @@ class UserProfileContent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${storage.read("nom") ?? ""}  ${storage.read("prenoms") ?? ""}',
+                      '${storage.read("nom") ?? ""}',
                       style: TextStyle(
                           fontFamily: 'GilroyBold',
                           fontSize: 20,
                           letterSpacing: -1),
                     ),
                     Text(
-                      storage.read("email") ?? "",
+                      storage.read("telephone") ?? "",
                       style: TextStyle(fontFamily: 'Poppins', fontSize: 14),
                     )
                   ]),
