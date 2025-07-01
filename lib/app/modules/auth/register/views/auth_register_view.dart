@@ -423,6 +423,18 @@ class AuthRegisterView extends GetView<AuthRegisterController> {
               ]),
             ),
           ),
+          TextButton(
+            onPressed: () {
+              Get.offAndToNamed(Routes.LOGIN);
+            },
+            child: Text(
+              'Se connectez maintenant',
+              style: TextStyle(
+                  fontFamily: 'GilroySemi',
+                  fontSize: 14,
+                  color: PrimaryColor.primary500),
+            ),
+          ),
         ],
       ),
     );

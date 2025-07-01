@@ -9,6 +9,7 @@ import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Contents/auth_constant.dart';
 import 'package:lesto/app/data/constants/Image/image_constant.dart';
+import 'package:lesto/app/routes/app_pages.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 
 import '../controllers/auth_login_controller.dart';
@@ -221,6 +222,18 @@ class AuthLoginView extends GetView<AuthLoginController> {
                     width: 372,
                     height: 56),
               ]),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.offAndToNamed(Routes.REGISTER);
+            },
+            child: Text(
+              'S\'inscrire maintenant',
+              style: TextStyle(
+                  fontFamily: 'GilroySemi',
+                  fontSize: 14,
+                  color: PrimaryColor.primary500),
             ),
           ),
         ],
