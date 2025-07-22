@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
-import 'package:lesto/app/modules/ui_v2/Accueil/accueil.dart';
+import 'package:lesto/app/modules/ui_v2/Accueil/accueil%20copy.dart';
 import 'package:lesto/app/modules/ui_v2/Livraison/livraison.dart';
 
 void main() {
@@ -240,7 +240,7 @@ class _MenuSemaineScreenState extends State<MenuSemaineScreen> {
           : _currentIndex == 2
               ? _buildCoursesContent()
               : _currentIndex == 0
-                  ? RecipeHomePage()
+                  ? HomeScreenMenu()
                   : DeliveryScreen(), // Correctly call placeholder content
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

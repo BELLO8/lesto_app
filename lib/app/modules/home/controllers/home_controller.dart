@@ -14,119 +14,157 @@ class HomeController extends GetxController {
   final search = TextEditingController();
   final prohibition = TextEditingController();
   final storeMenu = GetStorage();
+  var currentIndex = 2.obs; // Onglet Courses sélectionné par défaut
+  var selectedDay = 'Lun'.obs;
+  var numberOfPeople = 2.obs;
 
-  // List recommandation = [
-  //   {
-  //     "id": 20,
-  //     "nom": "La sauce gombo",
-  //     "duree": "01:15:00",
-  //     "level": "facile",
-  //     "image":
-  //         "http://img.taste.com.au/UZVXAdo7/taste/2016/11/chinese-egg-noodle-and-vegetable-stir-fry-94186-1.jpeg",
-  //     "id_type": 2,
-  //     "description":
-  //         "Sauce épaisse à base de gombo, servie avec du riz ou du foufou en Côte d’Ivoire."
-  //   },
-  //   {
-  //     "id": 9,
-  //     "nom": "Kedjenou de poulet",
-  //     "duree": "01:15:00",
-  //     "level": "moyen",
-  //     "image":
-  //         "http://img.taste.com.au/UZVXAdo7/taste/2016/11/chinese-egg-noodle-and-vegetable-stir-fry-94186-1.jpeg",
-  //     "id_type": 2,
-  //     "description":
-  //         "Plat de poulet mijoté avec des légumes et des épices ivoiriennes."
-  //   },
-  //   {
-  //     "id": 16,
-  //     "nom": "Le Soupe Kandja",
-  //     "duree": "01:15:00",
-  //     "level": "facile",
-  //     "image":
-  //         "http://img.taste.com.au/UZVXAdo7/taste/2016/11/chinese-egg-noodle-and-vegetable-stir-fry-94186-1.jpeg",
-  //     "id_type": 2,
-  //     "description":
-  //         "Une soupe épicée à base de gombo et de viande, courante en Côte d’Ivoire."
-  //   },
-  //   {
-  //     "id": 18,
-  //     "nom": "Sauce arachide",
-  //     "duree": "01:15:00",
-  //     "level": "facile",
-  //     "image":
-  //         "http://img.taste.com.au/UZVXAdo7/taste/2016/11/chinese-egg-noodle-and-vegetable-stir-fry-94186-1.jpeg",
-  //     "id_type": 2,
-  //     "description":
-  //         "Une sauce épaisse à base d’arachides, souvent servie avec du riz ou du foufou en Côte d’Ivoire."
-  //   },
-  //   {
-  //     "id": 30,
-  //     "nom": "Aboboi",
-  //     "duree": "01:15:00",
-  //     "level": "moyen",
-  //     "image":
-  //         "http://img.taste.com.au/UZVXAdo7/taste/2016/11/chinese-egg-noodle-and-vegetable-stir-fry-94186-1.jpeg",
-  //     "id_type": 3,
-  //     "description":
-  //         "Ragoût de maïs et de haricots, souvent servi avec du poisson ou de la viande au Ghana."
-  //   },
-  //   {
-  //     "id": 21,
-  //     "nom": "Attiéké aux crevettes",
-  //     "duree": "01:15:00",
-  //     "level": "moyen",
-  //     "image":
-  //         "http://img.taste.com.au/UZVXAdo7/taste/2016/11/chinese-egg-noodle-and-vegetable-stir-fry-94186-1.jpeg",
-  //     "id_type": 2,
-  //     "description":
-  //         "Couscous de manioc fermenté servi avec des crevettes, populaire en Côte d’Ivoire."
-  //   },
-  //   {
-  //     "id": 37,
-  //     "nom": "Brochettes de viande",
-  //     "duree": "01:15:00",
-  //     "level": "facile",
-  //     "image":
-  //         "http://img.taste.com.au/UZVXAdo7/taste/2016/11/chinese-egg-noodle-and-vegetable-stir-fry-94186-1.jpeg",
-  //     "id_type": 4,
-  //     "description":
-  //         "Des brochettes de viande grillées, populaires dans toute l’Afrique centrale."
-  //   },
-  //   {
-  //     "id": 38,
-  //     "nom": "Poulet DG",
-  //     "duree": "01:15:00",
-  //     "level": "moyen",
-  //     "image":
-  //         "http://img.taste.com.au/UZVXAdo7/taste/2016/11/chinese-egg-noodle-and-vegetable-stir-fry-94186-1.jpeg",
-  //     "id_type": 4,
-  //     "description":
-  //         "Poulet sauté avec des légumes, typique de la cuisine camerounaise."
-  //   },
-  //   {
-  //     "id": 43,
-  //     "nom": "Nkui",
-  //     "duree": "01:15:00",
-  //     "level": "facile",
-  //     "image":
-  //         "http://img.taste.com.au/UZVXAdo7/taste/2016/11/chinese-egg-noodle-and-vegetable-stir-fry-94186-1.jpeg",
-  //     "id_type": 4,
-  //     "description":
-  //         "Un plat camerounais à base de feuilles de njama njama, souvent servi avec du poisson ou de la viande."
-  //   },
-  //   {
-  //     "id": 7,
-  //     "nom": "Foutou banane",
-  //     "duree": "01:15:00",
-  //     "level": "facile",
-  //     "image":
-  //         "http://img.taste.com.au/UZVXAdo7/taste/2016/11/chinese-egg-noodle-and-vegetable-stir-fry-94186-1.jpeg",
-  //     "id_type": 2,
-  //     "description":
-  //         "Banane plantain pilée, souvent servie avec une sauce ou un ragoût."
-  //   }
-  // ];
+  // État des checkboxes pour la liste de courses
+  final Map<String, bool> shoppingItems = {
+    'Champignons': false,
+    'Tomates': false,
+    'Courgettes': false,
+    'Poivrons': false,
+    'Riz pour risotto': false,
+    'Pâtes': false,
+    'Quinoa': false,
+    'Sauce tomate': false,
+    'Pâte de curry': false,
+    'Parmesan': false,
+    'Crème fraîche': false,
+    'Lait de coco': false,
+    'Basilic frais': false,
+  };
+
+  final List<String> days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+
+  final Map<String, List<Map<String, dynamic>>> weeklyMenus = {
+    'Lun': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Risotto aux champignons',
+        'cuisine': 'Italien',
+        'regime': 'Végétarien',
+        'duration': '30 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Salade de quinoa aux légumes grillés',
+        'cuisine': 'Méditerranéen',
+        'regime': 'Végétarien',
+        'duration': '20 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+    'Mar': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Pasta à la carbonara',
+        'cuisine': 'Italien',
+        'regime': 'Standard',
+        'duration': '25 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Saumon grillé aux légumes',
+        'cuisine': 'Français',
+        'regime': 'Standard',
+        'duration': '35 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+    'Mer': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Salade César végétarienne',
+        'cuisine': 'Américain',
+        'regime': 'Végétarien',
+        'duration': '15 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Curry de légumes',
+        'cuisine': 'Indien',
+        'regime': 'Végétalien',
+        'duration': '40 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+    'Jeu': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Quiche aux épinards',
+        'cuisine': 'Français',
+        'regime': 'Végétarien',
+        'duration': '45 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Tacos aux haricots noirs',
+        'cuisine': 'Mexicain',
+        'regime': 'Végétarien',
+        'duration': '30 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+    'Ven': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Sushi végétarien',
+        'cuisine': 'Japonais',
+        'regime': 'Végétarien',
+        'duration': '50 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Pizza margherita',
+        'cuisine': 'Italien',
+        'regime': 'Végétarien',
+        'duration': '25 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+    'Sam': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Pancakes aux fruits',
+        'cuisine': 'Américain',
+        'regime': 'Végétarien',
+        'duration': '20 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Ratatouille',
+        'cuisine': 'Français',
+        'regime': 'Végétalien',
+        'duration': '60 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+    'Dim': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Brunch végétarien',
+        'cuisine': 'International',
+        'regime': 'Végétarien',
+        'duration': '30 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Soupe de légumes',
+        'cuisine': 'Français',
+        'regime': 'Végétalien',
+        'duration': '45 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+  };
 
   var platList = <Plat>[].obs;
   var platbyDay = <Plat>[].obs;

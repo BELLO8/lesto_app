@@ -2,799 +2,626 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:lesto/app/components/Dialog/bottom_sheet_dialog.dart';
-import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
-import 'package:lesto/app/data/constants/Contents/homescreen_text_constant.dart';
-import 'package:lesto/app/data/constants/Image/image_constant.dart';
-import 'package:lesto/app/routes/app_pages.dart';
+import 'package:lesto/app/modules/ui_v2/Accueil/accueil%20copy.dart';
+import 'package:lesto/app/modules/ui_v2/Livraison/livraison.dart';
 
-import '../../../components/Dialog/Content/search_content.dart';
-import '../../../components/Dialog/Content/user_profil_content.dart';
-import '../../../components/EasyDateTime/easy_date_timeline.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final box = GetStorage();
     return Scaffold(
-      backgroundColor: NeutralColor.neutral100,
-      body: SingleChildScrollView(
-        child: Column(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: PrimaryColor.primary600,
+        elevation: 0,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 17),
-              padding: EdgeInsets.symmetric(vertical: 47),
-              child: Column(
+            RichText(
+              text: const TextSpan(children: [
+                TextSpan(
+                    text: '👋 Salut,',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontFamily: 'Gilroy')),
+                TextSpan(
+                    text: "Lesto",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: 'GilroyBold')),
+                TextSpan(
+                    text: ' !',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontFamily: 'GilroySemi')),
+              ]),
+            ),
+            Text(
+              'Planifiez vos repas facilement',
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.8),
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            SizedBox(height: 18),
+          ],
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person_outline, color: Colors.white),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings_outlined, color: Colors.white),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: controller.currentIndex.value == 1
+          ? _buildMenusContent()
+          : controller.currentIndex.value == 2
+              ? _buildCoursesContent()
+              : controller.currentIndex.value == 0
+                  ? HomeScreenMenu()
+                  : DeliveryScreen(), // Correctly call placeholder content
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: controller.currentIndex.value,
+        onTap: (index) {
+          // setState(() {
+          //   _currentIndex = index;
+          // });
+        },
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: PrimaryColor.primary600,
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(
+            icon: HugeIcon(
+              icon: HugeIcons.strokeRoundedHome02,
+              color: Colors.grey,
+            ),
+            activeIcon: HugeIcon(
+              icon: HugeIcons.strokeRoundedHome02,
+              color: PrimaryColor.primary600,
+            ),
+            label: 'Accueil',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(HugeIcons.strokeRoundedDish01),
+            activeIcon: Icon(HugeIcons.strokeRoundedDish01),
+            label: 'Menus',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(HugeIcons.strokeRoundedShoppingBasket02),
+            activeIcon: Icon(HugeIcons.strokeRoundedShoppingBasket02),
+            label: 'Courses',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(HugeIcons.strokeRoundedDeliveryTruck01),
+            activeIcon: Icon(HugeIcons.strokeRoundedDeliveryTruck01),
+            label: 'Livraison',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenusContent() {
+    return Column(
+      children: [
+        // Header avec titre et nombre de personnes
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Menu de la semaine',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: PrimaryColor.primary600.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  'Pour ${controller.numberOfPeople.value} personnes',
+                  style: const TextStyle(
+                    color: PrimaryColor.primary700,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // Sélecteur de jours
+        SizedBox(
+          height: 50,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: controller.days.length,
+            itemBuilder: (context, index) {
+              final day = controller.days[index];
+              final isSelected = day == controller.selectedDay.value;
+              return GestureDetector(
+                onTap: () {
+                  // setState(() {
+                  //   _selectedDay = day;
+                  // });
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(right: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? PrimaryColor.primary600
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(20),
+                    border: isSelected
+                        ? null
+                        : Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: Center(
+                    child: Text(
+                      day,
+                      style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.grey.shade600,
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+
+        // Liste des repas
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: _buildMealsList(),
+            ),
+          ),
+        ),
+
+        // Bouton Voir ma liste de courses
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: PrimaryColor.primary600,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      RichText(
-                        text: TextSpan(children: [
-                          TextSpan(
-                              text: '👋 Salut,',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontFamily: 'Gilroy')),
-                          TextSpan(
-                              text: box.read('nom'),
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontFamily: 'GilroyBold')),
-                          TextSpan(
-                              text: ' !',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24,
-                                  fontFamily: 'GilroySemi')),
-                        ]),
-                      ),
-                      Spacer(),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                width: 1, color: PrimaryColor.primary300)),
-                        child: Row(
-                          children: [
-                            Image.asset(ImageString.crown),
-                            Text("Standard",
-                                style: TextStyle(
-                                    color: PrimaryColor.primary700,
-                                    fontSize: 14,
-                                    fontFamily: 'GilroySemi'))
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: size.width * 0.06,
-                      ),
-                      InkWell(
-                        radius: 50,
-                        onTap: () {
-                          bottomSheetDialog(
-                              context,
-                              UserProfileContent(
-                                size: size,
-                              ),
-                              size.height * 0.67,
-                              () => {});
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              image: DecorationImage(
-                                  image: AssetImage(ImageString.avatar))),
-                          height: size.height * 0.06,
-                          width: size.height * 0.06,
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(HomeText.HOMESCREEN_TEXT,
-                        style: TextStyle(
-                            color: PrimaryColor.primary1000,
-                            fontSize: 17,
-                            fontFamily: 'Gilroy')),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.01,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      bottomSheetDialog(
-                          context,
-                          SearchContent(
-                            controller: controller.search,
-                            onChanged: (value) {
-                              controller.searchPlat(value);
-                            },
-                            child: Center(
-                              child: Obx(
-                                () => controller.isloading.value
-                                    ? Center(
-                                        child:
-                                            const CircularProgressIndicator())
-                                    : SizedBox(
-                                        child: ListView(
-                                          scrollDirection: Axis.vertical,
-                                          children: controller.searchPlatList
-                                              .map((plat) {
-                                            return InkWell(
-                                              onTap: () {
-                                                Get.toNamed(Routes.FOOD_DETAIL,
-                                                    arguments: plat);
-                                              },
-                                              child: Container(
-                                                width: 338,
-                                                height: 118,
-                                                margin: EdgeInsets.symmetric(
-                                                    horizontal: 5, vertical: 4),
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 12),
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        width: 1.2,
-                                                        color: PrimaryColor
-                                                            .primary200),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                    color: PrimaryColor
-                                                        .transparent),
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      height: 100,
-                                                      width: 100,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(15),
-                                                          image: DecorationImage(
-                                                              image: NetworkImage(
-                                                                  plat.image),
-                                                              fit: BoxFit
-                                                                  .cover)),
-                                                    ),
-                                                    Container(
-                                                      margin:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 8,
-                                                              horizontal: 8),
-                                                      child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            SizedBox(
-                                                              width:
-                                                                  size.width *
-                                                                      0.5,
-                                                              child: Text(
-                                                                plat.nom,
-                                                                softWrap: true,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    color: PrimaryColor
-                                                                        .primary900,
-                                                                    fontSize:
-                                                                        18,
-                                                                    fontFamily:
-                                                                        'GilroySemi'),
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              width:
-                                                                  size.width *
-                                                                      0.5,
-                                                              child: Text(
-                                                                plat.description,
-                                                                maxLines: 2,
-                                                                softWrap: true,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
-                                                                    fontSize:
-                                                                        13,
-                                                                    fontFamily:
-                                                                        'GilroyRegular'),
-                                                              ),
-                                                            ),
-                                                            SizedBox(
-                                                              child: Row(
-                                                                  children: [
-                                                                    Container(
-                                                                      margin: EdgeInsets.symmetric(
-                                                                          vertical:
-                                                                              5),
-                                                                      child:
-                                                                          Row(
-                                                                        children: [
-                                                                          Icon(
-                                                                            Icons.timer,
-                                                                            color:
-                                                                                PrimaryColor.primary500,
-                                                                            size:
-                                                                                18,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                3,
-                                                                          ),
-                                                                          Text(
-                                                                            plat.duree,
-                                                                            style: TextStyle(
-                                                                                fontWeight: FontWeight.w600,
-                                                                                fontSize: 13,
-                                                                                fontFamily: 'GilroyRegular'),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                    Container(
-                                                                      margin: EdgeInsets.symmetric(
-                                                                          vertical:
-                                                                              5,
-                                                                          horizontal:
-                                                                              8),
-                                                                      child:
-                                                                          Row(
-                                                                        children: [
-                                                                          Icon(
-                                                                            Icons.wb_sunny_rounded,
-                                                                            color:
-                                                                                PrimaryColor.primary500,
-                                                                            size:
-                                                                                20,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                3,
-                                                                          ),
-                                                                          Text(
-                                                                            plat.level,
-                                                                            style: TextStyle(
-                                                                                fontWeight: FontWeight.w600,
-                                                                                fontSize: 13,
-                                                                                fontFamily: 'GilroyRegular'),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                  ]),
-                                                            ),
-                                                          ]),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                              ),
-                            ),
-                          ),
-                          size.height * 0.92,
-                          () => {controller.searchPlatList.value = []});
-                    },
-                    child: Container(
-                      height: 46,
-                      width: size.width * 0.9,
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(13),
-                          border: Border.all(
-                              width: 1, color: PrimaryColor.primary200)),
-                      child: Row(
-                        children: [
-                          Image.asset(ImageString.search),
-                          SizedBox(
-                            width: size.width * 0.02,
-                          ),
-                          Text("Rechercher un plat",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: NeutralColor.neutral300,
-                                  fontSize: 16,
-                                  fontFamily: 'Gilroy'))
-                        ],
-                      ),
+                  Icon(Icons.shopping_cart_outlined, size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    'Voir ma liste de courses',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(
-                    height: size.height * 0.03,
-                  ),
-                  Stack(
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.topLeft,
-                        padding: EdgeInsets.symmetric(horizontal: 18),
-                        height: size.height * 0.18,
-                        width: size.width,
-                        decoration: BoxDecoration(
-                            color: PrimaryColor.primary600,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(top: 20),
-                              child: RichText(
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                      text: 'Créez des menus',
-                                      style: TextStyle(
-                                          color: NeutralColor.neutral100,
-                                          fontSize: 22,
-                                          fontFamily: 'GilroyBold')),
-                                  TextSpan(
-                                      text: ' qui',
-                                      style: TextStyle(
-                                          color: NeutralColor.neutral100,
-                                          fontSize: 16,
-                                          fontFamily: 'Gilroy')),
-                                  TextSpan(
-                                      text: '\n reflètent votre',
-                                      style: TextStyle(
-                                          color: NeutralColor.neutral100,
-                                          fontSize: 16,
-                                          fontFamily: 'Gilroy')),
-                                  TextSpan(
-                                      text: ' style de vie .',
-                                      style: TextStyle(
-                                          color: NeutralColor.neutral100,
-                                          fontSize: 22,
-                                          fontFamily: 'GilroyBold')),
-                                ]),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                box.read('menu') == null
-                                    ? Get.toNamed(Routes.GENERATE_MENU_FILTER)
-                                    : Get.toNamed(Routes.GENERATE_MENU);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 10),
-                                margin:
-                                    const EdgeInsets.only(top: 8, bottom: 4),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 1.5,
-                                      color: NeutralColor.neutral100),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                    // ignore: unnecessary_null_comparison
-                                    box.read('menu') == null
-                                        ? HomeText.HOMESCREEN_BUTTON_TEXT
-                                        : 'Afficher le menu géneré',
-                                    style: TextStyle(
-                                        fontFamily: 'GilroySemi',
-                                        fontSize: 14,
-                                        color: NeutralColor.neutral100)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        top: 35,
-                        bottom: 0,
-                        right: 0,
-                        child: Image.asset(
-                          ImageString.food,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 26),
-                    child: Row(children: [
-                      Text(HomeText.HOMESCREEN_RECOMMANDATION_TEXT,
-                          style: TextStyle(
-                              letterSpacing: -0.5,
-                              fontWeight: FontWeight.w800,
-                              color: const Color(0xFF381712),
-                              fontSize: 19,
-                              fontFamily: 'GilroyBold')),
-                      Spacer(),
-                      // LinkButton(
-                      //   title: 'Voir plus',
-                      //   press: () {},
-                      //   width: 105,
-                      //   height: 30,
-                      // ),
-                    ]),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.25,
-                    child: Obx(
-                      () => controller.loading.value
-                          ? const Center(child: CircularProgressIndicator())
-                          : controller.platList.isNotEmpty
-                              ? ListView(
-                                  scrollDirection: Axis.horizontal,
-                                  children: controller.platList
-                                      .getRange(0, 6)
-                                      .map((plat) {
-                                    return InkWell(
-                                      borderRadius: BorderRadius.circular(15),
-                                      onTap: () {
-                                        Get.toNamed(Routes.FOOD_DETAIL,
-                                            arguments: plat);
-                                      },
-                                      child: Container(
-                                        width: size.width * 0.5,
-                                        height: 184,
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 5, vertical: 12),
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            color: PrimaryColor.primary100),
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              height: 117,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                                image: plat.image != ""
-                                                    ? DecorationImage(
-                                                        image: NetworkImage(
-                                                            plat.image),
-                                                        fit: BoxFit.cover)
-                                                    : DecorationImage(
-                                                        image: AssetImage(
-                                                            ImageString
-                                                                .defaultImage),
-                                                        fit: BoxFit.cover),
-                                              ),
-                                              child: Align(
-                                                alignment: Alignment.topRight,
-                                                child: Container(
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal: 8,
-                                                      vertical: 10),
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 5),
-                                                  alignment: Alignment.center,
-                                                  width: size.width * 0.24,
-                                                  height: 30,
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50)),
-                                                  child: Row(
-                                                    children: [
-                                                      Icon(
-                                                        Icons.timer,
-                                                        color: PrimaryColor
-                                                            .primary500,
-                                                        size: 18,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 4,
-                                                      ),
-                                                      Text(plat.duree,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              color: PrimaryColor
-                                                                  .primary900,
-                                                              fontSize: 16,
-                                                              fontFamily:
-                                                                  'GilroyRegular')),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.symmetric(
-                                                  vertical: 8, horizontal: 12),
-                                              child: Column(children: [
-                                                Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text(plat.nom,
-                                                      style: TextStyle(
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: PrimaryColor
-                                                              .primary1000,
-                                                          fontSize: 14,
-                                                          fontFamily:
-                                                              'GilroySemi')),
-                                                ),
-                                                Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text(
-                                                      "Difficultés: ${plat.level}",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: PrimaryColor
-                                                              .primary600,
-                                                          fontSize: 12,
-                                                          fontFamily:
-                                                              'GilroyRegular')),
-                                                ),
-                                              ]),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                )
-                              : Container(
-                                  margin: EdgeInsets.symmetric(vertical: 40),
-                                  child: Column(children: [
-                                    Image.asset(
-                                      ImageString.noMenu,
-                                    ),
-                                    Text(
-                                      "Aucune recommandation de plats",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: 'GilroyRegular',
-                                      ),
-                                    ),
-                                  ]),
-                                ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(HomeText.HOMESCREEN_planification_TEXT,
-                        style: TextStyle(
-                            letterSpacing: -0.7,
-                            fontWeight: FontWeight.w800,
-                            color: const Color(0xFF381712),
-                            fontSize: 19,
-                            fontFamily: 'GilroySemi')),
-                  ),
-                  EasyDateTimeLine(
-                    locale: "fr",
-                    initialDate: DateTime.now(),
-                    onDateChange: (selectedDate) {
-                      controller.getPlatsByDate(selectedDate);
-                    },
-                    dayProps: const EasyDayProps(
-                      height: 100.0,
-                      // You must specify the width in this case.
-                      width: 124.0,
-                    ),
-                    headerProps: const EasyHeaderProps(
-                      showSelectedDate: false,
-                    ),
-                    itemBuilder: (BuildContext context, String dayNumber,
-                        dayName, monthName, fullDate, isSelected) {
-                      return Container(
-                        width: 60.0,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 18),
-                        decoration: BoxDecoration(
-                          color: isSelected ? PrimaryColor.primary600 : null,
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              dayNumber,
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontFamily: 'GilroySemi',
-                                fontWeight: FontWeight.bold,
-                                color: isSelected
-                                    ? Colors.white
-                                    : PrimaryColor.primary600,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10.0,
-                            ),
-                            Text(
-                              dayName,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'GilroyRegular',
-                                fontWeight: FontWeight.bold,
-                                color: isSelected
-                                    ? Colors.white
-                                    : PrimaryColor.primary600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  Obx(
-                    () => controller.generateMenuStore.isEmpty
-                        ? Container(
-                            margin: EdgeInsets.symmetric(vertical: 55),
-                            child: Column(children: [
-                              Image.asset(
-                                ImageString.noMenu,
-                              ),
-                              Text(
-                                "Aucun menu généré pour le moment",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: 'GilroyRegular',
-                                ),
-                              ),
-                            ]),
-                          )
-                        : SizedBox(
-                            child: Column(
-                              spacing: 4,
-                              children: controller.generateMenuStore[0].plats
-                                  .map<Widget>((plat) {
-                                return SizedBox(
-                                  width: 355,
-                                  height: 165,
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Container(
-                                        width: 355,
-                                        height: 165,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          image: DecorationImage(
-                                              image: AssetImage(
-                                                  ImageString.defaultImage),
-                                              fit: BoxFit.fill),
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.all(5.0),
-                                        alignment: Alignment.bottomCenter,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: <Color>[
-                                              Color(0x1F222222),
-                                              Color(0x74141414),
-                                            ],
-                                          ),
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.topRight,
-                                              child: Container(
-                                                margin: EdgeInsets.symmetric(
-                                                    horizontal: 8,
-                                                    vertical: 10),
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 5),
-                                                alignment: Alignment.center,
-                                                width: 114,
-                                                height: 30,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            50)),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons.timer,
-                                                      color: PrimaryColor
-                                                          .primary500,
-                                                      size: 18,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 4,
-                                                    ),
-                                                    Text(
-                                                        plat.duree == null
-                                                            ? plat.duree
-                                                            : "15-18 mins",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color: Color(
-                                                                0xFF381712),
-                                                            fontSize: 15,
-                                                            fontFamily:
-                                                                'GilroyRegular')),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.symmetric(
-                                                  vertical: 8, horizontal: 12),
-                                              child: Column(children: [
-                                                Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text(plat.libelle,
-                                                      style: TextStyle(
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Colors.white,
-                                                          fontSize: 20,
-                                                          fontFamily:
-                                                              'GilroySemi')),
-                                                ),
-                                                Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Text(
-                                                      "Difficultés: ${plat.level}",
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Colors.white,
-                                                          fontSize: 14,
-                                                          fontFamily:
-                                                              'GilroyRegular')),
-                                                ),
-                                              ]),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                  )
                 ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<Widget> _buildMealsList() {
+    final meals = controller.weeklyMenus[controller.selectedDay.value] ?? [];
+    List<Widget> widgets = [];
+
+    for (int i = 0; i < meals.length; i++) {
+      final meal = meals[i];
+
+      widgets.add(
+        Padding(
+          padding: EdgeInsets.only(top: i == 0 ? 0 : 24, bottom: 12),
+          child: Row(
+            children: [
+              Text(
+                meal['type'] as String? ?? 'Type inconnu',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              const Spacer(),
+              _buildActionButton('Ingrédients', Colors.orange.shade100,
+                  Colors.orange.shade700, () {}),
+              const SizedBox(width: 8),
+              _buildActionButton('Commander', Colors.green.shade100,
+                  Colors.green.shade700, () {}),
+            ],
+          ),
+        ),
+      );
+
+      // Carte du plat
+      widgets.add(
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: PrimaryColor.primary600.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: PrimaryColor.primary600.withOpacity(0.1)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: PrimaryColor.primary600.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  meal['icon'] as IconData? ?? Icons.help_outline,
+                  color: PrimaryColor.primary600,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      meal['name'] as String? ?? 'Plat inconnu',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${meal['cuisine'] as String? ?? 'N/A'} • ${meal['regime'] as String? ?? 'N/A'} • ${meal['duration'] as String? ?? 'N/A'}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return widgets;
+  }
+
+  Widget _buildActionButton(String label, Color backgroundColor,
+      Color textColor, VoidCallback onPressed) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              label == 'Ingrédients' ? Icons.receipt_long : Icons.shopping_bag,
+              size: 14,
+              color: textColor,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: textColor,
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCoursesContent() {
+    final items = [
+      {
+        'category': 'Fruits et légumes',
+        'items': [
+          {'name': 'Champignons', 'price': '3,50 €', 'quantity': '250g'},
+          {'name': 'Tomates', 'price': '2,80 €', 'quantity': '500g'},
+          {'name': 'Courgettes', 'price': '1,95 €', 'quantity': '2 pièces'},
+          {'name': 'Poivrons', 'price': '2,20 €', 'quantity': '2 pièces'},
+        ]
+      },
+      {
+        'category': 'Épicerie',
+        'items': [
+          {'name': 'Riz pour risotto', 'price': '3,20 €', 'quantity': '500g'},
+          {'name': 'Pâtes', 'price': '1,50 €', 'quantity': '500g'},
+          {'name': 'Quinoa', 'price': '3,90 €', 'quantity': '300g'},
+          {'name': 'Sauce tomate', 'price': '1,80 €', 'quantity': '400g'},
+          {'name': 'Pâte de curry', 'price': '2,50 €', 'quantity': '100g'},
+        ]
+      },
+      {
+        'category': 'Produits frais',
+        'items': [
+          {'name': 'Parmesan', 'price': '3,60 €', 'quantity': '150g'},
+          {'name': 'Crème fraîche', 'price': '1,95 €', 'quantity': '20cl'},
+          {'name': 'Lait de coco', 'price': '2,10 €', 'quantity': '400ml'},
+        ]
+      },
+      {
+        'category': 'Herbes et épices',
+        'items': [
+          {'name': 'Basilic frais', 'price': '1,45 €', 'quantity': '1 bouquet'},
+        ]
+      },
+    ];
+
+    double totalPrice = 0;
+    controller.shoppingItems.forEach((key, value) {
+      if (value) {
+        final item = items
+            .expand<Map<String, dynamic>>((category) =>
+                (category['items'] as List<dynamic>?)
+                    ?.map<Map<String, dynamic>>(
+                        (e) => e as Map<String, dynamic>)
+                    .toList() ??
+                [])
+            .firstWhere((item) => (item['name'] as String?) == key,
+                orElse: () => {'price': '0,00 €'});
+        final priceString = item['price'] as String? ?? '0,00 €';
+        final price =
+            double.parse(priceString.replaceAll(' €', '').replaceAll(',', '.'));
+        totalPrice += price;
+      }
+    });
+
+    return Column(
+      children: [
+        // Header avec titre et nombre de personnes
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Liste de courses',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: PrimaryColor.primary600.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  'Pour ${controller.numberOfPeople.value} personnes',
+                  style: const TextStyle(
+                    color: Color(0xFF6366F1),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // Total estimé
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade50,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey.shade200),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Total estimé',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
+              ),
+              Text(
+                '${totalPrice.toStringAsFixed(2).replaceAll('.', ',')} €',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // Liste des catégories et produits
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: items
+                  .map<Widget>(
+                      (categoryData) => _buildCategorySection(categoryData))
+                  .toList(),
+            ),
+          ),
+        ),
+
+        // Bouton Commander la livraison
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                // Action for ordering delivery
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: PrimaryColor.primary600,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.local_shipping_outlined, size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    'Commander la livraison',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategorySection(Map<String, dynamic> categoryData) {
+    final categoryName =
+        categoryData['category'] as String? ?? 'Catégorie inconnue';
+    final items = (categoryData['items'] as List<dynamic>?)
+            ?.map<Map<String, dynamic>>((e) => e as Map<String, dynamic>)
+            .toList() ??
+        [];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 24, bottom: 12),
+          child: Text(
+            categoryName,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF6366F1),
+            ),
+          ),
+        ),
+        ...items.map<Widget>((item) => _buildShoppingItem(item)).toList(),
+      ],
+    );
+  }
+
+  Widget _buildShoppingItem(Map<String, dynamic> item) {
+    final itemName = item['name'] as String? ?? 'Article inconnu';
+    final isChecked = controller.shoppingItems[itemName] ?? false;
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        children: [
+          Checkbox(
+            value: isChecked,
+            onChanged: (bool? value) {
+              // setState(() {
+              //   _shoppingItems[itemName] = value ?? false;
+              // });
+            },
+            activeColor: PrimaryColor.primary600,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              itemName,
+              style: TextStyle(
+                fontSize: 16,
+                color: isChecked ? Colors.grey.shade600 : Colors.black87,
+                decoration: isChecked
+                    ? TextDecoration.lineThrough
+                    : TextDecoration.none,
+              ),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                item['price'] as String? ?? '0,00 €',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+              Text(
+                item['quantity'] as String? ?? 'Qté inconnue',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
