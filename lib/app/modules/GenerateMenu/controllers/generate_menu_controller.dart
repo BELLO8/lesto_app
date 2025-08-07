@@ -3,106 +3,143 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lesto/app/data/Models/menu_model.dart';
 
-import '../../../data/constants/Image/image_constant.dart';
-
 class GenerateMenuController extends GetxController {
   final argumentData = GetStorage();
-  final scrollController = ScrollController();
   var generateMenu = <Dish>[].obs;
   var isLoading = true.obs;
-  Map<int, String> dayOfWeek = {
-    1: 'Lundi',
-    2: 'Mardi',
-    3: 'Mercredi',
-    4: 'Jeudi',
-    5: 'Vendredi',
-    6: 'Samedi',
-    7: 'Dimanche',
-  };
+  var selectedDay = 'Lun'.obs;
+  var numberOfPeople = 2.obs;
 
-  List<Map<String, dynamic>> menusGenerate = [
-    {
-      'id': 1,
-      'day': 'Lundi',
-      'menu': [
-        {
-          'img': ImageString.food2,
-          'timing': '2 h 30 min',
-          'time': 'midi',
-          'foodName': 'Sauce gouagouassou',
-          'level': 'Difficultés: Moyen',
-          'description':
-              'Oignons frais, daurades fraîches à couper en 2 morceaux égaux...'
-        },
-        {
-          'img': ImageString.food3,
-          'timing': '1 h 50 min',
-          'time': 'midi',
-          'foodName': 'Placali sauce gombo',
-          'level': 'Difficultés: Moyen',
-          'description':
-              'Placez les morceaux de gombos dans un mixeur et réduisez-les en petits'
-        },
-      ]
-    },
-    {
-      'id': 2,
-      'day': 'Mardi',
-      'menu': [
-        {
-          'img': ImageString.food2,
-          'timing': '2 h 30 min',
-          'time': 'midi',
-          'foodName': 'Sauce gouagouassou',
-          'level': 'Difficultés: Moyen',
-          'description':
-              'Oignons frais, daurades fraîches à couper en 2 morceaux égaux...'
-        },
-        {
-          'img': ImageString.food3,
-          'timing': '1 h 50 min',
-          'time': 'midi',
-          'foodName': 'Placali sauce gombo',
-          'level': 'Difficultés: Moyen',
-          'description':
-              'Placez les morceaux de gombos dans un mixeur et réduisez-les en petits'
-        },
-      ]
-    },
-    {
-      'id': 3,
-      'day': 'Mercredi',
-      'menu': [
-        {
-          'img': ImageString.food2,
-          'timing': '2 h 30 min',
-          'time': 'midi',
-          'foodName': 'Sauce gouagouassou',
-          'level': 'Difficultés: Moyen',
-          'description':
-              'Oignons frais, daurades fraîches à couper en 2 morceaux égaux...'
-        },
-        {
-          'img': ImageString.food3,
-          'timing': '1 h 50 min',
-          'time': 'midi',
-          'foodName': 'Placali sauce gombo',
-          'level': 'Difficultés: Moyen',
-          'description':
-              'Placez les morceaux de gombos dans un mixeur et réduisez-les en petits'
-        },
-      ]
-    },
-  ];
-  List days = [
-    {'day': 'Lundi', 'index': 1},
-    {'day': 'Mardi', 'index': 2},
-    {'day': 'Mercredi', 'index': 3},
-    {'day': 'Jeudi', 'index': 4},
-    {'day': 'Vendredi', 'index': 5},
-    {'day': 'Samedi', 'index': 6},
-    {'day': 'Dimanche', 'index': 7},
-  ];
+  final List<String> days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+
+  final Map<String, List<Map<String, dynamic>>> weeklyMenus = {
+    'Lun': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Risotto aux champignons',
+        'cuisine': 'Italien',
+        'regime': 'Végétarien',
+        'duration': '30 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Salade de quinoa aux légumes grillés',
+        'cuisine': 'Méditerranéen',
+        'regime': 'Végétarien',
+        'duration': '20 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+    'Mar': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Pasta à la carbonara',
+        'cuisine': 'Italien',
+        'regime': 'Standard',
+        'duration': '25 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Saumon grillé aux légumes',
+        'cuisine': 'Français',
+        'regime': 'Standard',
+        'duration': '35 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+    'Mer': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Salade César végétarienne',
+        'cuisine': 'Américain',
+        'regime': 'Végétarien',
+        'duration': '15 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Curry de légumes',
+        'cuisine': 'Indien',
+        'regime': 'Végétalien',
+        'duration': '40 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+    'Jeu': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Quiche aux épinards',
+        'cuisine': 'Français',
+        'regime': 'Végétarien',
+        'duration': '45 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Tacos aux haricots noirs',
+        'cuisine': 'Mexicain',
+        'regime': 'Végétarien',
+        'duration': '30 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+    'Ven': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Sushi végétarien',
+        'cuisine': 'Japonais',
+        'regime': 'Végétarien',
+        'duration': '50 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Pizza margherita',
+        'cuisine': 'Italien',
+        'regime': 'Végétarien',
+        'duration': '25 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+    'Sam': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Pancakes aux fruits',
+        'cuisine': 'Américain',
+        'regime': 'Végétarien',
+        'duration': '20 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Ratatouille',
+        'cuisine': 'Français',
+        'regime': 'Végétalien',
+        'duration': '60 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+    'Dim': [
+      {
+        'type': 'Déjeuner',
+        'name': 'Brunch végétarien',
+        'cuisine': 'International',
+        'regime': 'Végétarien',
+        'duration': '30 min',
+        'icon': Icons.menu_book,
+      },
+      {
+        'type': 'Dîner',
+        'name': 'Soupe de légumes',
+        'cuisine': 'Français',
+        'regime': 'Végétalien',
+        'duration': '45 min',
+        'icon': Icons.menu_book,
+      },
+    ],
+  };
 
   @override
   void onInit() {

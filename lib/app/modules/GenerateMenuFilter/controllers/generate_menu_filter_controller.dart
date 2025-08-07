@@ -77,7 +77,9 @@ class GenerateMenuFilterController extends GetxController {
 
   Future<void> getMenu(int id, String dateDebut, String dateFin) async {
     loading.value = true;
-    generateMenu.value = await MenuProvider().getMenu(id, dateDebut, dateFin);
+    final DateTime debut = DateTime.parse(dateDebut);
+    final DateTime fin = DateTime.parse(dateFin);
+    generateMenu.value = await MenuProvider().getMenu(id, debut, fin);
     storeMenu.write('menu', generateMenu);
     storeMenu.write('menuDate', DateTime.now());
     Get.toNamed(Routes.GENERATE_MENU);

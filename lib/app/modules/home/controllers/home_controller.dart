@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:lesto/app/data/Models/ingredient_model.dart';
 import 'package:lesto/app/data/Models/menu_model.dart';
 import 'package:lesto/app/data/Models/plat_model.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
@@ -14,10 +15,10 @@ class HomeController extends GetxController {
   final search = TextEditingController();
   final prohibition = TextEditingController();
   final storeMenu = GetStorage();
-  var currentIndex = 2.obs; // Onglet Courses sélectionné par défaut
+  var currentIndex = 0.obs; // Onglet Courses sélectionné par défaut
   var selectedDay = 'Lun'.obs;
   var numberOfPeople = 2.obs;
-
+  var ingredientListe = <Ingredient>[].obs;
   // État des checkboxes pour la liste de courses
   final Map<String, bool> shoppingItems = {
     'Champignons': false,
@@ -171,15 +172,40 @@ class HomeController extends GetxController {
   var searchPlatList = <Plat>[].obs;
   var isloading = true.obs;
   var loading = true.obs;
-  var dateDebut = "Date de debut".obs;
+  var dateDebut = "Date de début".obs;
   var dateFin = "Date de fin".obs;
   var generateMenu = <Dish>[].obs;
   var generateMenuStore = <Dish>[].obs;
 
+  // Variables for GenerateRecipe
+  var selectedIngredients = <String>[].obs;
+  var selectedPersons = 2.obs;
+  var selectedPeriod = '1 day'.obs;
+  var selectedAllergies = <String>[].obs;
+  var selectedCookingTime = '15-30 min'.obs;
+  var selectedDifficulty = 'Easy'.obs;
+  var selectedCuisineType = 'Asian'.obs;
+  var searchQuery = ''.obs;
+  var filteredIngredients = <Ingredient>[].obs;
+
+  void searchIngredients(String query) {
+    searchQuery.value = query;
+    if (query.isEmpty) {
+      filteredIngredients.value = ingredientListe;
+    } else {
+      filteredIngredients.value = ingredientListe
+          .where((ingredient) =>
+              ingredient.nom.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
+    filteredIngredients.value = ingredientListe;
     getPlat();
+    getAllIngredients();
   }
 
   Future<void> getPlat() async {
@@ -191,14 +217,25 @@ class HomeController extends GetxController {
     }
   }
 
+  Future<void> getAllIngredients() async {
+    try {
+      loading.value = true;
+      ingredientListe.value = await PlatProvider().getAllIngredients();
+    } finally {
+      loading.value = false;
+    }
+  }
+
   Future<void> getMenu(int id, String dateDebut, String dateFin) async {
     loading.value = true;
-
-    if (dateDebut == "Date de debut" && dateFin == "Date de fin") {
+    final DateTime debut = DateTime.parse(dateDebut);
+    final DateTime fin = DateTime.parse(dateFin);
+    if (dateDebut == "Date de début" && dateFin == "Date de fin") {
       Get.snackbar('Date invalide', 'Selectionnez une date valide',
           backgroundColor: PrimaryColor.primary500, colorText: Colors.white);
+      loading.value = false;
     } else {
-      generateMenu.value = await MenuProvider().getMenu(id, dateDebut, dateFin);
+      generateMenu.value = await MenuProvider().getMenu(id, debut, fin);
       storeMenu.write('menu', generateMenu);
       storeMenu.write('menuDate', DateTime.now());
       Get.toNamed(Routes.GENERATE_MENU);
@@ -234,5 +271,48 @@ class HomeController extends GetxController {
       return generateMenuStore.value = [];
     }
     return generateMenuStore.value = [];
+  }
+
+  void removeIngredient(String ingredient) {
+    selectedIngredients.remove(ingredient);
+  }
+
+  void toggleIngredient(String ingredient) {
+    if (selectedIngredients.contains(ingredient)) {
+      selectedIngredients.remove(ingredient);
+    } else {
+      selectedIngredients.add(ingredient);
+    }
+  }
+
+  // Methods for other selections
+  void updatePersons(int value) {
+    if (value >= 1 && value <= 10) {
+      selectedPersons.value = value;
+    }
+  }
+
+  void updatePeriod(String period) {
+    selectedPeriod.value = period;
+  }
+
+  void updateDateDebut(String date) {
+    dateDebut.value = date;
+  }
+
+  void updateDateFin(String date) {
+    dateFin.value = date;
+  }
+
+  void toggleAllergy(String allergy) {
+    if (selectedAllergies.contains(allergy)) {
+      selectedAllergies.remove(allergy);
+    } else {
+      selectedAllergies.add(allergy);
+    }
+  }
+
+  void updateCuisineType(String type) {
+    selectedCuisineType.value = type;
   }
 }

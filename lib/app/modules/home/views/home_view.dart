@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
-import 'package:lesto/app/modules/ui_v2/Accueil/accueil%20copy.dart';
+import 'package:lesto/app/modules/home/views/GenerateRecipe.dart';
 import 'package:lesto/app/modules/ui_v2/Livraison/livraison.dart';
 
 import '../controllers/home_controller.dart';
@@ -66,59 +66,60 @@ class HomeView extends GetView<HomeController> {
           ),
         ],
       ),
-      body: controller.currentIndex.value == 1
-          ? _buildMenusContent()
-          : controller.currentIndex.value == 2
-              ? _buildCoursesContent()
-              : controller.currentIndex.value == 0
-                  ? HomeScreenMenu()
-                  : DeliveryScreen(), // Correctly call placeholder content
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: controller.currentIndex.value,
-        onTap: (index) {
-          // setState(() {
-          //   _currentIndex = index;
-          // });
-        },
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: PrimaryColor.primary600,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: HugeIcon(
-              icon: HugeIcons.strokeRoundedHome02,
-              color: Colors.grey,
-            ),
-            activeIcon: HugeIcon(
-              icon: HugeIcons.strokeRoundedHome02,
-              color: PrimaryColor.primary600,
-            ),
-            label: 'Accueil',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(HugeIcons.strokeRoundedDish01),
-            activeIcon: Icon(HugeIcons.strokeRoundedDish01),
-            label: 'Menus',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(HugeIcons.strokeRoundedShoppingBasket02),
-            activeIcon: Icon(HugeIcons.strokeRoundedShoppingBasket02),
-            label: 'Courses',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(HugeIcons.strokeRoundedDeliveryTruck01),
-            activeIcon: Icon(HugeIcons.strokeRoundedDeliveryTruck01),
-            label: 'Livraison',
-          ),
-        ],
-      ),
+      body: Obx(() {
+        return IndexedStack(
+          index: controller.currentIndex.value,
+          children: [
+            GenerateRecipe(),
+            _buildMenusContent(), // Menus
+            _buildCoursesContent(), //
+            DeliveryScreen(),
+          ],
+        );
+      }),
+      bottomNavigationBar: Obx(() => (BottomNavigationBar(
+            currentIndex: controller.currentIndex.value,
+            onTap: (index) {
+              controller.currentIndex.value = index;
+            },
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: PrimaryColor.primary600,
+            unselectedItemColor: Colors.grey,
+            items: const [
+              BottomNavigationBarItem(
+                icon: HugeIcon(
+                  icon: HugeIcons.strokeRoundedHome02,
+                  color: Colors.grey,
+                ),
+                activeIcon: HugeIcon(
+                  icon: HugeIcons.strokeRoundedHome02,
+                  color: PrimaryColor.primary600,
+                ),
+                label: 'Accueil',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(HugeIcons.strokeRoundedDish01),
+                activeIcon: Icon(HugeIcons.strokeRoundedDish01),
+                label: 'Menus',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(HugeIcons.strokeRoundedShoppingBasket02),
+                activeIcon: Icon(HugeIcons.strokeRoundedShoppingBasket02),
+                label: 'Courses',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(HugeIcons.strokeRoundedDeliveryTruck01),
+                activeIcon: Icon(HugeIcons.strokeRoundedDeliveryTruck01),
+                label: 'Livraison',
+              ),
+            ],
+          ))),
     );
   }
 
   Widget _buildMenusContent() {
     return Column(
       children: [
-        // Header avec titre et nombre de personnes
         Container(
           padding: const EdgeInsets.all(16),
           child: Row(
@@ -577,18 +578,6 @@ class HomeView extends GetView<HomeController> {
       margin: const EdgeInsets.only(bottom: 12),
       child: Row(
         children: [
-          Checkbox(
-            value: isChecked,
-            onChanged: (bool? value) {
-              // setState(() {
-              //   _shoppingItems[itemName] = value ?? false;
-              // });
-            },
-            activeColor: PrimaryColor.primary600,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4),
-            ),
-          ),
           Expanded(
             child: Text(
               itemName,

@@ -13,6 +13,7 @@ class AuthProvider extends GetConnect {
   login(LoginModel loginRequest) async {
     final response =
         await post('${EndPoint.API_URL}/login', loginRequest.toJson());
+    print(response.body);
     return response.body;
   }
 

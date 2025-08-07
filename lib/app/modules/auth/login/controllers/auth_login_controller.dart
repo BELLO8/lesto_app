@@ -66,19 +66,6 @@ class AuthLoginController extends GetxController {
     if (loginResponse['status'] == "error") {
       loading.value = false;
       update();
-      //     Get.snackbar(
-      // 'Erreur',
-      // loginResponse['message'],
-      // snackPosition: SnackPosition.BOTTOM,
-      // backgroundColor: Colors.red,
-      // colorText: Colors.white,
-      // padding: const EdgeInsets.all(10),
-      // margin: const EdgeInsets.all(10),
-      // icon: const Icon(
-      //   Icons.error,
-      //   color: Colors.white,
-      // ),
-
       toastification.show(
         context: context,
         type: ToastificationType.error,

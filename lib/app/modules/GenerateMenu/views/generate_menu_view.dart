@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:lesto/app/components/Button/primary_button.dart';
 import 'package:lesto/app/data/Models/plat_model.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Image/image_constant.dart';
@@ -16,154 +14,225 @@ class GenerateMenuView extends GetView<GenerateMenuController> {
   const GenerateMenuView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: PrimaryButton(
-        title: "Génerer la liste des courses",
-        press: () {},
-        color: PrimaryColor.primary600,
-        width: size.width * 0.6,
-        height: size.height * 0.042,
-        styleText: TextStyle(
-            fontFamily: 'GilroyMedium',
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-            fontSize: 14),
-      ),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: PrimaryColor.primary600),
-        leading: IconButton(
-            onPressed: () => {Get.offAllNamed(Routes.HOME)},
-            icon: const Icon(Icons.arrow_back, color: PrimaryColor.primary600)),
-        title: const Text(
-          'Menu de la semaine',
-          style: TextStyle(
-              fontFamily: 'GilroyMedium',
-              fontWeight: FontWeight.w600,
-              fontSize: 14),
+        backgroundColor: PrimaryColor.primary600,
+        elevation: 0,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
         ),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 68,
-            child: ListView(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              scrollDirection: Axis.horizontal,
-              children: controller.generateMenu.asMap().entries.map((day) {
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 2),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: PrimaryColor.primary600,
-                  ),
-                  child: InkWell(
-                    radius: 10,
-                    onTap: () {
-                      controller.scrollController.animateTo(day.key * 350.0,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeIn);
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(horizontal: 25),
-                      child: Text(
-                        day.value.name,
-                        style: TextStyle(
-                            fontFamily: 'GilroyMedium',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 13,
-                            color: Colors.white),
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person_outline, color: Colors.white),
+            onPressed: () {},
           ),
-          Expanded(
-              child: Obx(
-            () => controller.isLoading.value
-                ? Center(child: CircularProgressIndicator())
-                : ListView(
-                    controller: controller.scrollController,
-                    children: controller.generateMenu.map((menu) {
-                      return SizedBox(
-                        height: 350,
-                        child: Column(
-                          children: [
-                            Container(
-                              color: PrimaryColor.primary500,
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              height: 38,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "${menu.name}${" "}${DateFormat('dd MMMM yyyy', 'fr_FR').format(menu.date)}",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                        fontFamily: 'GilroyMedium'),
-                                  ),
-                                  Spacer(),
-                                  InkWell(
-                                    onTap: () {},
-                                    child: Icon(
-                                      Icons.autorenew,
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              child: Column(
-                                children: menu.plats
-                                    .asMap()
-                                    .entries
-                                    .map<Widget>((plat) {
-                                  return Column(
-                                    children: [
-                                      GenerateFoodWidget(
-                                        id: plat.value.id,
-                                        size: size,
-                                        borderWidth: 0,
-                                        borderColor: Colors.transparent,
-                                        backgroundColor: Colors.white,
-                                        image: plat.value.image,
-                                        title: plat.value.libelle,
-                                        description: plat.value.description,
-                                        time: plat.value.duree,
-                                        period: plat.key == 0 ? 'Midi' : 'Soir',
-                                        icon: plat.key == 0
-                                            ? ImageString.sun
-                                            : ImageString.moon,
-                                      ),
-                                      plat.key == 0
-                                          ? Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal:
-                                                      size.width * 0.07),
-                                              child: Image.asset(
-                                                  ImageString.separator))
-                                          : Text("")
-                                    ],
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
-          )),
+          IconButton(
+            icon: const Icon(Icons.settings_outlined, color: Colors.white),
+            onPressed: () {},
+          ),
         ],
       ),
+      body: _buildMenusContent(),
     );
+  }
+
+  Widget _buildMenusContent() {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Menu de la semaine',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: PrimaryColor.primary600.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  'Pour ${controller.numberOfPeople.value} personnes',
+                  style: const TextStyle(
+                    color: PrimaryColor.primary700,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        SizedBox(
+          height: 68,
+          child: ListView(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            scrollDirection: Axis.horizontal,
+            children: controller.generateMenu.asMap().entries.map((day) {
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 2),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: PrimaryColor.primary600,
+                ),
+                child: InkWell(
+                  radius: 10,
+                  onTap: () {},
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    child: Text(
+                      day.value.name,
+                      style: TextStyle(
+                          fontFamily: 'GilroyMedium',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                          color: Colors.white),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+
+        // Liste des repas
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: _buildMealsList(),
+            ),
+          ),
+        ),
+
+        // Bouton Voir ma liste de courses
+        Container(
+          padding: const EdgeInsets.all(16),
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: PrimaryColor.primary600,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.shopping_cart_outlined, size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    'Voir ma liste de courses',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<Widget> _buildMealsList() {
+    final meals = controller.weeklyMenus[controller.selectedDay.value] ?? [];
+    List<Widget> widgets = [];
+
+    for (int i = 0; i < meals.length; i++) {
+      final meal = meals[i];
+
+      widgets.add(
+        Padding(
+          padding: EdgeInsets.only(top: i == 0 ? 0 : 24, bottom: 12),
+          child: Row(
+            children: [
+              Text(
+                meal['type'] as String? ?? 'Type inconnu',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      // Carte du plat
+      widgets.add(
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: PrimaryColor.primary600.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: PrimaryColor.primary600.withOpacity(0.1)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: PrimaryColor.primary600.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  meal['icon'] as IconData? ?? Icons.help_outline,
+                  color: PrimaryColor.primary600,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      meal['name'] as String? ?? 'Plat inconnu',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${meal['cuisine'] as String? ?? 'N/A'} • ${meal['regime'] as String? ?? 'N/A'} • ${meal['duration'] as String? ?? 'N/A'}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return widgets;
   }
 }
 
