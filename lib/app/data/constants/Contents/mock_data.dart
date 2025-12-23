@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:lesto/app/data/models/menu_model.dart';
 
-class GenerateMenuController extends GetxController {
-  final argumentData = GetStorage();
-  var generateMenu = <Dish>[].obs;
-  var isLoading = true.obs;
-  var selectedDay = 'Lun'.obs;
-  var numberOfPeople = 2.obs;
+class MockData {
+  static final Map<String, bool> shoppingItems = {
+    'Champignons': false,
+    'Tomates': false,
+    'Courgettes': false,
+    'Poivrons': false,
+    'Riz pour risotto': false,
+    'Pâtes': false,
+    'Quinoa': false,
+    'Sauce tomate': false,
+    'Pâte de curry': false,
+    'Parmesan': false,
+    'Crème fraîche': false,
+    'Lait de coco': false,
+    'Basilic frais': false,
+  };
 
-  final List<String> days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
-
-  final Map<String, List<Map<String, dynamic>>> weeklyMenus = {
+  static final Map<String, List<Map<String, dynamic>>> weeklyMenus = {
     'Lun': [
       {
         'type': 'Déjeuner',
@@ -140,15 +145,4 @@ class GenerateMenuController extends GetxController {
       },
     ],
   };
-
-  @override
-  void onInit() {
-    super.onInit();
-    getMenu();
-  }
-
-  void getMenu() {
-    isLoading.value = false;
-    generateMenu.value = argumentData.read("menu");
-  }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class PrimaryColor {
   static const Color transparent = Colors.transparent;
+  static const Color primary50 = Color(0xFFFEF6F2);
   static const Color primary100 = Color(0xFFFAF1EC);
   static const Color primary200 = Color(0xFFF6E2D9);
   static const Color primary300 = Color(0xFFECC5B2);

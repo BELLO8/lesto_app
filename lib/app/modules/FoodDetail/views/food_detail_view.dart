@@ -1,215 +1,134 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:lesto/app/components/Video/VideoPlayer.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
-
-import '../../../components/Button/primary_button.dart';
-import '../../../data/constants/Colors/color_primary.dart';
-import '../../../data/constants/Contents/text_constant.dart';
+import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import '../controllers/food_detail_controller.dart';
 
 class FoodDetailView extends GetView<FoodDetailController> {
   const FoodDetailView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 18),
-        height: 73,
-        child: Row(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              _buildSliverAppBar(context),
+              SliverToBoxAdapter(
+                child: _buildContent(context),
+              ),
+              SliverToBoxAdapter(
+                child: const SizedBox(height: 100),
+              ),
+            ],
+          ),
+          _buildBottomBar(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSliverAppBar(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return SliverAppBar(
+      expandedHeight: size.height * 0.35,
+      backgroundColor: Colors.white,
+      elevation: 0,
+      pinned: true,
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 16),
+        child: Center(
+          child: GestureDetector(
+            onTap: () => Get.back(),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: const Icon(Icons.arrow_back_ios_new_rounded,
+                  color: NeutralColor.neutral900, size: 18),
+            ),
+          ),
+        ),
+      ),
+      flexibleSpace: FlexibleSpaceBar(
+        background: Stack(
+          fit: StackFit.expand,
           children: [
-            Text(
-              '0 Fcfa',
-              style: TextStyle(
-                fontFamily: 'GilroyBold',
-                fontSize: 14,
+            const VideoApp(),
+            // Gradient overlay
+            DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.3),
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.05),
+                  ],
+                ),
               ),
             ),
-            Spacer(),
-            PrimaryButton(
-                styleText: TextStyle(
-                    fontFamily: 'GilroyMedium',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13,
-                    color: NeutralColor.neutral100),
-                title: OtherText.CALCULATE_BUTTON_TEXT,
-                press: () {},
-                color: PrimaryColor.primary500,
-                width: 224,
-                height: 44),
           ],
         ),
       ),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: PrimaryColor.primary600),
-        centerTitle: true,
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                ),
-                height: size.height * 0.25,
-                child: VideoApp(),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 25),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      controller.argumentData.nom,
-                      style: TextStyle(
-                          fontFamily: 'GilroySemi',
-                          fontSize: 21,
-                          color: PrimaryColor.primary500,
-                          letterSpacing: -1),
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.timer,
-                          color: PrimaryColor.primary600,
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          controller.argumentData.duree,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontFamily: 'GilroyBold'),
-                        ),
-                        SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          '| Difficultés: ${controller.argumentData.level}',
-                          style: TextStyle(
-                              color: NeutralColor.neutral400,
-                              fontSize: 14,
-                              fontFamily: 'GilroyBold'),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      "Description",
-                      style: TextStyle(
-                        fontFamily: 'GilroyBold',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                        color: PrimaryColor.primary900,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    SizedBox(
-                      child: Text(
-                        controller.argumentData.description,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                            fontFamily: 'GilroyRegular'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 36,
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ButtonOptionTab(
-                          size: size,
-                          label: 'Ingredients',
-                          onPressed: () {
-                            controller.pageController.animateToPage(0,
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.easeIn);
-                          },
-                          color: PrimaryColor.primary500),
-                      ButtonOptionTab(
-                          size: size,
-                          label: 'Mode de préparation',
-                          onPressed: () {
-                            controller.pageController.animateToPage(1,
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.easeIn);
-                          },
-                          color: PrimaryColor.primary500),
-                    ],
+              Expanded(
+                child: Text(
+                  controller.argumentData.nom,
+                  style: const TextStyle(
+                    fontFamily: 'GilroyBold',
+                    fontSize: 24,
+                    color: NeutralColor.neutral900,
                   ),
                 ),
               ),
-              SizedBox(
-                height: 12,
-              ),
-              SizedBox(
-                height: size.height * 0.7,
-                child: PageView(
-                  controller: controller.pageController,
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: PrimaryColor.primary50,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
                   children: [
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      child: Obx(
-                        () => controller.loading.value
-                            ? const Center(child: CircularProgressIndicator())
-                            : controller.ingredients.isNotEmpty
-                                ? SingleChildScrollView(
-                                    child: Column(
-                                        children:
-                                            controller.ingredients.map((item) {
-                                      return Container(
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 4),
-                                        child: IngredientWidget(
-                                            size: size,
-                                            name: item.nom,
-                                            quantity: item.quantite,
-                                            unite: item.unite),
-                                      );
-                                    }).toList()),
-                                  )
-                                : Text("Aucun ingredient pour ce plat"),
-                      ),
-                    ),
-                    SizedBox(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 8),
-                            child: Text(
-                              'Mode de preparation',
-                              style: TextStyle(
-                                  fontFamily: 'GilroySemi', fontSize: 18),
-                            ),
-                          )
-                        ],
+                    const Icon(Icons.star_rounded,
+                        size: 14, color: PrimaryColor.primary600),
+                    const SizedBox(width: 4),
+                    const Text(
+                      "4.8",
+                      style: TextStyle(
+                        fontFamily: 'GilroyBold',
+                        fontSize: 12,
+                        color: PrimaryColor.primary700,
                       ),
                     ),
                   ],
@@ -217,92 +136,286 @@ class FoodDetailView extends GetView<FoodDetailController> {
               ),
             ],
           ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              _buildInfoTag(HugeIcons.strokeRoundedClock01,
+                  controller.argumentData.duree),
+              const SizedBox(width: 12),
+              _buildInfoTag(
+                  Icons.bar_chart_rounded, controller.argumentData.level),
+            ],
+          ),
+          const SizedBox(height: 32),
+          const Text(
+            "Description",
+            style: TextStyle(
+              fontFamily: 'GilroyBold',
+              fontSize: 18,
+              color: NeutralColor.neutral900,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            controller.argumentData.description,
+            style: TextStyle(
+              fontFamily: 'Gilroy',
+              fontSize: 14,
+              color: Colors.grey.shade600,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 32),
+          _buildTabs(),
+          const SizedBox(height: 24),
+          _buildTabContent(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoTag(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon, size: 16, color: Colors.grey.shade400),
+        const SizedBox(width: 6),
+        Text(
+          text,
+          style: TextStyle(
+            fontFamily: 'GilroySemi',
+            fontSize: 13,
+            color: Colors.grey.shade600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTabs() {
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Obx(() => Row(
+            children: [
+              Expanded(
+                child: _buildTabItem(
+                  "Ingrédients",
+                  controller.currentTab.value == 0,
+                  () => controller.changeTab(0),
+                ),
+              ),
+              Expanded(
+                child: _buildTabItem(
+                  "Préparation",
+                  controller.currentTab.value == 1,
+                  () => controller.changeTab(1),
+                ),
+              ),
+            ],
+          )),
+    );
+  }
+
+  Widget _buildTabItem(String title, bool isSelected, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : [],
+        ),
+        child: Center(
+          child: Text(
+            title,
+            style: TextStyle(
+              fontFamily: isSelected ? 'GilroyBold' : 'GilroySemi',
+              fontSize: 14,
+              color:
+                  isSelected ? NeutralColor.neutral900 : Colors.grey.shade400,
+            ),
+          ),
         ),
       ),
     );
   }
-}
 
-class IngredientWidget extends StatelessWidget {
-  const IngredientWidget({
-    super.key,
-    required this.size,
-    required this.name,
-    required this.quantity,
-    required this.unite,
-  });
+  Widget _buildTabContent() {
+    return Obx(() {
+      if (controller.currentTab.value == 0) {
+        return _buildIngredientsList();
+      } else {
+        return _buildPreparationMode();
+      }
+    });
+  }
 
-  final Size size;
-  final String name;
-  final String unite;
-  final int quantity;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
+  Widget _buildIngredientsList() {
+    return Obx(() {
+      if (controller.loading.value) {
+        return const Center(
+          child: CircularProgressIndicator(color: PrimaryColor.primary600),
+        );
+      }
+      if (controller.ingredients.isEmpty) {
+        return const Center(
+          child: Text("Aucun ingrédient pour ce plat"),
+        );
+      }
+      return ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: controller.ingredients.length,
+        separatorBuilder: (context, index) => const SizedBox(height: 16),
+        itemBuilder: (context, index) {
+          final item = controller.ingredients[index];
+          return Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey.shade100),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: PrimaryColor.primary50,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(HugeIcons.strokeRoundedApple,
+                      size: 20, color: PrimaryColor.primary600),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    item.nom,
+                    style: const TextStyle(
+                      fontFamily: 'GilroySemi',
+                      fontSize: 15,
+                      color: NeutralColor.neutral900,
+                    ),
+                  ),
+                ),
+                Text(
+                  '${item.quantite} ${item.unite}',
+                  style: TextStyle(
+                    fontFamily: 'GilroyBold',
+                    fontSize: 14,
+                    color: Colors.grey.shade400,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    });
+  }
+
+  Widget _buildPreparationMode() {
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: PrimaryColor.primary100),
-          child: SvgPicture.network(
-            "https://cdn.hugeicons.com/icons/ice-cubes-stroke-rounded.svg",
-            color: PrimaryColor.primary500,
+        Text(
+          "Mode de préparation",
+          style: TextStyle(
+            fontFamily: 'GilroyBold',
+            fontSize: 16,
+            color: NeutralColor.neutral900,
           ),
         ),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          width: size.width * 0.85,
-          child: Row(
-            children: [
-              Text(
-                name,
-                style: TextStyle(fontFamily: 'GilroyBold', fontSize: 15),
-              ),
-              Spacer(),
-              Text(
-                '$quantity' '$unite',
-                style: TextStyle(fontFamily: 'Poppins', fontSize: 15),
-              )
-            ],
+        SizedBox(height: 12),
+        Text(
+          "Les étapes de préparation seront bientôt disponibles ici.",
+          style: TextStyle(
+            fontFamily: 'Gilroy',
+            fontSize: 14,
+            color: Colors.grey,
           ),
-        )
+        ),
       ],
     );
   }
-}
 
-class ButtonOptionTab extends StatelessWidget {
-  const ButtonOptionTab(
-      {super.key,
-      required this.size,
-      required this.label,
-      required this.onPressed,
-      required this.color});
-  final String label;
-  final Size size;
-  final void Function() onPressed;
-  final Color color;
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      radius: 10,
-      onTap: onPressed,
+  Widget _buildBottomBar(BuildContext context) {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 2),
-        height: size.height * 0.04,
+        padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: color,
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 20,
+              offset: const Offset(0, -5),
+            ),
+          ],
         ),
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 25),
-        child: Text(
-          label,
-          style: TextStyle(
-              fontFamily: 'GilroyMedium',
-              fontWeight: FontWeight.w500,
-              fontSize: 13,
-              color: Colors.white),
+        child: Row(
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Coût estimé",
+                  style: TextStyle(
+                    fontFamily: 'Gilroy',
+                    fontSize: 12,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
+                const Text(
+                  "0 Fcfa",
+                  style: TextStyle(
+                    fontFamily: 'GilroyBold',
+                    fontSize: 18,
+                    color: NeutralColor.neutral900,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 24),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: PrimaryColor.primary600,
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 0,
+                ),
+                child: const Text(
+                  "Calculer le prix",
+                  style: TextStyle(
+                    fontFamily: 'GilroyBold',
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -16,6 +16,10 @@ import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
+import '../modules/profile/bindings/profile_binding.dart';
+import '../modules/profile/views/profile_view.dart';
+import '../modules/notifications/bindings/notifications_binding.dart';
+import '../modules/notifications/views/notifications_view.dart';
 
 part 'app_routes.dart';
 
@@ -29,41 +33,61 @@ class AppPages {
       name: _Paths.HOME,
       page: () => const HomeView(),
       binding: HomeBinding(),
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: _Paths.SPLASH,
       page: () => const SplashView(),
       binding: SplashBinding(),
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: _Paths.ONBOARDING,
       page: () => const OnboardingView(),
       binding: OnboardingBinding(),
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: _Paths.AUTH_LOGIN,
       page: () => const AuthLoginView(),
       binding: AuthLoginBinding(),
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: _Paths.AUTH_REGISTER,
       page: () => const AuthRegisterView(),
       binding: AuthRegisterBinding(),
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: _Paths.FOOD_DETAIL,
       page: () => const FoodDetailView(),
       binding: FoodDetailBinding(),
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: _Paths.GENERATE_MENU,
       page: () => const GenerateMenuView(),
       binding: GenerateMenuBinding(),
+      transition: Transition.cupertino,
     ),
     GetPage(
       name: _Paths.GENERATE_MENU_FILTER,
       page: () => const GenerateMenuFilterView(),
       binding: GenerateMenuFilterBinding(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => const ProfileView(),
+      binding: ProfileBinding(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATIONS,
+      page: () => const NotificationsView(),
+      binding: NotificationsBinding(),
+      transition: Transition.cupertino,
     ),
   ];
 }

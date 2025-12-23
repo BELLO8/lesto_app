@@ -2,13 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lesto/app/components/Button/link_button.dart';
-import 'package:lesto/app/components/Button/primary_button.dart';
-import 'package:lesto/app/components/Container/container_image.dart';
-import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
-import 'package:lesto/app/data/constants/Contents/auth_constant.dart';
-import 'package:lesto/app/data/constants/Contents/text_constant.dart';
 import 'package:lesto/app/routes/app_pages.dart';
 
 import '../../../data/constants/Image/image_constant.dart';
@@ -20,57 +14,112 @@ class OnboardingView extends GetView<OnboardingController> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: ImageContainer(
-        size: size,
-        backgroundImage: ImageString.onboardingImage,
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            height: size.height * 0.45,
-            child: Column(children: [
-              Image.asset(
-                ImageString.logoPrimary,
-                width: 163,
+      body: Stack(
+        children: [
+          // Background Image with Gradient Overlay
+          Container(
+            width: size.width,
+            height: size.height,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(ImageString.onboardingImage),
+                fit: BoxFit.cover,
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    const Text(
-                      OtherText.ONBOARDING_TEXT_2,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontFamily: 'Gilroy', fontSize: 22),
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    PrimaryButton(
-                      styleText: TextStyle(
-                          fontFamily: 'GilroySemi',
-                          fontSize: 16,
-                          color: NeutralColor.neutral100),
-                      title: AuthText.REGISTER_BUTTON_TEXT,
-                      press: () {
-                        Get.toNamed(Routes.AUTH_REGISTER);
-                      },
-                      color: PrimaryColor.primary500,
-                      width: 373,
-                      height: 56,
-                    ),
-                    LinkButton(
-                      title: AuthText.LOGIN_BUTTON_TEXT,
-                      press: () {
-                        Get.toNamed(Routes.AUTH_LOGIN);
-                      },
-                      width: 300,
-                      height: 30,
-                    ),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.1),
+                    Colors.black.withOpacity(0.8),
                   ],
                 ),
               ),
-            ]),
+            ),
           ),
-        ),
+
+          // Content
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    'assets/images/logo_primary.png', // Fallback to path if needed
+                    width: 140,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    "Cuisinez ce que vous aimez, simplement.",
+                    style: TextStyle(
+                      fontFamily: 'GilroyBold',
+                      fontSize: 32,
+                      color: Colors.white,
+                      height: 1.1,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    "Lesto vous accompagne dans la préparation de vos repas quotidiens avec des recettes personnalisées.",
+                    style: TextStyle(
+                      fontFamily: 'Gilroy',
+                      fontSize: 16,
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                  ),
+                  const SizedBox(height: 48),
+
+                  // Buttons
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Get.toNamed(Routes.AUTH_REGISTER),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: PrimaryColor.primary600,
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: const Text(
+                        "Créer un compte",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'GilroyBold',
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: () => Get.toNamed(Routes.AUTH_LOGIN),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                      ),
+                      child: const Text(
+                        "Se connecter",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'GilroySemi',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

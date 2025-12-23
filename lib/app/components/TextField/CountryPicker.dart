@@ -46,7 +46,6 @@ class _CountrypickerState extends State<Countrypicker> {
           countryDropdownLabel: countryLabel,
           onCountryChanged: (value) {
             setState(() {
-              print(value);
               countryLabel = value;
             });
           },

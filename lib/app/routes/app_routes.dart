@@ -15,6 +15,8 @@ abstract class Routes {
   static const FOOD_DETAIL = _Paths.FOOD_DETAIL;
   static const GENERATE_MENU = _Paths.GENERATE_MENU;
   static const GENERATE_MENU_FILTER = _Paths.GENERATE_MENU_FILTER;
+  static const PROFILE = _Paths.PROFILE;
+  static const NOTIFICATIONS = _Paths.NOTIFICATIONS;
 }
 
 abstract class _Paths {
@@ -29,4 +31,6 @@ abstract class _Paths {
   static const FOOD_DETAIL = '/food-detail';
   static const GENERATE_MENU = '/generate-menu';
   static const GENERATE_MENU_FILTER = '/generate-menu-filter';
+  static const PROFILE = '/profile';
+  static const NOTIFICATIONS = '/notifications';
 }

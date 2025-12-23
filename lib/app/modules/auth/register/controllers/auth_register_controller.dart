@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:lesto/app/data/Models/RegisterModel.dart';
-import 'package:lesto/app/data/Models/country_model.dart';
+import 'package:lesto/app/data/models/register_model.dart';
+import 'package:lesto/app/data/models/country_model.dart';
 import 'package:lesto/app/data/providers/auth_provider.dart';
 import 'package:lesto/app/routes/app_pages.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
@@ -68,30 +68,43 @@ class AuthRegisterController extends GetxController {
     flagCountry.value = country.flags.svg;
   }
 
-  void inscription(RegisterModel registerRequest, context) async {
+  void inscription(RegisterModel registerRequest, BuildContext context) async {
     try {
       isSubmitingData.value = true;
       var response = await AuthProvider().register(registerRequest);
-      if (response['status'] == 'success') {
-        box.write('id', response["data"]['id']);
-        box.write('nom', response["data"]['nom']);
-        box.write('prenoms', response["data"]['prenoms']);
-        box.write('email', response["data"]['email']);
-        box.write('telephone', response["data"]['telephone']);
+
+      if (response != null && response['status'] == 'success') {
+        box.write('id', response["data"]?['id']);
+        box.write('nom', response["data"]?['nom']);
+        box.write('prenoms', response["data"]?['prenoms']);
+        box.write('email', response["data"]?['email']);
+        box.write('telephone', response["data"]?['telephone']);
         Get.offNamed(Routes.HOME);
       } else {
+        String errorMessage = response?['message'] ??
+            "Oops ! une erreur s'est produite lors de l'inscription.";
         toastification.show(
           context: context,
           type: ToastificationType.error,
           style: ToastificationStyle.flat,
-          title: const Text(
-            "Oops ! une erreur s'est produite.",
-            style: TextStyle(fontFamily: 'GilroySemi', color: Colors.red),
+          title: Text(
+            errorMessage,
+            style: const TextStyle(fontFamily: 'GilroySemi', color: Colors.red),
           ),
           autoCloseDuration: const Duration(seconds: 3),
         );
-        isSubmitingData.value = false;
       }
+    } catch (e) {
+      toastification.show(
+        context: context,
+        type: ToastificationType.error,
+        style: ToastificationStyle.flat,
+        title: Text(
+          "Erreur: $e",
+          style: const TextStyle(fontFamily: 'GilroySemi', color: Colors.red),
+        ),
+        autoCloseDuration: const Duration(seconds: 3),
+      );
     } finally {
       isSubmitingData.value = false;
     }

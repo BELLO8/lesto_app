@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:lesto/app/data/Models/ingredient_model.dart';
-import 'package:lesto/app/data/Models/menu_model.dart';
+import 'package:lesto/app/data/models/ingredient_model.dart';
+import 'package:lesto/app/data/models/menu_model.dart';
 import 'package:lesto/app/data/providers/menu_provider.dart';
 import 'package:lesto/app/data/providers/plat_provider.dart';
 import 'package:lesto/app/routes/app_pages.dart';
@@ -101,7 +101,6 @@ class GenerateMenuFilterController extends GetxController {
     Iterable search = ingredientListe
         .where((ingredient) => ingredient.nom.contains(element))
         .toList();
-    print(search);
     return ingredientListe.value =
         search.map((e) => Ingredient.fromJson(e)).toList();
     // return ingredientListe

@@ -7,18 +7,11 @@ import 'package:lesto/app/components/Dialog/modal_dialog.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 
-import '../controllers/home_controller.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:lesto/app/modules/home/controllers/home_controller.dart';
 
 class GenerateRecipe extends GetView<HomeController> {
-  GenerateRecipe({Key? key}) : super(key: key);
-
-  // Nouvelles variables d'état
-  final int selectedPersons = 2;
-  final String selectedPeriod = '1 day';
-  final List<String> selectedAllergies = [];
-  final String selectedCookingTime = '15-30 min';
-  final String selectedDifficulty = 'Easy';
-  final String selectedCuisineType = 'Asian';
+  const GenerateRecipe({Key? key}) : super(key: key);
 
   void _showAddIngredientBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -65,7 +58,7 @@ class GenerateRecipe extends GetView<HomeController> {
                         child: Text(
                           'Terminer',
                           style: TextStyle(
-                            color: Color(0xFF4A5D3A),
+                            color: PrimaryColor.primary600,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -170,131 +163,68 @@ class GenerateRecipe extends GetView<HomeController> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.6,
-        decoration: BoxDecoration(
+        height: MediaQuery.of(context).size.height * 0.65,
+        decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
         child: Column(
           children: [
+            const SizedBox(height: 12),
             Container(
-              margin: EdgeInsets.only(top: 8),
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: Colors.grey.shade200,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
+            const SizedBox(height: 32),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Etape de generation de menu',
+                    const Text(
+                      'Personnalisation du menu',
                       style: TextStyle(
-                        fontFamily: 'GilroySemi',
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontFamily: 'GilroyBold',
+                        fontSize: 22,
+                        color: NeutralColor.neutral900,
                       ),
                     ),
-                    SizedBox(height: 16),
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[50],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Ingredients selectionnés:',
-                            style: TextStyle(
-                              fontFamily: "GilroySemi",
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Obx(() => Wrap(
-                                spacing: 6,
-                                runSpacing: 6,
-                                children: controller.selectedIngredients
-                                    .map((ingredient) {
-                                  return Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.green[100],
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Text(
-                                      ingredient,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.green[700],
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              )),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 8),
                     Text(
-                      'Préférences du menu',
+                      'Ajustez les détails pour votre menu de la semaine.',
                       style: TextStyle(
-                        fontFamily: 'GilroySemi',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Gilroy',
+                        fontSize: 14,
+                        color: Colors.grey.shade500,
                       ),
                     ),
-                    SizedBox(height: 16),
-
-                    // Nombre de personnes
-                    _buildPersonSelector(),
-                    SizedBox(height: 16),
-                    _buildPeriodSelector(),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 32),
+                    _buildSoftSection(
+                      icon: HugeIcons.strokeRoundedUserGroup,
+                      title: "Nombre de personnes",
+                      child: _buildPersonSelector(),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20),
+                      child: Divider(height: 1, color: Color(0xFFF5F5F5)),
+                    ),
+                    _buildSoftSection(
+                      icon: HugeIcons.strokeRoundedCalendar03,
+                      title: "Dates du menu",
+                      child: _buildDateRangeSelector(),
+                    ),
+                    const Spacer(),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () async {
                           Navigator.pop(context);
-                          controller.loading.value
-                              ? showAlert(
-                                  context,
-                                  Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 35),
-                                    child: Row(children: [
-                                      CircularProgressIndicator(
-                                        color: PrimaryColor.primary400,
-                                      ),
-                                      SizedBox(
-                                        width: 14,
-                                      ),
-                                      Text(
-                                        "Génération du menu en cours",
-                                        style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            fontFamily: 'Gilroy',
-                                            fontSize: 14,
-                                            color: Colors.black),
-                                      ),
-                                    ]),
-                                  ),
-                                  size.width * 0.85,
-                                  size.height * 0.11,
-                                  false)
-                              : null;
-
+                          _showLoadingAlert(context, size);
                           await controller.getMenu(
                             1,
                             controller.dateDebut.value,
@@ -302,23 +232,24 @@ class GenerateRecipe extends GetView<HomeController> {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF4A5D3A),
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          backgroundColor: PrimaryColor.primary600,
+                          padding: const EdgeInsets.symmetric(vertical: 18),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(16),
                           ),
+                          elevation: 0,
                         ),
-                        child: Text(
+                        child: const Text(
                           'Générer mon menu',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
-                            fontFamily: 'GilroySemi',
-                            fontWeight: FontWeight.w600,
+                            fontFamily: 'GilroyBold',
                           ),
                         ),
                       ),
                     ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -329,162 +260,215 @@ class GenerateRecipe extends GetView<HomeController> {
     );
   }
 
-  Widget _buildPersonSelector() {
+  Widget _buildSoftSection(
+      {required IconData icon, required String title, required Widget child}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Number of Persons',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey[700],
-          ),
-        ),
-        SizedBox(height: 8),
-        Obx(() => Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey[300]!),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  GestureDetector(
-                    onTap: () => controller
-                        .updatePersons(controller.selectedPersons.value - 1),
-                    child: Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: controller.selectedPersons.value > 1
-                            ? Colors.grey[100]
-                            : Colors.grey[50],
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Icon(
-                        Icons.remove,
-                        size: 16,
-                        color: controller.selectedPersons.value > 1
-                            ? Colors.black
-                            : Colors.grey[400],
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  Text(
-                    '${controller.selectedPersons.value}',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(width: 16),
-                  GestureDetector(
-                    onTap: () => controller
-                        .updatePersons(controller.selectedPersons.value + 1),
-                    child: Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: controller.selectedPersons.value < 10
-                            ? Colors.grey[100]
-                            : Colors.grey[50],
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Icon(
-                        Icons.add,
-                        size: 16,
-                        color: controller.selectedPersons.value < 10
-                            ? Colors.black
-                            : Colors.grey[400],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            )),
-      ],
-    );
-  }
-
-  Widget _buildPeriodSelector() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Menu Period',
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey[700],
-          ),
-        ),
-        SizedBox(height: 8),
         Row(
           children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                    context: Get.context!,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2101),
-                  );
-                  if (pickedDate != null) {
-                    String formattedDate =
-                        DateFormat('yyyy-MM-dd').format(pickedDate);
-                    controller.updateDateDebut(formattedDate);
-                  }
-                },
-                child: Obx(() => Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey[300]!),
-                      ),
-                      child: Text(
-                        controller.dateDebut.value,
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    )),
-              ),
-            ),
-            SizedBox(width: 12),
-            Expanded(
-              child: GestureDetector(
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                    context: Get.context!,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2101),
-                  );
-                  if (pickedDate != null) {
-                    String formattedDate =
-                        DateFormat('yyyy-MM-dd').format(pickedDate);
-                    controller.updateDateFin(formattedDate);
-                  }
-                },
-                child: Obx(() => Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey[300]!),
-                      ),
-                      child: Text(
-                        controller.dateFin.value,
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    )),
+            Icon(icon, size: 18, color: Colors.grey.shade400),
+            const SizedBox(width: 10),
+            Text(
+              title,
+              style: TextStyle(
+                fontFamily: 'GilroySemi',
+                fontSize: 14,
+                color: Colors.grey.shade600,
               ),
             ),
           ],
         ),
+        const SizedBox(height: 16),
+        child,
       ],
     );
+  }
+
+  void _showLoadingAlert(BuildContext context, Size size) {
+    showAlert(
+      context,
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        child: Row(
+          children: [
+            const SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                color: PrimaryColor.primary600,
+                strokeWidth: 3,
+              ),
+            ),
+            const SizedBox(width: 16),
+            const Text(
+              "Génération en cours...",
+              style: TextStyle(
+                fontFamily: 'GilroySemi',
+                fontSize: 15,
+                color: NeutralColor.neutral800,
+                decoration: TextDecoration.none,
+              ),
+            ),
+          ],
+        ),
+      ),
+      size.width * 0.8,
+      90,
+      false,
+    );
+  }
+
+  Widget _buildPersonSelector() {
+    return Row(
+      children: [
+        _buildCounterButton(
+          icon: Icons.remove_rounded,
+          onTap: () =>
+              controller.updatePersons(controller.selectedPersons.value - 1),
+        ),
+        const SizedBox(width: 20),
+        Obx(() => Text(
+              '${controller.selectedPersons.value} Personnes',
+              style: const TextStyle(
+                fontSize: 16,
+                fontFamily: 'GilroyBold',
+                color: NeutralColor.neutral800,
+              ),
+            )),
+        const SizedBox(width: 20),
+        _buildCounterButton(
+          icon: Icons.add_rounded,
+          onTap: () =>
+              controller.updatePersons(controller.selectedPersons.value + 1),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCounterButton(
+      {required IconData icon, required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey.shade100),
+        ),
+        child: Icon(icon, size: 20, color: NeutralColor.neutral700),
+      ),
+    );
+  }
+
+  Widget _buildDateRangeSelector() {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildDatePickerItem(
+            label: "Début",
+            value: controller.dateDebut,
+            onTap: () => _pickDate(true),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: _buildDatePickerItem(
+            label: "Fin",
+            value: controller.dateFin,
+            onTap: () => _pickDate(false),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDatePickerItem({
+    required String label,
+    required RxString value,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontFamily: 'Gilroy',
+              color: Colors.grey.shade400,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Obx(() => Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade50,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.shade100),
+                ),
+                child: Row(
+                  children: [
+                    Icon(HugeIcons.strokeRoundedCalendar01,
+                        size: 16, color: PrimaryColor.primary600),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        value.value == "Date de début" ||
+                                value.value == "Date de fin"
+                            ? value.value
+                            : DateFormat('dd/MM/yyyy')
+                                .format(DateTime.parse(value.value)),
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'GilroySemi',
+                          color: value.value.contains("Date")
+                              ? Colors.grey.shade400
+                              : NeutralColor.neutral800,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _pickDate(bool isDebut) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: Get.context!,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: PrimaryColor.primary600,
+              onPrimary: Colors.white,
+              onSurface: NeutralColor.neutral800,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+      if (isDebut) {
+        controller.updateDateDebut(formattedDate);
+      } else {
+        controller.updateDateFin(formattedDate);
+      }
+    }
   }
 
   @override
@@ -497,18 +481,30 @@ class GenerateRecipe extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(
-                    'Vous ne savez pas quoi cuisiner aujourd\'hui ?',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontFamily: 'GilroySemi',
-                      fontWeight: FontWeight.bold,
-                      color: NeutralColor.neutral800,
-                      height: 1.2,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Vous ne savez pas quoi cuisiner aujourd\'hui ?',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontFamily: 'GilroyBold',
+                          color: NeutralColor.neutral900,
+                          height: 1.2,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Laissez Lesto vous concocter un menu sur mesure.',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Gilroy',
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -517,121 +513,157 @@ class GenerateRecipe extends GetView<HomeController> {
 
             // Recipe generation card
             Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Color(0xFFF5F3F0),
-                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: Colors.grey.shade100),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.auto_fix_high, size: 20, color: Colors.orange),
-                      SizedBox(width: 8),
-                      Text(
-                        "Avez-vous des ingrédients que vous \nne désirez pas (interdits)?",
-                        style: TextStyle(
-                            fontFamily: 'GilroyMedium',
-                            fontSize: 14,
-                            color: Colors.grey[700]),
+                      const Icon(HugeIcons.strokeRoundedAiMagic,
+                          size: 20, color: PrimaryColor.primary500),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          "Avez-vous des ingrédients que vous ne désirez pas ?",
+                          style: TextStyle(
+                              fontFamily: 'GilroySemi',
+                              fontSize: 14,
+                              color: Colors.grey.shade700),
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 20),
 
                   // Ingredients chips
-                  Obx(() => Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children:
-                            controller.selectedIngredients.map((ingredient) {
-                          return Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
+                  Obx(() => controller.selectedIngredients.isEmpty
+                      ? Container(
+                          height: 50,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: Colors.grey.shade100),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Aucun ingrédient interdit",
+                              style: TextStyle(
+                                  color: Colors.grey.shade400,
+                                  fontSize: 13,
+                                  fontFamily: 'Gilroy'),
                             ),
+                          ),
+                        )
+                      : Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children:
+                              controller.selectedIngredients.map((ingredient) {
+                            return Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: PrimaryColor.primary100.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(12),
+                                border:
+                                    Border.all(color: PrimaryColor.primary200),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    ingredient,
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontFamily: 'GilroySemi',
+                                      color: PrimaryColor.primary700,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  GestureDetector(
+                                    onTap: () =>
+                                        controller.removeIngredient(ingredient),
+                                    child: const Icon(
+                                      Icons.close_rounded,
+                                      size: 14,
+                                      color: PrimaryColor.primary600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        )),
+
+                  const SizedBox(height: 20),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => _showAddIngredientBottomSheet(context),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
                             decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.grey[300]!),
+                              color: Colors.grey.shade50,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.grey.shade100),
                             ),
                             child: Row(
-                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                const Icon(HugeIcons.strokeRoundedPlusSign,
+                                    size: 18, color: PrimaryColor.primary600),
+                                const SizedBox(width: 8),
                                 Text(
-                                  ingredient,
+                                  'Ajouter ingredients',
                                   style: TextStyle(
+                                    color: Colors.grey.shade600,
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                SizedBox(width: 6),
-                                GestureDetector(
-                                  onTap: () =>
-                                      controller.removeIngredient(ingredient),
-                                  child: Icon(
-                                    Icons.close,
-                                    size: 16,
-                                    color: Colors.grey[500],
+                                    fontFamily: 'GilroySemi',
                                   ),
                                 ),
                               ],
                             ),
-                          );
-                        }).toList(),
-                      )),
-
-                  SizedBox(height: 12),
-                  GestureDetector(
-                    onTap: () {
-                      _showAddIngredientBottomSheet(context);
-                    },
-                    child: Text(
-                      'Ajouter les ingrédients',
-                      style: TextStyle(
-                        color: Colors.blue[600],
-                        fontSize: 14,
-                        fontFamily: 'GilroySemi',
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _showGenerateRecipeBottomSheet(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF4A5D3A),
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.auto_fix_high,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Générer un menu',
-                            style: TextStyle(
-                              fontFamily: 'GilroySemi',
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                      const SizedBox(width: 12),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: PrimaryColor.primary600,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: PrimaryColor.primary600.withOpacity(0.2),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                        child: IconButton(
+                          onPressed: () =>
+                              _showGenerateRecipeBottomSheet(context),
+                          icon: const Icon(HugeIcons.strokeRoundedMagicWand01,
+                              color: Colors.white, size: 22),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
@@ -640,53 +672,56 @@ class GenerateRecipe extends GetView<HomeController> {
             SizedBox(height: 20),
             // Premium banner
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFFFFA726), Color(0xFFFF8F00)],
+                gradient: const LinearGradient(
+                  colors: [Color(0xFFF96913), Color(0xFFE8713C)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFF96913).withOpacity(0.3),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
               ),
               child: Row(
                 children: [
-                  Expanded(
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Start from \$10/month',
+                          'À partir de 10\$/mois',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.white70,
                             fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                            fontFamily: 'Gilroy',
                           ),
                         ),
+                        SizedBox(height: 4),
                         Text(
-                          'Generate Unlimited Recipe!',
+                          'Générez des recettes en illimité !',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            fontFamily: 'GilroyBold',
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    width: 60,
-                    height: 60,
-                    child: Image.asset(
-                      'assets/chef_icon.png', // Vous devrez ajouter cette image
-                      errorBuilder: (context, error, stackTrace) {
-                        return Icon(
-                          Icons.restaurant_menu,
-                          color: Colors.white,
-                          size: 40,
-                        );
-                      },
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      shape: BoxShape.circle,
                     ),
+                    child: const Icon(HugeIcons.strokeRoundedChefHat,
+                        color: Colors.white, size: 32),
                   ),
                 ],
               ),
@@ -698,41 +733,71 @@ class GenerateRecipe extends GetView<HomeController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'History',
+                const Text(
+                  'Historique',
                   style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    fontSize: 20,
+                    fontFamily: 'GilroyBold',
+                    color: NeutralColor.neutral900,
                   ),
                 ),
-                Text(
-                  'See All',
-                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    'Voir tout',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: PrimaryColor.primary600,
+                      fontFamily: 'GilroySemi',
+                    ),
+                  ),
                 ),
               ],
             ),
 
             SizedBox(height: 16),
 
-            // Recipe history items
-            RecipeHistoryItem(
-              imagePath: 'assets/javanese_rice.png',
-              title: 'Javanese Beef Fried Rice with Tomato',
-              time: '25 Min',
-              ingredients: '6 ingredients',
-              date: '24 Mar',
-            ),
-
-            SizedBox(height: 16),
-
-            RecipeHistoryItem(
-              imagePath: 'assets/nasi_liwet.png',
-              title: 'Indonesian Original Nasi Liwet',
-              time: '15 Min',
-              ingredients: '4 ingredients',
-              date: '17 Mar',
-            ),
+            // History list
+            Obx(() => controller.historyMenus.isEmpty
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 40),
+                      child: Column(
+                        children: [
+                          Icon(HugeIcons.strokeRoundedCalendar03,
+                              size: 40, color: Colors.grey.shade200),
+                          const SizedBox(height: 12),
+                          Text(
+                            "Aucun historique pour le moment",
+                            style: TextStyle(
+                              color: Colors.grey.shade300,
+                              fontFamily: 'Gilroy',
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller.historyMenus.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 16),
+                    itemBuilder: (context, index) {
+                      final menu = controller.historyMenus[index];
+                      return RecipeHistoryItem(
+                        imagePath: 'assets/images/plat_default.png',
+                        title: "Menu personnalisé (${menu.length} jours)",
+                        time: "Variable",
+                        ingredients: "${menu.length} recettes",
+                        date: "Aujourd'hui",
+                      );
+                    },
+                  )),
+            const SizedBox(
+                height: 100), // Bottom padding for floating navigation bar
           ],
         ),
       ),
@@ -759,99 +824,105 @@ class RecipeHistoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.grey.shade100),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 6,
-            offset: Offset(0, 2),
+            color: Colors.black.withOpacity(0.02),
+            spreadRadius: 0,
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         children: [
           Container(
-            width: 60,
-            height: 60,
+            width: 70,
+            height: 70,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(16),
+              color: Colors.grey[100],
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
-                    color: PrimaryColor.primary200,
-                    child: Icon(
-                      Icons.restaurant,
-                      color: PrimaryColor.primary500,
-                      size: 30,
+                    color: PrimaryColor.primary100,
+                    child: const Icon(
+                      Icons.restaurant_rounded,
+                      color: PrimaryColor.primary600,
+                      size: 28,
                     ),
                   );
                 },
               ),
             ),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.red[50],
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        time,
-                        style: TextStyle(
-                          color: Colors.red[600],
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      ingredients,
-                      style: TextStyle(
-                          fontFamily: 'GilroySemi',
-                          color: Colors.grey[500],
-                          fontSize: 10),
-                    ),
-                    Spacer(),
+                    _buildTag(HugeIcons.strokeRoundedClock01, time,
+                        Colors.red.shade600, Colors.red.shade50),
+                    const SizedBox(width: 8),
+                    _buildTag(HugeIcons.strokeRoundedKitchenUtensils,
+                        ingredients, Colors.blue.shade600, Colors.blue.shade50),
+                    const Spacer(),
                     Text(
                       date,
                       style: TextStyle(
-                          fontFamily: 'GilroySemi',
-                          color: Colors.grey[500],
-                          fontSize: 10),
+                          fontFamily: 'Gilroy',
+                          color: Colors.grey[400],
+                          fontSize: 11),
                     ),
                   ],
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 8),
                 Text(
                   title,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'GilroySemi',
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontFamily: 'GilroyBold',
+                    color: NeutralColor.neutral900,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTag(IconData icon, String text, Color color, Color bgColor) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 10, color: color),
+          const SizedBox(width: 4),
+          Text(
+            text,
+            style: TextStyle(
+              color: color,
+              fontSize: 10,
+              fontFamily: 'GilroyBold',
             ),
           ),
         ],

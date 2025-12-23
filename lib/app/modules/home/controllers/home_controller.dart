@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:lesto/app/data/Models/ingredient_model.dart';
-import 'package:lesto/app/data/Models/menu_model.dart';
-import 'package:lesto/app/data/Models/plat_model.dart';
-import 'package:lesto/app/data/constants/Colors/color_primary.dart';
+import 'package:lesto/app/data/models/ingredient_model.dart';
+import 'package:lesto/app/data/models/menu_model.dart';
+import 'package:lesto/app/data/models/plat_model.dart';
+import 'package:lesto/app/data/constants/colors/color_primary.dart';
+import 'package:lesto/app/data/constants/contents/mock_data.dart';
 import 'package:lesto/app/data/providers/menu_provider.dart';
 import 'package:lesto/app/data/providers/plat_provider.dart';
 import 'package:lesto/app/routes/app_pages.dart';
@@ -19,153 +20,13 @@ class HomeController extends GetxController {
   var selectedDay = 'Lun'.obs;
   var numberOfPeople = 2.obs;
   var ingredientListe = <Ingredient>[].obs;
+
   // État des checkboxes pour la liste de courses
-  final Map<String, bool> shoppingItems = {
-    'Champignons': false,
-    'Tomates': false,
-    'Courgettes': false,
-    'Poivrons': false,
-    'Riz pour risotto': false,
-    'Pâtes': false,
-    'Quinoa': false,
-    'Sauce tomate': false,
-    'Pâte de curry': false,
-    'Parmesan': false,
-    'Crème fraîche': false,
-    'Lait de coco': false,
-    'Basilic frais': false,
-  };
+  final shoppingItems = MockData.shoppingItems.obs;
 
   final List<String> days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 
-  final Map<String, List<Map<String, dynamic>>> weeklyMenus = {
-    'Lun': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Risotto aux champignons',
-        'cuisine': 'Italien',
-        'regime': 'Végétarien',
-        'duration': '30 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Salade de quinoa aux légumes grillés',
-        'cuisine': 'Méditerranéen',
-        'regime': 'Végétarien',
-        'duration': '20 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-    'Mar': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Pasta à la carbonara',
-        'cuisine': 'Italien',
-        'regime': 'Standard',
-        'duration': '25 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Saumon grillé aux légumes',
-        'cuisine': 'Français',
-        'regime': 'Standard',
-        'duration': '35 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-    'Mer': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Salade César végétarienne',
-        'cuisine': 'Américain',
-        'regime': 'Végétarien',
-        'duration': '15 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Curry de légumes',
-        'cuisine': 'Indien',
-        'regime': 'Végétalien',
-        'duration': '40 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-    'Jeu': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Quiche aux épinards',
-        'cuisine': 'Français',
-        'regime': 'Végétarien',
-        'duration': '45 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Tacos aux haricots noirs',
-        'cuisine': 'Mexicain',
-        'regime': 'Végétarien',
-        'duration': '30 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-    'Ven': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Sushi végétarien',
-        'cuisine': 'Japonais',
-        'regime': 'Végétarien',
-        'duration': '50 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Pizza margherita',
-        'cuisine': 'Italien',
-        'regime': 'Végétarien',
-        'duration': '25 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-    'Sam': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Pancakes aux fruits',
-        'cuisine': 'Américain',
-        'regime': 'Végétarien',
-        'duration': '20 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Ratatouille',
-        'cuisine': 'Français',
-        'regime': 'Végétalien',
-        'duration': '60 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-    'Dim': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Brunch végétarien',
-        'cuisine': 'International',
-        'regime': 'Végétarien',
-        'duration': '30 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Soupe de légumes',
-        'cuisine': 'Français',
-        'regime': 'Végétalien',
-        'duration': '45 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-  };
+  final weeklyMenus = MockData.weeklyMenus.obs;
 
   var platList = <Plat>[].obs;
   var platbyDay = <Plat>[].obs;
@@ -176,6 +37,7 @@ class HomeController extends GetxController {
   var dateFin = "Date de fin".obs;
   var generateMenu = <Dish>[].obs;
   var generateMenuStore = <Dish>[].obs;
+  var historyMenus = <List<Dish>>[].obs;
 
   // Variables for GenerateRecipe
   var selectedIngredients = <String>[].obs;
@@ -204,8 +66,18 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     filteredIngredients.value = ingredientListe;
+    loadHistory();
     getPlat();
     getAllIngredients();
+  }
+
+  void loadHistory() {
+    List? storedHistory = storeMenu.read('historyMenus');
+    if (storedHistory != null) {
+      historyMenus.value = storedHistory.map((e) {
+        return (e as List).map((i) => Dish.fromJson(i)).toList();
+      }).toList();
+    }
   }
 
   Future<void> getPlat() async {
@@ -235,7 +107,14 @@ class HomeController extends GetxController {
           backgroundColor: PrimaryColor.primary500, colorText: Colors.white);
       loading.value = false;
     } else {
-      generateMenu.value = await MenuProvider().getMenu(id, debut, fin);
+      var newMenu = await MenuProvider().getMenu(id, debut, fin);
+      generateMenu.value = newMenu;
+
+      // Save to history
+      historyMenus.insert(0, newMenu);
+      storeMenu.write('historyMenus',
+          historyMenus.map((e) => e.map((i) => i.toJson()).toList()).toList());
+
       storeMenu.write('menu', generateMenu);
       storeMenu.write('menuDate', DateTime.now());
       Get.toNamed(Routes.GENERATE_MENU);
