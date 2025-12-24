@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
+import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import '../controllers/notifications_controller.dart';
 import 'package:intl/intl.dart';
 
@@ -11,19 +12,19 @@ class NotificationsView extends GetView<NotificationsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: NeutralColor.neutral50,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded,
-              color: Colors.grey.shade800),
+              color: NeutralColor.neutral800),
           onPressed: () => Get.back(),
         ),
         title: Text(
           'Notifications',
           style: TextStyle(
-            color: Colors.grey.shade800,
+            color: NeutralColor.neutral900,
             fontFamily: 'GilroyBold',
             fontSize: 20,
           ),
@@ -42,7 +43,7 @@ class NotificationsView extends GetView<NotificationsController> {
                 Text(
                   "Aucune notification pour le moment",
                   style: TextStyle(
-                      color: Colors.grey.shade500, fontFamily: 'Gilroy'),
+                      color: NeutralColor.neutral500, fontFamily: 'Gilroy'),
                 ),
               ],
             ),
@@ -71,7 +72,7 @@ class NotificationsView extends GetView<NotificationsController> {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: notification.isRead
-              ? Colors.grey.shade100
+              ? NeutralColor.neutral200
               : PrimaryColor.primary100,
         ),
       ),
@@ -108,7 +109,7 @@ class NotificationsView extends GetView<NotificationsController> {
                         style: TextStyle(
                           fontSize: 16,
                           fontFamily: 'GilroyBold',
-                          color: Colors.grey.shade800,
+                          color: NeutralColor.neutral900,
                         ),
                       ),
                     ),
@@ -116,7 +117,7 @@ class NotificationsView extends GetView<NotificationsController> {
                       DateFormat('HH:mm').format(notification.time),
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey.shade500,
+                        color: NeutralColor.neutral500,
                         fontFamily: 'Gilroy',
                       ),
                     ),
@@ -127,7 +128,7 @@ class NotificationsView extends GetView<NotificationsController> {
                   notification.message,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey.shade600,
+                    color: NeutralColor.neutral700,
                     fontFamily: 'Gilroy',
                     height: 1.4,
                   ),

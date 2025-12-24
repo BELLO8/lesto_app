@@ -17,6 +17,8 @@ abstract class Routes {
   static const GENERATE_MENU_FILTER = _Paths.GENERATE_MENU_FILTER;
   static const PROFILE = _Paths.PROFILE;
   static const NOTIFICATIONS = _Paths.NOTIFICATIONS;
+  static const SUBSCRIPTION = _Paths.SUBSCRIPTION;
+  static const ABOUT = _Paths.ABOUT;
 }
 
 abstract class _Paths {
@@ -33,4 +35,6 @@ abstract class _Paths {
   static const GENERATE_MENU_FILTER = '/generate-menu-filter';
   static const PROFILE = '/profile';
   static const NOTIFICATIONS = '/notifications';
+  static const SUBSCRIPTION = '/subscription';
+  static const ABOUT = '/about';
 }

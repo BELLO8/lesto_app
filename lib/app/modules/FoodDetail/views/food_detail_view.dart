@@ -12,17 +12,16 @@ class FoodDetailView extends GetView<FoodDetailController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: NeutralColor.neutral50,
       body: Stack(
         children: [
-          CustomScrollView(
-            slivers: [
-              _buildSliverAppBar(context),
-              SliverToBoxAdapter(
-                child: _buildContent(context),
-              ),
-              SliverToBoxAdapter(
-                child: const SizedBox(height: 100),
+          Column(
+            children: [
+              _buildFixedVideoHeader(context),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: _buildContent(context),
+                ),
               ),
             ],
           ),
@@ -32,58 +31,56 @@ class FoodDetailView extends GetView<FoodDetailController> {
     );
   }
 
-  Widget _buildSliverAppBar(BuildContext context) {
+  Widget _buildFixedVideoHeader(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return SliverAppBar(
-      expandedHeight: size.height * 0.35,
-      backgroundColor: Colors.white,
-      elevation: 0,
-      pinned: true,
-      leading: Padding(
-        padding: const EdgeInsets.only(left: 16),
-        child: Center(
-          child: GestureDetector(
-            onTap: () => Get.back(),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
+    final topPadding = MediaQuery.of(context).padding.top;
+
+    return Container(
+      height: size.height * 0.35,
+      width: double.infinity,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          const VideoApp(),
+          // Gradient overlay
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withOpacity(0.3),
+                  Colors.transparent,
+                  Colors.black.withOpacity(0.2),
                 ],
               ),
-              child: const Icon(Icons.arrow_back_ios_new_rounded,
-                  color: NeutralColor.neutral900, size: 18),
             ),
           ),
-        ),
-      ),
-      flexibleSpace: FlexibleSpaceBar(
-        background: Stack(
-          fit: StackFit.expand,
-          children: [
-            const VideoApp(),
-            // Gradient overlay
-            DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withOpacity(0.3),
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.05),
+          // Back Button
+          Positioned(
+            top: topPadding + 16,
+            left: 16,
+            child: GestureDetector(
+              onTap: () => Get.back(),
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.9),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
                   ],
                 ),
+                child: const Icon(Icons.arrow_back_ios_new_rounded,
+                    color: NeutralColor.neutral900, size: 18),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -91,10 +88,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
   Widget _buildContent(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(24),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-      ),
+      color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -103,7 +97,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
             children: [
               Expanded(
                 child: Text(
-                  controller.argumentData.nom,
+                  controller.nom,
                   style: const TextStyle(
                     fontFamily: 'GilroyBold',
                     fontSize: 24,
@@ -139,11 +133,9 @@ class FoodDetailView extends GetView<FoodDetailController> {
           const SizedBox(height: 16),
           Row(
             children: [
-              _buildInfoTag(HugeIcons.strokeRoundedClock01,
-                  controller.argumentData.duree),
+              _buildInfoTag(HugeIcons.strokeRoundedClock01, controller.duree),
               const SizedBox(width: 12),
-              _buildInfoTag(
-                  Icons.bar_chart_rounded, controller.argumentData.level),
+              _buildInfoTag(Icons.bar_chart_rounded, controller.level),
             ],
           ),
           const SizedBox(height: 32),
@@ -157,11 +149,11 @@ class FoodDetailView extends GetView<FoodDetailController> {
           ),
           const SizedBox(height: 8),
           Text(
-            controller.argumentData.description,
+            controller.description,
             style: TextStyle(
               fontFamily: 'Gilroy',
               fontSize: 14,
-              color: Colors.grey.shade600,
+              color: NeutralColor.neutral700,
               height: 1.5,
             ),
           ),
@@ -169,6 +161,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
           _buildTabs(),
           const SizedBox(height: 24),
           _buildTabContent(),
+          const SizedBox(height: 120), // Space for bottom bar
         ],
       ),
     );
@@ -177,14 +170,14 @@ class FoodDetailView extends GetView<FoodDetailController> {
   Widget _buildInfoTag(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: Colors.grey.shade400),
+        Icon(icon, size: 16, color: NeutralColor.neutral500),
         const SizedBox(width: 6),
         Text(
           text,
           style: TextStyle(
             fontFamily: 'GilroySemi',
             fontSize: 13,
-            color: Colors.grey.shade600,
+            color: NeutralColor.neutral700,
           ),
         ),
       ],
@@ -244,8 +237,9 @@ class FoodDetailView extends GetView<FoodDetailController> {
             style: TextStyle(
               fontFamily: isSelected ? 'GilroyBold' : 'GilroySemi',
               fontSize: 14,
-              color:
-                  isSelected ? NeutralColor.neutral900 : Colors.grey.shade400,
+              color: isSelected
+                  ? NeutralColor.neutral900
+                  : NeutralColor.neutral500,
             ),
           ),
         ),
@@ -287,7 +281,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.grey.shade100),
+              border: Border.all(color: NeutralColor.neutral200),
             ),
             child: Row(
               children: [
@@ -316,7 +310,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
                   style: TextStyle(
                     fontFamily: 'GilroyBold',
                     fontSize: 14,
-                    color: Colors.grey.shade400,
+                    color: NeutralColor.neutral500,
                   ),
                 ),
               ],
@@ -380,7 +374,7 @@ class FoodDetailView extends GetView<FoodDetailController> {
                   style: TextStyle(
                     fontFamily: 'Gilroy',
                     fontSize: 12,
-                    color: Colors.grey.shade500,
+                    color: NeutralColor.neutral600,
                   ),
                 ),
                 const Text(

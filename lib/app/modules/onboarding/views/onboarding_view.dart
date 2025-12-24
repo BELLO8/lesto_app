@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
+import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
 import 'package:lesto/app/routes/app_pages.dart';
 
 import '../../../data/constants/Image/image_constant.dart';
@@ -32,8 +33,8 @@ class OnboardingView extends GetView<OnboardingController> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.black.withOpacity(0.1),
-                    Colors.black.withOpacity(0.8),
+                    Colors.white.withOpacity(0.1),
+                    Colors.white.withOpacity(0.8),
                   ],
                 ),
               ),
@@ -49,9 +50,9 @@ class OnboardingView extends GetView<OnboardingController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Image.asset(
-                    'assets/images/logo_primary.png', // Fallback to path if needed
+                    ImageString.logoPrimary, // Fallback to path if needed
                     width: 140,
-                    color: Colors.white,
+                    // color: PrimaryColor.primary600, // Removed white color filter to show original colors or use a dark one
                   ),
                   const SizedBox(height: 24),
                   const Text(
@@ -59,7 +60,7 @@ class OnboardingView extends GetView<OnboardingController> {
                     style: TextStyle(
                       fontFamily: 'GilroyBold',
                       fontSize: 32,
-                      color: Colors.white,
+                      color: NeutralColor.neutral900,
                       height: 1.1,
                     ),
                   ),
@@ -69,7 +70,7 @@ class OnboardingView extends GetView<OnboardingController> {
                     style: TextStyle(
                       fontFamily: 'Gilroy',
                       fontSize: 16,
-                      color: Colors.white.withOpacity(0.8),
+                      color: NeutralColor.neutral700,
                     ),
                   ),
                   const SizedBox(height: 48),
@@ -108,7 +109,7 @@ class OnboardingView extends GetView<OnboardingController> {
                       child: const Text(
                         "Se connecter",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: NeutralColor.neutral900,
                           fontSize: 16,
                           fontFamily: 'GilroySemi',
                         ),

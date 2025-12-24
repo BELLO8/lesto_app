@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:lesto/app/routes/app_pages.dart';
 
 class ProfileController extends GetxController {
   final box = GetStorage();
@@ -13,10 +14,20 @@ class ProfileController extends GetxController {
   var userEmail = "".obs;
   var userPhone = "".obs;
   var userAvatar = "".obs;
+  var currentLanguage = "Français".obs;
+
+  void changeLanguage(String lang) {
+    currentLanguage.value = lang;
+    box.write('language', lang);
+    Get.back();
+  }
 
   final List<String> avatars = [
     "assets/images/avatar.png",
-    // Add more avatar paths if available, otherwise we will use modern colors/icons
+    "assets/images/food1.png",
+    "assets/images/food2.png",
+    "assets/images/food3.png",
+    "assets/images/imagePizza.png",
   ];
 
   @override
@@ -56,5 +67,10 @@ class ProfileController extends GetxController {
     userAvatar.value = avatarPath;
     box.write('avatar', avatarPath);
     Get.back(); // Close modal
+  }
+
+  void logout() {
+    box.erase(); // Clear all stored data
+    Get.offAllNamed(Routes.AUTH_LOGIN); // Navigate to login and clear stack
   }
 }

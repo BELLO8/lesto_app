@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -72,11 +73,17 @@ class HomeController extends GetxController {
   }
 
   void loadHistory() {
-    List? storedHistory = storeMenu.read('historyMenus');
+    String? storedHistory = storeMenu.read('historyMenus');
     if (storedHistory != null) {
-      historyMenus.value = storedHistory.map((e) {
-        return (e as List).map((i) => Dish.fromJson(i)).toList();
-      }).toList();
+      try {
+        List<dynamic> list = jsonDecode(storedHistory);
+        historyMenus.value = list.map((e) {
+          return (e as List).map((i) => Dish.fromJson(i)).toList();
+        }).toList();
+      } catch (e) {
+        print('Error loading history: $e');
+        historyMenus.value = [];
+      }
     }
   }
 
@@ -100,24 +107,35 @@ class HomeController extends GetxController {
 
   Future<void> getMenu(int id, String dateDebut, String dateFin) async {
     loading.value = true;
-    final DateTime debut = DateTime.parse(dateDebut);
-    final DateTime fin = DateTime.parse(dateFin);
-    if (dateDebut == "Date de début" && dateFin == "Date de fin") {
-      Get.snackbar('Date invalide', 'Selectionnez une date valide',
-          backgroundColor: PrimaryColor.primary500, colorText: Colors.white);
+    try {
+      final DateTime debut = DateTime.parse(dateDebut);
+      final DateTime fin = DateTime.parse(dateFin);
+      if (dateDebut == "Date de début" && dateFin == "Date de fin") {
+        Get.snackbar('Date invalide', 'Selectionnez une date valide',
+            backgroundColor: PrimaryColor.primary500, colorText: Colors.white);
+      } else {
+        var newMenu = await MenuProvider().getMenu(id, debut, fin);
+        generateMenu.value = newMenu;
+
+        // Save to history (at the beginning)
+        historyMenus.insert(0, newMenu);
+
+        // Persist history as JSON string
+        final historyJson = jsonEncode(historyMenus
+            .map((e) => e.map((i) => i.toJson()).toList())
+            .toList());
+        storeMenu.write('historyMenus', historyJson);
+
+        // Store current generation
+        final menuJson =
+            jsonEncode(generateMenu.map((e) => e.toJson()).toList());
+        storeMenu.write('menu', menuJson);
+        storeMenu.write('menuDate', DateTime.now().toIso8601String());
+
+        Get.toNamed(Routes.GENERATE_MENU);
+      }
+    } finally {
       loading.value = false;
-    } else {
-      var newMenu = await MenuProvider().getMenu(id, debut, fin);
-      generateMenu.value = newMenu;
-
-      // Save to history
-      historyMenus.insert(0, newMenu);
-      storeMenu.write('historyMenus',
-          historyMenus.map((e) => e.map((i) => i.toJson()).toList()).toList());
-
-      storeMenu.write('menu', generateMenu);
-      storeMenu.write('menuDate', DateTime.now());
-      Get.toNamed(Routes.GENERATE_MENU);
     }
   }
 

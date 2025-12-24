@@ -55,8 +55,16 @@ class HomeSilverBar extends StatelessWidget {
           centerTitle: true,
           background: Container(
             decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: NetworkImage(imagePath), fit: BoxFit.cover)),
+              image: imagePath.startsWith('http')
+                  ? DecorationImage(
+                      image: NetworkImage(imagePath),
+                      fit: BoxFit.cover,
+                    )
+                  : null,
+              color: imagePath.startsWith('http')
+                  ? Colors.transparent
+                  : PrimaryColor.primary100,
+            ),
           ),
           titlePadding: EdgeInsets.zero,
           title: AnimatedOpacity(

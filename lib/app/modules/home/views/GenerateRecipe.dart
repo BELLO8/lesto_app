@@ -9,6 +9,7 @@ import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lesto/app/modules/home/controllers/home_controller.dart';
+import 'package:lesto/app/routes/app_pages.dart';
 
 class GenerateRecipe extends GetView<HomeController> {
   const GenerateRecipe({Key? key}) : super(key: key);
@@ -474,7 +475,7 @@ class GenerateRecipe extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: NeutralColor.neutral50,
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Column(
@@ -501,7 +502,7 @@ class GenerateRecipe extends GetView<HomeController> {
                         style: TextStyle(
                           fontSize: 14,
                           fontFamily: 'Gilroy',
-                          color: Colors.grey.shade500,
+                          color: NeutralColor.neutral600,
                         ),
                       ),
                     ],
@@ -511,165 +512,8 @@ class GenerateRecipe extends GetView<HomeController> {
             ),
             SizedBox(height: 24),
 
-            // Recipe generation card
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.grey.shade100),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.03),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(HugeIcons.strokeRoundedAiMagic,
-                          size: 20, color: PrimaryColor.primary500),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          "Avez-vous des ingrédients que vous ne désirez pas ?",
-                          style: TextStyle(
-                              fontFamily: 'GilroySemi',
-                              fontSize: 14,
-                              color: Colors.grey.shade700),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
+            SizedBox(height: 24),
 
-                  // Ingredients chips
-                  Obx(() => controller.selectedIngredients.isEmpty
-                      ? Container(
-                          height: 50,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade50,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: Colors.grey.shade100),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Aucun ingrédient interdit",
-                              style: TextStyle(
-                                  color: Colors.grey.shade400,
-                                  fontSize: 13,
-                                  fontFamily: 'Gilroy'),
-                            ),
-                          ),
-                        )
-                      : Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children:
-                              controller.selectedIngredients.map((ingredient) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: PrimaryColor.primary100.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(12),
-                                border:
-                                    Border.all(color: PrimaryColor.primary200),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    ingredient,
-                                    style: const TextStyle(
-                                      fontSize: 13,
-                                      fontFamily: 'GilroySemi',
-                                      color: PrimaryColor.primary700,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  GestureDetector(
-                                    onTap: () =>
-                                        controller.removeIngredient(ingredient),
-                                    child: const Icon(
-                                      Icons.close_rounded,
-                                      size: 14,
-                                      color: PrimaryColor.primary600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        )),
-
-                  const SizedBox(height: 20),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () => _showAddIngredientBottomSheet(context),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade50,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.grey.shade100),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(HugeIcons.strokeRoundedPlusSign,
-                                    size: 18, color: PrimaryColor.primary600),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Ajouter ingredients',
-                                  style: TextStyle(
-                                    color: Colors.grey.shade600,
-                                    fontSize: 14,
-                                    fontFamily: 'GilroySemi',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: PrimaryColor.primary600,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: PrimaryColor.primary600.withOpacity(0.2),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: IconButton(
-                          onPressed: () =>
-                              _showGenerateRecipeBottomSheet(context),
-                          icon: const Icon(HugeIcons.strokeRoundedMagicWand01,
-                              color: Colors.white, size: 22),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            SizedBox(height: 20),
             // Premium banner
             Container(
               padding: const EdgeInsets.all(20),
@@ -727,6 +571,179 @@ class GenerateRecipe extends GetView<HomeController> {
               ),
             ),
 
+            SizedBox(height: 24),
+
+            // Recipe generation card
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: NeutralColor.neutral200),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(HugeIcons.strokeRoundedAiMagic,
+                          size: 20, color: PrimaryColor.primary500),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          "Avez-vous des ingrédients que vous ne désirez pas ?",
+                          style: TextStyle(
+                              fontFamily: 'GilroySemi',
+                              fontSize: 14,
+                              color: Colors.grey.shade700),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Ingredients chips
+                  Obx(() => controller.selectedIngredients.isEmpty
+                      ? Container(
+                          height: 50,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: NeutralColor.neutral200),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Aucun ingrédient interdit",
+                              style: TextStyle(
+                                  color: Colors.grey.shade400,
+                                  fontSize: 13,
+                                  fontFamily: 'Gilroy'),
+                            ),
+                          ),
+                        )
+                      : Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children:
+                              controller.selectedIngredients.map((ingredient) {
+                            return Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: PrimaryColor.primary100.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(12),
+                                border:
+                                    Border.all(color: PrimaryColor.primary200),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    ingredient,
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontFamily: 'GilroySemi',
+                                      color: PrimaryColor.primary700,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  GestureDetector(
+                                    onTap: () =>
+                                        controller.removeIngredient(ingredient),
+                                    child: const Icon(
+                                      Icons.close_rounded,
+                                      size: 14,
+                                      color: PrimaryColor.primary600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        )),
+
+                  const SizedBox(height: 24),
+
+                  Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () => _showAddIngredientBottomSheet(context),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: NeutralColor.neutral200),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(HugeIcons.strokeRoundedPlusSign,
+                                  size: 18, color: NeutralColor.neutral600),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Ajouter des exclusions',
+                                style: TextStyle(
+                                  color: NeutralColor.neutral600,
+                                  fontSize: 14,
+                                  fontFamily: 'GilroySemi',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () =>
+                              _showGenerateRecipeBottomSheet(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: PrimaryColor.primary600,
+                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            elevation: 0,
+                            shadowColor:
+                                PrimaryColor.primary600.withOpacity(0.4),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(HugeIcons.strokeRoundedMagicWand01,
+                                  color: Colors.white, size: 20),
+                              SizedBox(width: 12),
+                              Text(
+                                'Générer mon menu',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontFamily: 'GilroyBold',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
             SizedBox(height: 32),
 
             // History section
@@ -765,13 +782,13 @@ class GenerateRecipe extends GetView<HomeController> {
                       child: Column(
                         children: [
                           Icon(HugeIcons.strokeRoundedCalendar03,
-                              size: 40, color: Colors.grey.shade200),
+                              size: 40, color: NeutralColor.neutral300),
                           const SizedBox(height: 12),
                           Text(
                             "Aucun historique pour le moment",
                             style: TextStyle(
-                              color: Colors.grey.shade300,
-                              fontFamily: 'Gilroy',
+                              color: NeutralColor.neutral700,
+                              fontFamily: 'GilroySemi',
                               fontSize: 14,
                             ),
                           ),
@@ -787,12 +804,16 @@ class GenerateRecipe extends GetView<HomeController> {
                         const SizedBox(height: 16),
                     itemBuilder: (context, index) {
                       final menu = controller.historyMenus[index];
-                      return RecipeHistoryItem(
-                        imagePath: 'assets/images/plat_default.png',
-                        title: "Menu personnalisé (${menu.length} jours)",
-                        time: "Variable",
-                        ingredients: "${menu.length} recettes",
-                        date: "Aujourd'hui",
+                      return GestureDetector(
+                        onTap: () =>
+                            Get.toNamed(Routes.GENERATE_MENU, arguments: menu),
+                        child: RecipeHistoryItem(
+                          imagePath: 'assets/images/plat_default.png',
+                          title: "Menu personnalisé (${menu.length} jours)",
+                          time: "Variable",
+                          ingredients: "${menu.length} recettes",
+                          date: "Aujourd'hui",
+                        ),
                       );
                     },
                   )),

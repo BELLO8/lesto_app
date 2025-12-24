@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:lesto/app/data/constants/colors/color_neutral.dart';
-import 'package:lesto/app/data/constants/colors/color_primary.dart';
+import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
+import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/modules/home/views/GenerateRecipe.dart';
 import 'package:lesto/app/modules/ui_v2/Livraison/livraison.dart';
 import 'package:lesto/app/modules/home/views/tabs/menu_tab.dart';
@@ -16,134 +16,157 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: false,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 4),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Bonjour Lesto 👋",
-                style: TextStyle(
-                  fontFamily: 'GilroyBold',
-                  fontSize: 20,
-                  color: NeutralColor.neutral900,
-                  letterSpacing: -0.5,
+    return Obx(() => Scaffold(
+          backgroundColor: NeutralColor.neutral50,
+          appBar: controller.currentIndex.value == 0 ? _buildAppBar() : null,
+          body: controller.loading.value
+              ? _buildLoadingState()
+              : IndexedStack(
+                  index: controller.currentIndex.value,
+                  children: [
+                    GenerateRecipe(),
+                    const MenuTab(),
+                    const CoursesTab(),
+                    DeliveryScreen(),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                "Prêt pour votre prochain délicieux repas ?",
-                style: TextStyle(
-                  fontFamily: 'Gilroy',
-                  fontSize: 13,
-                  color: Colors.grey.shade500,
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => Get.toNamed(Routes.NOTIFICATIONS),
-            icon: const Icon(HugeIcons.strokeRoundedNotification03,
-                color: NeutralColor.neutral800, size: 22),
-          ),
-          const SizedBox(width: 4),
-          GestureDetector(
-            onTap: () => Get.toNamed(Routes.PROFILE),
-            child: Container(
-              margin: const EdgeInsets.only(right: 20),
-              width: 38,
-              height: 38,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.grey.shade50,
-                border: Border.all(color: Colors.grey.shade100, width: 1.5),
-              ),
-              child: const Icon(HugeIcons.strokeRoundedUser,
-                  color: PrimaryColor.primary600, size: 18),
-            ),
-          ),
-        ],
-      ),
-      body: Obx(() {
-        return controller.loading.value
-            ? _buildLoadingState()
-            : IndexedStack(
-                index: controller.currentIndex.value,
-                children: [
-                  GenerateRecipe(),
-                  const MenuTab(),
-                  const CoursesTab(),
-                  DeliveryScreen(),
-                ],
-              );
-      }),
-      bottomNavigationBar: Obx(() => Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          bottomNavigationBar: Container(
+            padding: EdgeInsets.fromLTRB(
+                24, 0, 24, MediaQuery.of(context).padding.bottom + 12),
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.04),
                   blurRadius: 20,
-                  offset: const Offset(0, -5),
+                  offset: const Offset(0, -8),
                 ),
               ],
             ),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              height: 72,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 color: NeutralColor.neutral900,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: BottomNavigationBar(
-                currentIndex: controller.currentIndex.value,
-                onTap: (index) {
-                  controller.currentIndex.value = index;
-                },
-                type: BottomNavigationBarType.fixed,
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                selectedItemColor: Colors.white,
-                unselectedItemColor: Colors.grey.shade500,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                items: const [
-                  BottomNavigationBarItem(
-                    icon: Icon(HugeIcons.strokeRoundedHome01),
-                    activeIcon: Icon(HugeIcons.strokeRoundedHome01,
-                        color: Colors.white),
-                    label: 'Accueil',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(HugeIcons.strokeRoundedDish01),
-                    activeIcon: Icon(HugeIcons.strokeRoundedDish01,
-                        color: Colors.white),
-                    label: 'Menus',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(HugeIcons.strokeRoundedShoppingBasket01),
-                    activeIcon: Icon(HugeIcons.strokeRoundedShoppingBasket01,
-                        color: Colors.white),
-                    label: 'Courses',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(HugeIcons.strokeRoundedDeliveryTruck01),
-                    activeIcon: Icon(HugeIcons.strokeRoundedDeliveryTruck01,
-                        color: Colors.white),
-                    label: 'Livraison',
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: NeutralColor.neutral900.withOpacity(0.3),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
                   ),
                 ],
               ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildNavItem(0, HugeIcons.strokeRoundedHome01, 'Accueil'),
+                  _buildNavItem(1, HugeIcons.strokeRoundedDish01, 'Menus'),
+                  _buildNavItem(
+                      2, HugeIcons.strokeRoundedShoppingBasket01, 'Courses'),
+                  _buildNavItem(
+                      3, HugeIcons.strokeRoundedDeliveryTruck01, 'Livraison'),
+                ],
+              ),
             ),
-          )),
+          ),
+        ));
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      backgroundColor: PrimaryColor.primary600,
+      elevation: 0,
+      centerTitle: false,
+      title: Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Bonjour Lesto 👋",
+              style: TextStyle(
+                fontFamily: 'GilroyBold',
+                fontSize: 20,
+                color: Colors.white,
+                letterSpacing: -0.5,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              "Prêt pour votre prochain délicieux repas ?",
+              style: TextStyle(
+                fontFamily: 'Gilroy',
+                fontSize: 13,
+                color: Colors.white.withOpacity(0.8),
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () => Get.toNamed(Routes.NOTIFICATIONS),
+          icon: const Icon(HugeIcons.strokeRoundedNotification03,
+              color: Colors.white, size: 22),
+        ),
+        const SizedBox(width: 4),
+        GestureDetector(
+          onTap: () => Get.toNamed(Routes.PROFILE),
+          child: Container(
+            margin: const EdgeInsets.only(right: 20),
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withOpacity(0.2),
+              border:
+                  Border.all(color: Colors.white.withOpacity(0.3), width: 1.5),
+            ),
+            child: const Icon(HugeIcons.strokeRoundedUser,
+                color: Colors.white, size: 18),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNavItem(int index, IconData icon, String label) {
+    final isSelected = controller.currentIndex.value == index;
+    return GestureDetector(
+      onTap: () => controller.currentIndex.value = index,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOutCubic,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? Colors.white.withOpacity(0.1)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(
+              icon,
+              color: isSelected ? Colors.white : NeutralColor.neutral500,
+              size: 24,
+            ),
+          ),
+          if (isSelected)
+            Container(
+              margin: const EdgeInsets.only(top: 4),
+              width: 4,
+              height: 4,
+              decoration: const BoxDecoration(
+                color: PrimaryColor.primary500,
+                shape: BoxShape.circle,
+              ),
+            ),
+        ],
+      ),
     );
   }
 

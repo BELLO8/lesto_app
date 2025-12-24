@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:lesto/app/data/constants/Colors/color_primary.dart';
 import 'package:lesto/app/data/constants/Colors/color_neutral.dart';
+import 'package:lesto/app/routes/app_pages.dart';
 import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -11,7 +12,7 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: NeutralColor.neutral50,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -115,7 +116,7 @@ class ProfileView extends GetView<ProfileController> {
                 style: TextStyle(
                   fontSize: 14,
                   fontFamily: 'Gilroy',
-                  color: Colors.grey.shade500,
+                  color: NeutralColor.neutral600,
                 ),
               )),
           const SizedBox(height: 16),
@@ -162,25 +163,20 @@ class ProfileView extends GetView<ProfileController> {
           _buildMenuItem(
             icon: HugeIcons.strokeRoundedCircleArrowDown01,
             title: "Abonnement",
-            onTap: () {},
+            onTap: () => Get.toNamed(Routes.SUBSCRIPTION),
           ),
           const SizedBox(height: 24),
           _buildMenuTitle("Préférences"),
-          _buildMenuItem(
-            icon: HugeIcons.strokeRoundedGlobal,
-            title: "Langue",
-            trailing: "Français",
-            onTap: () {},
-          ),
-          _buildMenuItem(
-            icon: HugeIcons.strokeRoundedNotification03,
-            title: "Notifications",
-            onTap: () {},
-          ),
+          Obx(() => _buildMenuItem(
+                icon: HugeIcons.strokeRoundedGlobal,
+                title: "Langue",
+                trailing: controller.currentLanguage.value,
+                onTap: () => _showLanguageModal(),
+              )),
           _buildMenuItem(
             icon: HugeIcons.strokeRoundedInformationCircle,
             title: "À propos de Lesto",
-            onTap: () {},
+            onTap: () => Get.toNamed(Routes.ABOUT),
           ),
         ],
       ),
@@ -195,7 +191,7 @@ class ProfileView extends GetView<ProfileController> {
         style: TextStyle(
           fontSize: 14,
           fontFamily: 'GilroyBold',
-          color: Colors.grey.shade400,
+          color: NeutralColor.neutral500,
           letterSpacing: 1.2,
         ),
       ),
@@ -213,7 +209,7 @@ class ProfileView extends GetView<ProfileController> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(color: NeutralColor.neutral200),
       ),
       child: ListTile(
         onTap: onTap,
@@ -242,12 +238,12 @@ class ProfileView extends GetView<ProfileController> {
                 style: TextStyle(
                   fontSize: 13,
                   fontFamily: 'Gilroy',
-                  color: Colors.grey.shade400,
+                  color: NeutralColor.neutral600,
                 ),
               ),
             const SizedBox(width: 8),
             Icon(Icons.arrow_forward_ios_rounded,
-                size: 14, color: Colors.grey.shade300),
+                size: 14, color: NeutralColor.neutral400),
           ],
         ),
       ),
@@ -258,7 +254,7 @@ class ProfileView extends GetView<ProfileController> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: TextButton(
-        onPressed: () {},
+        onPressed: () => controller.logout(),
         style: TextButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
@@ -386,11 +382,11 @@ class ProfileView extends GetView<ProfileController> {
             fillColor: Colors.grey.shade50,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.shade100),
+              borderSide: BorderSide(color: NeutralColor.neutral200),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.shade100),
+              borderSide: BorderSide(color: NeutralColor.neutral200),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -429,30 +425,31 @@ class ProfileView extends GetView<ProfileController> {
               height: 100,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: 8,
+                itemCount: controller.avatars.length,
                 separatorBuilder: (context, index) => const SizedBox(width: 16),
                 itemBuilder: (context, index) {
-                  final List<Color> avatarColors = [
-                    Colors.blue,
-                    Colors.red,
-                    Colors.green,
-                    Colors.orange,
-                    Colors.purple,
-                    Colors.teal,
-                    Colors.pink,
-                    Colors.amber
-                  ];
+                  final String avatarPath = controller.avatars[index];
                   return GestureDetector(
                     onTap: () {
-                      controller.changeAvatar("assets/images/avatar.png");
+                      controller.changeAvatar(avatarPath);
                     },
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundColor: avatarColors[index % avatarColors.length]
-                          .withOpacity(0.1),
-                      child: Icon(Icons.person,
-                          color: avatarColors[index % avatarColors.length]),
-                    ),
+                    child: Obx(() => Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: controller.userAvatar.value == avatarPath
+                                  ? PrimaryColor.primary600
+                                  : Colors.transparent,
+                              width: 2,
+                            ),
+                          ),
+                          child: CircleAvatar(
+                            radius: 35,
+                            backgroundColor: PrimaryColor.primary100,
+                            backgroundImage: AssetImage(avatarPath),
+                          ),
+                        )),
                   );
                 },
               ),
@@ -461,6 +458,55 @@ class ProfileView extends GetView<ProfileController> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showLanguageModal() {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(24),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Choisir la langue",
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: 'GilroyBold',
+                color: NeutralColor.neutral900,
+              ),
+            ),
+            const SizedBox(height: 24),
+            _buildLanguageItem("Français", "🇫🇷"),
+            _buildLanguageItem("English", "🇬🇧"),
+            _buildLanguageItem("Wolof", "🇸🇳"),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageItem(String lang, String flag) {
+    return ListTile(
+      onTap: () => controller.changeLanguage(lang),
+      leading: Text(flag, style: const TextStyle(fontSize: 20)),
+      title: Text(
+        lang,
+        style: const TextStyle(
+          fontFamily: 'GilroySemi',
+          fontSize: 15,
+          color: NeutralColor.neutral800,
+        ),
+      ),
+      trailing: Obx(() => controller.currentLanguage.value == lang
+          ? const Icon(Icons.check_circle, color: PrimaryColor.primary600)
+          : const SizedBox.shrink()),
     );
   }
 }

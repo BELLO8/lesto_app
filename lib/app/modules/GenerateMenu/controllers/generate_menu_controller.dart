@@ -1,145 +1,30 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:lesto/app/data/models/ingredient_model.dart';
 import 'package:lesto/app/data/models/menu_model.dart';
+import 'package:lesto/app/data/providers/plat_provider.dart';
 
 class GenerateMenuController extends GetxController {
   final argumentData = GetStorage();
   var generateMenu = <Dish>[].obs;
   var isLoading = true.obs;
-  var selectedDay = 'Lun'.obs;
+  var selectedDay = ''.obs;
   var numberOfPeople = 2.obs;
 
-  final List<String> days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+  final PlatProvider _platProvider = Get.find<PlatProvider>();
+  var shoppingList = <Ingredient>[].obs;
+  var isAggregating = false.obs;
 
-  final Map<String, List<Map<String, dynamic>>> weeklyMenus = {
-    'Lun': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Risotto aux champignons',
-        'cuisine': 'Italien',
-        'regime': 'Végétarien',
-        'duration': '30 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Salade de quinoa aux légumes grillés',
-        'cuisine': 'Méditerranéen',
-        'regime': 'Végétarien',
-        'duration': '20 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-    'Mar': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Pasta à la carbonara',
-        'cuisine': 'Italien',
-        'regime': 'Standard',
-        'duration': '25 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Saumon grillé aux légumes',
-        'cuisine': 'Français',
-        'regime': 'Standard',
-        'duration': '35 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-    'Mer': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Salade César végétarienne',
-        'cuisine': 'Américain',
-        'regime': 'Végétarien',
-        'duration': '15 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Curry de légumes',
-        'cuisine': 'Indien',
-        'regime': 'Végétalien',
-        'duration': '40 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-    'Jeu': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Quiche aux épinards',
-        'cuisine': 'Français',
-        'regime': 'Végétarien',
-        'duration': '45 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Tacos aux haricots noirs',
-        'cuisine': 'Mexicain',
-        'regime': 'Végétarien',
-        'duration': '30 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-    'Ven': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Sushi végétarien',
-        'cuisine': 'Japonais',
-        'regime': 'Végétarien',
-        'duration': '50 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Pizza margherita',
-        'cuisine': 'Italien',
-        'regime': 'Végétarien',
-        'duration': '25 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-    'Sam': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Pancakes aux fruits',
-        'cuisine': 'Américain',
-        'regime': 'Végétarien',
-        'duration': '20 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Ratatouille',
-        'cuisine': 'Français',
-        'regime': 'Végétalien',
-        'duration': '60 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-    'Dim': [
-      {
-        'type': 'Déjeuner',
-        'name': 'Brunch végétarien',
-        'cuisine': 'International',
-        'regime': 'Végétarien',
-        'duration': '30 min',
-        'icon': Icons.menu_book,
-      },
-      {
-        'type': 'Dîner',
-        'name': 'Soupe de légumes',
-        'cuisine': 'Français',
-        'regime': 'Végétalien',
-        'duration': '45 min',
-        'icon': Icons.menu_book,
-      },
-    ],
-  };
+  List<PlatMenu> get selectedDayPlats {
+    if (selectedDay.value.isEmpty || generateMenu.isEmpty) return [];
+    try {
+      final dish = generateMenu.firstWhere((d) => d.name == selectedDay.value);
+      return dish.plats;
+    } catch (e) {
+      return [];
+    }
+  }
 
   @override
   void onInit() {
@@ -149,6 +34,56 @@ class GenerateMenuController extends GetxController {
 
   void getMenu() {
     isLoading.value = false;
-    generateMenu.value = argumentData.read("menu");
+
+    // Check if a specific menu was passed as an argument
+    if (Get.arguments != null && Get.arguments is List<Dish>) {
+      generateMenu.value = Get.arguments as List<Dish>;
+      if (generateMenu.isNotEmpty) {
+        selectedDay.value = generateMenu.first.name;
+      }
+      return;
+    }
+
+    // Fallback to latest stored menu
+    String? storedMenu = argumentData.read("menu");
+    if (storedMenu != null) {
+      try {
+        List<dynamic> list = jsonDecode(storedMenu);
+        generateMenu.value = list.map((e) => Dish.fromJson(e)).toList();
+        if (generateMenu.isNotEmpty) {
+          selectedDay.value = generateMenu.first.name;
+        }
+      } catch (e) {
+        print('Error parsing menu: $e');
+        generateMenu.value = [];
+      }
+    }
+  }
+
+  Future<void> aggregateIngredients() async {
+    isAggregating.value = true;
+    Map<String, Ingredient> aggregated = {};
+
+    try {
+      for (var dish in generateMenu) {
+        for (var plat in dish.plats) {
+          final ingredients = await _platProvider.getPlatsIngredients(plat.id);
+          for (var ing in ingredients) {
+            if (aggregated.containsKey(ing.nom)) {
+              // Simple aggregation: try to add quantities if they are numeric
+              // For now, we'll just keep the first one or append if needed
+              // In a real app, unit conversion would happen here
+            } else {
+              aggregated[ing.nom] = ing;
+            }
+          }
+        }
+      }
+      shoppingList.value = aggregated.values.toList();
+    } catch (e) {
+      print('Error aggregating ingredients: $e');
+    } finally {
+      isAggregating.value = false;
+    }
   }
 }

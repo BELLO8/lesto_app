@@ -20,6 +20,9 @@ import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/notifications/bindings/notifications_binding.dart';
 import '../modules/notifications/views/notifications_view.dart';
+import '../modules/subscription/bindings/subscription_binding.dart';
+import '../modules/subscription/views/subscription_view.dart';
+import '../modules/profile/views/about_view.dart';
 
 part 'app_routes.dart';
 
@@ -87,6 +90,17 @@ class AppPages {
       name: _Paths.NOTIFICATIONS,
       page: () => const NotificationsView(),
       binding: NotificationsBinding(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: _Paths.SUBSCRIPTION,
+      page: () => const SubscriptionView(),
+      binding: SubscriptionBinding(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: _Paths.ABOUT,
+      page: () => const AboutView(),
       transition: Transition.cupertino,
     ),
   ];
